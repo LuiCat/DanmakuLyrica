@@ -4,10 +4,14 @@
 #include "graphics.h"
 #include "sounds.h"
 
+#include "maingame.h"
+
 #include "debug.h"
 
 
 HWND hWnd = 0;
+
+MainGame game;
 
 void Main_Init()
 {
@@ -26,10 +30,15 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
     {
     case WM_DESTROY:
+        game.exit();
         PostQuitMessage(0);
         return 0;
     case WM_KEYDOWN:
-        if(wParam==VK_ESCAPE)PostQuitMessage(0);
+        if(wParam==VK_ESCAPE)
+        {
+            game.exit();
+            PostQuitMessage(0);
+        }
         return 0;
     case WM_RESETDEVICE:
         d3d.beginScene();
@@ -78,6 +87,8 @@ WINAPI INT WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     try
     {
         Main_Init();
+
+        game.start(hWnd);
 
         ShowWindow(hWnd, SW_SHOWDEFAULT);
         UpdateWindow(hWnd);

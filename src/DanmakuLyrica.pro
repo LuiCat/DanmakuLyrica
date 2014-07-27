@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     registry.cpp \
     soundregistry.cpp \
     sounds.cpp \
-    ticking.cpp
+    ticking.cpp \
+    maingame.cpp
 
 HEADERS += \
     debug.h \
@@ -28,7 +29,8 @@ HEADERS += \
     soundregistry.h \
     sounds.h \
     ticking.h \
-    object.h
+    object.h \
+    maingame.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
