@@ -13,8 +13,8 @@ using namespace std;
 
 #define WINDOWED
 
-#define WIDTH  640
-#define HEIGHT 480
+#define WIDTH  800
+#define HEIGHT 600
 
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1)
 
