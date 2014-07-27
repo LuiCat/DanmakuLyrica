@@ -1,14 +1,25 @@
 #include <windows.h>
 #include <windowsx.h>
 
+#include "graphics.h"
+#include "sounds.h"
+
 #include "debug.h"
 
-#define WINDOWED
-
-#define WIDTH   800
-#define HEIGHT  600
 
 HWND hWnd = 0;
+
+void Main_Init()
+{
+    if(FAILED(D3D_Init(hWnd)))throw "Can't init d3d";
+    if(FAILED(Sound_Init(hWnd)))throw "Can't init sound";
+}
+
+void Main_Cleanup()
+{
+    Sound_Cleanup();
+    D3D_Cleanup();
+}
 
 LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -20,15 +31,14 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KEYDOWN:
         if(wParam==VK_ESCAPE)PostQuitMessage(0);
         return 0;
-        /*
     case WM_RESETDEVICE:
         d3d.beginScene();
         if(FAILED(d3d.reset()))
         {
-            throw "Can't reset d3d device,\n device has lost";
+            throw "Can't reset d3d device, device has lost";
         }
         d3d.endScene();
-        return 0;*/
+        return 0;
     }
 
     return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -67,6 +77,8 @@ WINAPI INT WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     try
     {
+        Main_Init();
+
         ShowWindow(hWnd, SW_SHOWDEFAULT);
         UpdateWindow(hWnd);
 
@@ -84,6 +96,8 @@ WINAPI INT WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         cout<<"[ERROR]"<<str<<endl;
         MessageBox(hWnd, str, 0, MB_OK|MB_ICONERROR);
     }
+
+    Main_Cleanup();
 
     UnregisterClass("Dx Danmaku Test", wc.hInstance);
 

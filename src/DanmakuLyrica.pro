@@ -1,11 +1,38 @@
 TEMPLATE = app
 CONFIG -= app_bundle
 CONFIG -= qt
+CONFIG += c++11
+QMAKE_LFLAGS += -static-libgcc
+QMAKE_LFLAGS += -static-libstdc++
+
 
 DEFINES -= UNICODE
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    graphics.cpp \
+    entity.cpp \
+	object.cpp \
+    position.cpp \
+    registry.cpp \
+    soundregistry.cpp \
+    sounds.cpp \
+    ticking.cpp
 
 HEADERS += \
-    debug.h
+    debug.h \
+    graphics.h \
+    entity.h \
+    mathhelper.h \
+    position.h \
+    registry.h \
+    soundregistry.h \
+    sounds.h \
+    ticking.h \
+    object.h
+
+LIBS += -ld3d9 \
+		-ld3dx9 \
+		-lwinmm \
+		-ldsound \
+		-ldxguid
 

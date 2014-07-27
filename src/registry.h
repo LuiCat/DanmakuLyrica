@@ -1,0 +1,66 @@
+#ifndef REGISTRY_H
+#define REGISTRY_H
+
+#include <unordered_map>
+#include <string>
+#include <cstring>
+
+using namespace std;
+
+template<typename T>
+class Registry
+{
+private:
+
+    unordered_map<int, T> typeInfoList;
+    unordered_map<string, int> typeNameMap;
+
+    int lastRegisteredId;
+
+public:
+
+    Registry()
+    {
+        lastRegisteredId=0;
+    }
+
+    T* registerName(const char *name, const T *info)
+    {
+        if(!info||strlen(name)<1)return 0;
+        ++lastRegisteredId;
+        typeNameMap[string(name)]=lastRegisteredId;
+        typeInfoList[lastRegisteredId]=*info;
+        return &typeInfoList[lastRegisteredId];
+    }
+
+    T* operator()(const char *name, const T *info)
+    {
+        return registerName(name, info);
+    }
+
+    int getNameId(const char *typeName)
+    {
+        string str(typeName);
+        if(typeNameMap.find(str)==typeNameMap.end())return 0;
+        return typeNameMap[str];
+    }
+
+    T* getIdInfo(int id)
+    {
+        if(typeInfoList.find(id)==typeInfoList.end())
+            return 0;
+        return &typeInfoList[id];
+    }
+
+    void releaseAll(void (*func)(T*))
+    {
+        while(!typeInfoList.empty())
+        {
+            func(&(typeInfoList.begin()->second));
+            typeInfoList.erase(typeInfoList.begin());
+        }
+    }
+
+};
+
+#endif // REGISTRY_H
