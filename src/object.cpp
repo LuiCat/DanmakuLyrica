@@ -102,9 +102,9 @@ void Object::onRender()
     d3d.setTexture(texture);
     if(useAlpha)
         d3d.setAlpha(alpha);
-    d3d.pushVertex(0.0, 0.0, 0.0, 0.0);
-    d3d.pushVertex(1.0, 0.0, 1.0, 0.0);
-    d3d.pushVertex(1.0, 1.0, 1.0, 1.0);
-    d3d.pushVertex(0.0, 1.0, 0.0, 1.0);
+    d3d.pushVertex(0.0, 0.0, texturePosX,              texturePosY             );
+    d3d.pushVertex(1.0, 0.0, texturePosX+textureSizeX, texturePosY             );
+    d3d.pushVertex(1.0, 1.0, texturePosX+textureSizeX, texturePosY+textureSizeY);
+    d3d.pushVertex(0.0, 1.0, texturePosX,              texturePosY+textureSizeY);
     d3d.popMatrix();
 }
