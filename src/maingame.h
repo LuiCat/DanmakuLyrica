@@ -25,10 +25,10 @@ protected:
 
     bool isExiting;
 
-    void mainInit();
-    void mainCleanup();
-    void mainUpdate();
-    void mainRender();
+    virtual void mainInit();
+    virtual void mainCleanup();
+    virtual void mainUpdate();
+    virtual void mainRender();
 
     void waitForUpdateTick();
     void updateFps(DWORD rate);

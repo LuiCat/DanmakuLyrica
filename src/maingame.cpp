@@ -9,8 +9,6 @@
 
 #include "debug.h"
 
-StreamBuffer sound;
-
 MainGame* MainGame::instance=0;
 
 MainGame::MainGame()
@@ -42,13 +40,10 @@ void MainGame::exit()
 
 void MainGame::mainInit()
 {
-    tick=0;
 }
 
 void MainGame::mainCleanup()
 {
-    sound.release();
-    SoundRegistry::releaseAllSounds();
 }
 
 void MainGame::mainUpdate()
@@ -58,18 +53,7 @@ void MainGame::mainUpdate()
 
 void MainGame::mainRender()
 {
-    d3d.beginScene();
-
-    d3d.resetMatrix();
-
-    d3d.pushMatrix();
-
     // ...
-
-    d3d.popMatrix();
-
-    d3d.endScene();
-
     d3d.present();
 }
 
@@ -111,6 +95,7 @@ void MainGame::prepare()
     idTimer=timeSetEvent(16, 1, tickFrame, 0, TIME_PERIODIC);
 #endif
     lastFrameTick=0;
+    tick=0;
 }
 
 void MainGame::finish()

@@ -4,6 +4,8 @@
 #include "graphics.h"
 #include "sounds.h"
 
+#include "soundregistry.h"
+
 #include "maingame.h"
 
 #include "debug.h"
@@ -21,6 +23,7 @@ void Main_Init()
 
 void Main_Cleanup()
 {
+    SoundRegistry::releaseAllSounds();
     Sound_Cleanup();
     D3D_Cleanup();
 }
