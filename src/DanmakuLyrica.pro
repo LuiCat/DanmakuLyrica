@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     sounds.cpp \
     ticking.cpp \
     maingame.cpp \
-    danmakulyrica.cpp
+    danmakulyrica.cpp \
+    luascript.cpp
 
 HEADERS += \
     debug.h \
@@ -32,7 +33,8 @@ HEADERS += \
     ticking.h \
     object.h \
     maingame.h \
-    danmakulyrica.h
+    danmakulyrica.h \
+    luascript.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
@@ -40,3 +42,4 @@ LIBS += -ld3d9 \
 		-ldsound \
 		-ldxguid
 
+LIBS += $$PWD/lua/lua.a

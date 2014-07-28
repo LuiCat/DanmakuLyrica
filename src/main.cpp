@@ -6,6 +6,8 @@
 
 #include "soundregistry.h"
 
+#include "luascript.h"
+
 #include "danmakulyrica.h"
 
 #include "debug.h"
@@ -19,10 +21,12 @@ void Main_Init()
 {
     if(FAILED(D3D_Init(hWnd)))throw "Can't init d3d";
     if(FAILED(Sound_Init(hWnd)))throw "Can't init sound";
+    LuaScript::init();
 }
 
 void Main_Cleanup()
 {
+    LuaScript::cleanup();
     SoundRegistry::releaseAllSounds();
     Sound_Cleanup();
     D3D_Cleanup();
