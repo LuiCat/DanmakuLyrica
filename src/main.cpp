@@ -6,14 +6,14 @@
 
 #include "soundregistry.h"
 
-#include "maingame.h"
+#include "danmakulyrica.h"
 
 #include "debug.h"
 
 
 HWND hWnd = 0;
 
-MainGame game;
+DanmakuLyrica game;
 
 void Main_Init()
 {

@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     soundregistry.cpp \
     sounds.cpp \
     ticking.cpp \
-    maingame.cpp
+    maingame.cpp \
+    danmakulyrica.cpp
 
 HEADERS += \
     debug.h \
@@ -30,7 +31,8 @@ HEADERS += \
     sounds.h \
     ticking.h \
     object.h \
-    maingame.h
+    maingame.h \
+    danmakulyrica.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
