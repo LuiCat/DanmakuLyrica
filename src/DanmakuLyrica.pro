@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     ticking.cpp \
     maingame.cpp \
     danmakulyrica.cpp \
-    luascript.cpp
+    luascript.cpp \
+    entitylist.cpp
 
 HEADERS += \
     debug.h \
@@ -34,7 +35,8 @@ HEADERS += \
     object.h \
     maingame.h \
     danmakulyrica.h \
-    luascript.h
+    luascript.h \
+    entitylist.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
