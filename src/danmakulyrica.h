@@ -3,12 +3,18 @@
 
 #include "maingame.h"
 
+#include "notemap.h"
+
 class DanmakuLyrica : public MainGame
 {
 public:
+
     DanmakuLyrica();
 
 protected:
+
+    Notemap notemap;
+
     void mainInit();
     void mainCleanup();
     void mainUpdate();

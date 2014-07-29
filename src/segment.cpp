@@ -59,15 +59,15 @@ void Segment::processEvent(MapState *state, const SegmentEvent *event) const
     case SegmentEvent::measure:
         if(event->num==0)
         {
-            state->measureDiv=event->param_i_2;
-            state->measureNum=event->param_i_1;
+            state->measureDiv=event->parameter_i_2;
+            state->measureNum=event->parameter_i_1;
         }
         break;
     case SegmentEvent::scroll:
-        state->scroll=event->param_d;
+        state->scroll=event->parameter_d;
         break;
     case SegmentEvent::bpmchange:
-        state->bpm=event->param_d;
+        state->bpm=event->parameter_d;
         break;
     default:
         break;

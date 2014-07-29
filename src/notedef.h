@@ -4,7 +4,7 @@
 struct SegmentNote
 {
     int num;
-    enum NoteType {none, type1}
+    enum NoteType {none, type1, type2, type3, type4}
         type;
 };
 
@@ -14,8 +14,8 @@ struct SegmentEvent
     enum EventType {unknown, bpmchange,
                     measure, scroll}
                        type;
-    int param_i_1, param_i_2;
-    double param_d;
+    int parameter_i_1, parameter_i_2;
+    double parameter_d;
 };
 
 struct MapState

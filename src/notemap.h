@@ -31,7 +31,6 @@ protected:
 
 private:
 
-    MapState prevState;
     MapState currentState;
 
 };

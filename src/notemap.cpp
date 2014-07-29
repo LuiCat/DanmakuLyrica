@@ -43,6 +43,8 @@ bool Notemap::reloadTjaFile()
 
     rewind(f);
 
+    segments.clear();
+
     while(fgets(line,500,f) && !readingEnded)
     {
         p=strstr(line, "//");
@@ -60,6 +62,7 @@ bool Notemap::reloadTjaFile()
                 if(strcmp(line, "#START")==0)
                 {
                     readingNotes=true;
+                    currentSegment.init(&beginState);
                 }
             }
             else
@@ -119,20 +122,20 @@ bool Notemap::reloadTjaFile()
                 {
                     tempEvent.type=SegmentEvent::bpmchange;
                     sscanf(p, "%lf", &x);
-                    tempEvent.param_d=x;
+                    tempEvent.parameter_d=x;
                 }
                 else if(strcmp(line, "#MEASURE")==0)
                 {
                     tempEvent.type=SegmentEvent::measure;
                     sscanf(p, "%d/%d", &j, &k);
-                    tempEvent.param_i_1=j;
-                    tempEvent.param_i_2=k;
+                    tempEvent.parameter_i_1=j;
+                    tempEvent.parameter_i_2=k;
                 }
                 else if(strcmp(line, "#SCROLL")==0)
                 {
                     tempEvent.type=SegmentEvent::scroll;
                     sscanf(p, "%lf", &x);
-                    tempEvent.param_d=x;
+                    tempEvent.parameter_d=x;
                 }
                 else
                 {
@@ -156,14 +159,15 @@ bool Notemap::reloadTjaFile()
                         currentSegment.init();
                         currentNoteCount=0;
                     }
-                    else if(c>='0' && c<='9')
+                    else if((c>='0' && c<='9')||(c>='A' && c<='Z')||(c>='a' && c<='z'))
                     {
                         if(c!='0')
                         {
+                            tempNote.num=currentNoteCount;
                             tempNote.type=(SegmentNote::NoteType)(c-'0');
                             currentSegment.appendNote(tempNote);
                         }
-                        ++tempNote.num;
+                        ++currentNoteCount;
                     }
                 }
             }
