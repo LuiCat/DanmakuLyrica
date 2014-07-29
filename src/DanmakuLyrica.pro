@@ -20,7 +20,9 @@ SOURCES += main.cpp \
     maingame.cpp \
     danmakulyrica.cpp \
     luascript.cpp \
-    entitylist.cpp
+    entitylist.cpp \
+    notemap.cpp \
+    segment.cpp
 
 HEADERS += \
     debug.h \
@@ -36,7 +38,10 @@ HEADERS += \
     maingame.h \
     danmakulyrica.h \
     luascript.h \
-    entitylist.h
+    entitylist.h \
+    notemap.h \
+    segment.h \
+    notedef.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \

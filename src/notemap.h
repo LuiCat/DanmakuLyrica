@@ -1,0 +1,39 @@
+#ifndef NOTEMAP_H
+#define NOTEMAP_H
+
+#include "notedef.h"
+#include "segment.h"
+
+#include <list>
+using namespace std;
+
+class Notemap
+{
+public:
+
+    Notemap();
+
+    bool loadTjaFile(const char* filename);
+
+protected:
+
+    char tjafile[100];
+    char wavfile[100];
+    char title[100];
+    char subtitle[200];
+    bool showSub;
+
+    MapState beginState;
+
+    list<Segment> segments;
+
+    bool reloadTjaFile();
+
+private:
+
+    MapState prevState;
+    MapState currentState;
+
+};
+
+#endif // NOTEMAP_H
