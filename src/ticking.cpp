@@ -1,13 +1,15 @@
 #include "ticking.h"
 
-Ticking::Ticking()
+#include "mathhelper.h"
+
+Ticking::Ticking(double tickRate)
     :isDead(false)
     ,tick(0)
     ,timeSec(0.0)
-    ,tickRate(60.0)
-    ,nextTickSec(0.0)
     ,useDefaultTicking(true)
+    ,processSec(0.0)
 {
+    setTickRate(tickRate);
 }
 
 void Ticking::update(double deltaSec)
@@ -16,21 +18,24 @@ void Ticking::update(double deltaSec)
     if(useDefaultTicking)
     {
         double newSec=timeSec+deltaSec;
-        while(nextTickSec<=newSec)
+
+        while(timeSec+processSec<newSec)
         {
+            onUpdateMotion(processSec, processSec*tickRate);
             ++tick;
-            onUpdateMotion(nextTickSec-timeSec, (nextTickSec-timeSec)*tickRate);
-            timeSec=nextTickSec;
-            nextTickSec+=1.0/tickRate;
+            timeSec+=processSec;
             onTick();
+            processSec=tickSec;
         }
-        onUpdateMotion(newSec-timeSec, (newSec-timeSec)*tickRate);
+        deltaSec=newSec-timeSec;
+        onUpdateMotion(deltaSec, deltaSec*tickRate);
         timeSec=newSec;
+        processSec=tickSec-deltaSec;
     }
     else
     {
-        ++tick;
         onUpdateMotion(deltaSec, deltaSec*tickRate);
+        ++tick;
         onTick();
         timeSec+=deltaSec;
     }
@@ -44,6 +49,13 @@ void Ticking::setDead()
 bool Ticking::dead() const
 {
     return isDead;
+}
+
+void Ticking::setTickRate(double ticksPerSec)
+{
+    if(ticksPerSec>0&&ticksPerSec<600.0)ticksPerSec=60.0;
+    tickRate=ticksPerSec;
+    tickSec=1.0/tickRate;
 }
 
 int Ticking::getTick() const

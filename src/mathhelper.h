@@ -36,5 +36,16 @@ inline double deg(double x)
     return x*180/M_PI;
 }
 
+template <typename T>
+inline T& min(T& x, T& y)
+{
+    return x<y?x:y;
+}
+
+template <typename T>
+inline T& max(T& x, T& y)
+{
+    return x>y?x:y;
+}
 
 #endif // MATHHELPER_H

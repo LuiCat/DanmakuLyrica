@@ -5,11 +5,12 @@ class Ticking
 {
 public:
 
-    Ticking();
+    Ticking(double _tickRate=60.0);
 
     void setDead();
-
     bool dead() const;
+
+    void setTickRate(double ticksPerSec);
 
     int getTick() const;
     double getSec() const;
@@ -20,15 +21,21 @@ protected:
 
     bool isDead;
 
+
     int tick;
     double timeSec;
-    double tickRate;
-    double nextTickSec;
 
     bool useDefaultTicking;
 
     virtual void onUpdateMotion(double deltaSec, double deltaTick);
     virtual void onTick();
+
+private:
+
+    double tickRate;
+    double tickSec;
+
+    double processSec;
 
 };
 
