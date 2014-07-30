@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     luascript.cpp \
     entitylist.cpp \
     notemap.cpp \
-    segment.cpp
+    segment.cpp \
+    noteluafunc.cpp
 
 HEADERS += \
     debug.h \
@@ -42,7 +43,8 @@ HEADERS += \
     notemap.h \
     segment.h \
     notedef.h \
-    commondef.h
+    commondef.h \
+    noteluafunc.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
