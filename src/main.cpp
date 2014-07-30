@@ -5,11 +5,11 @@
 #include "sounds.h"
 
 #include "soundregistry.h"
-
 #include "luascript.h"
 
 #include "danmakulyrica.h"
 
+#include "commondef.h"
 #include "debug.h"
 
 

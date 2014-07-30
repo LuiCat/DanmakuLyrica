@@ -1,6 +1,7 @@
 #include "danmakulyrica.h"
 
 #include "graphics.h"
+#include "commondef.h"
 
 DanmakuLyrica::DanmakuLyrica()
 {
@@ -29,7 +30,7 @@ void DanmakuLyrica::mainRender()
     d3d.resetMatrix();
     d3d.pushMatrix();
 
-    d3d.translate(400, 300);
+    d3d.translate(WIDTH/2, HEIGHT/2);
     d3d.scale(150.0, 150.0);
     d3d.rotate(0.085*updateCount++);
     d3d.translate(-0.5, -0.5);

@@ -41,7 +41,8 @@ HEADERS += \
     entitylist.h \
     notemap.h \
     segment.h \
-    notedef.h
+    notedef.h \
+    commondef.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \

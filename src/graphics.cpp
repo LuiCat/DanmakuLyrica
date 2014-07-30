@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include "commondef.h"
 #include "debug.h"
 
 //-----------------------------------------------------------------------------
