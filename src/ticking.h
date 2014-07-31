@@ -21,7 +21,6 @@ protected:
 
     bool isDead;
 
-
     int tick;
     double timeSec;
 

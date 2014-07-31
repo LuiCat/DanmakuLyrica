@@ -25,6 +25,7 @@ void Ticking::update(double deltaSec)
             ++tick;
             timeSec+=processSec;
             onTick();
+            if(isDead)return;
             processSec=tickSec;
         }
         deltaSec=newSec-timeSec;
@@ -36,8 +37,8 @@ void Ticking::update(double deltaSec)
     {
         onUpdateMotion(deltaSec, deltaSec*tickRate);
         ++tick;
-        onTick();
         timeSec+=deltaSec;
+        onTick();
     }
 }
 
