@@ -20,20 +20,20 @@ struct SegmentEvent
 
 struct MapState
 {
-    double offset;
+    double timeOffset;
     double beatOffset;
 
     double bpm;
-    double scroll;
+    double hs;
 
     int measureDiv;
     int measureNum;
 
     MapState(double _offset=0.0, double _bpm=120.0) :
-        offset(_offset),
+        timeOffset(_offset),
         beatOffset(0),
         bpm(_bpm),
-        scroll(1.0),
+        hs(1.0),
         measureDiv(4),
         measureNum(4)
     {

@@ -64,7 +64,7 @@ void Segment::processEvent(MapState *state, const SegmentEvent *event) const
         }
         break;
     case SegmentEvent::scroll:
-        state->scroll=event->parameter_d;
+        state->hs=event->parameter_d;
         break;
     case SegmentEvent::bpmchange:
         state->bpm=event->parameter_d;
@@ -76,14 +76,14 @@ void Segment::processEvent(MapState *state, const SegmentEvent *event) const
 
 void Segment::processEvent(MapState *state, const SegmentEvent *event, int deltaNum) const
 {
-    state->offset+=state->calcOffset_segment((double)deltaNum/segmentDiv);
+    state->timeOffset+=state->calcOffset_segment((double)deltaNum/segmentDiv);
     state->beatOffset+=state->getTotalBeats()*((double)deltaNum/segmentDiv);
     processEvent(state, event);
 }
 
 void Segment::processEvent(MapState *state, const SegmentEvent *event, double deltaOffset) const
 {
-    state->offset+=deltaOffset;
+    state->timeOffset+=deltaOffset;
     state->beatOffset+=state->calcBeatOffset(deltaOffset);
     processEvent(state, event);
 }

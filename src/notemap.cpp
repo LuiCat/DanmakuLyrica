@@ -92,7 +92,7 @@ bool Notemap::reloadTjaFile()
                     else if(strcmp(line, "OFFSET")==0)
                     {
                         sscanf(p, "%lf", &x);
-                        beginState.offset=-x;
+                        beginState.timeOffset=-x;
                     }
                     else if(strcmp(line, "BPM")==0)
                     {
