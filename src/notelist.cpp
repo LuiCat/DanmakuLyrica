@@ -17,7 +17,8 @@ JudgeResult NoteList::judgeSingleNote(const MapState *state)
     while(judge==miss && iter!=entityList.end())
     {
         note=(NoteEntity*)&(*iter);
-        judge=noteJudge.judgeNote(note->getTimeOffset(state));
+        if(!note->isJudged())
+            judge=noteJudge.judgeNote(note->getTimeOffset(state));
         iter++;
     }
 

@@ -20,6 +20,11 @@ void NoteEntity::setJudgeResult(const MapState *state, JudgeResult result)
     judgeTime=state->timeOffset;
 }
 
+bool NoteEntity::isJudged()
+{
+    return judgeResult!=bad;
+}
+
 void NoteEntity::onTick()
 {
 

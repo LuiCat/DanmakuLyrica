@@ -15,6 +15,7 @@ public:
     double getTimeOffset(const MapState* state) const;
 
     void setJudgeResult(const MapState *state, JudgeResult result);
+    bool isJudged();
 
 protected:
 
