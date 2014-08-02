@@ -37,13 +37,13 @@ inline double deg(double x)
 }
 
 template <typename T>
-inline T& min(T& x, T& y)
+inline const T& min(const T& x, const T& y)
 {
     return x<y?x:y;
 }
 
 template <typename T>
-inline T& max(T& x, T& y)
+inline const T& max(const T& x, const T& y)
 {
     return x>y?x:y;
 }
