@@ -5,11 +5,11 @@
 
 #include "debug.h"
 
-Notemap::Notemap()
+NoteMap::NoteMap()
 {
 }
 
-bool Notemap::loadTjaFile(const char *filename)
+bool NoteMap::loadTjaFile(const char *filename)
 {
     strcpy(tjafile, filename);
     if(!reloadTjaFile())
@@ -20,7 +20,7 @@ bool Notemap::loadTjaFile(const char *filename)
     return true;
 }
 
-bool Notemap::reloadTjaFile()
+bool NoteMap::reloadTjaFile()
 {
     FILE* f=fopen(tjafile, "r");
     if(!f)return false;

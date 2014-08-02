@@ -7,11 +7,11 @@
 #include <list>
 using namespace std;
 
-class Notemap
+class NoteMap
 {
 public:
 
-    Notemap();
+    NoteMap();
 
     bool loadTjaFile(const char* filename);
 

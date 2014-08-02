@@ -13,8 +13,6 @@ public:
 
 protected:
 
-    Notemap notemap;
-
     void mainInit();
     void mainCleanup();
     void mainUpdate();

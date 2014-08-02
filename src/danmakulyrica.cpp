@@ -10,7 +10,6 @@ DanmakuLyrica::DanmakuLyrica()
 
 void DanmakuLyrica::mainInit()
 {
-    notemap.loadTjaFile("data/test.lrc");
 }
 
 void DanmakuLyrica::mainCleanup()

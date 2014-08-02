@@ -23,7 +23,11 @@ SOURCES += main.cpp \
     entitylist.cpp \
     notemap.cpp \
     segment.cpp \
-    noteluafunc.cpp
+    noteluafunc.cpp \
+    noteentity.cpp \
+    notescene.cpp \
+    notelist.cpp \
+    notejudge.cpp
 
 HEADERS += \
     debug.h \
@@ -44,7 +48,11 @@ HEADERS += \
     segment.h \
     notedef.h \
     commondef.h \
-    noteluafunc.h
+    noteluafunc.h \
+    noteentity.h \
+    notescene.h \
+    notelist.h \
+    notejudge.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
