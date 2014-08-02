@@ -53,8 +53,8 @@ protected:
     bool useDefaultMotion;
     bool useDefaultRendering;
 
-    void onUpdateMotion(double deltaSec, double deltaTick);
-    void onTick();
+    virtual void onUpdateMotion(double deltaSec, double deltaTick);
+    virtual void onTick();
 
     virtual void onRender();
     virtual void destroy();
