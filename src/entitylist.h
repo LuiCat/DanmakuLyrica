@@ -22,7 +22,7 @@ public:
 
 protected:
 
-    list<Entity> entityList;
+    list<Entity*> entityList;
 
 private:
 

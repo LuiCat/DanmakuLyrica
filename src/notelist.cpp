@@ -1,6 +1,5 @@
 #include "notelist.h"
 
-#include "noteentity.h"
 
 
 NoteList::NoteList()
@@ -16,7 +15,7 @@ JudgeResult NoteList::judgeSingleNote(const MapState *state)
     auto iter=entityList.begin();
     while(judge==miss && iter!=entityList.end())
     {
-        note=(NoteEntity*)&(*iter);
+        note=(NoteEntity*)*iter;
         if(!note->isJudged())
             judge=noteJudge.judgeNote(note->getTimeOffset(state));
         iter++;
@@ -28,4 +27,9 @@ JudgeResult NoteList::judgeSingleNote(const MapState *state)
     }
 
     return judge;
+}
+
+void NoteList::pushNote(const NoteEntity& note)
+{
+    entityList.push_back(new NoteEntity(note));
 }

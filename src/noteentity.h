@@ -12,6 +12,8 @@ public:
 
     NoteEntity(double _hitTime, double _hitBeat);
 
+    void setJudgeTime(double _hitTime, double _hitBeat);
+
     double getTimeOffset(const MapState* state) const;
 
     void setJudgeResult(const MapState *state, JudgeResult result);

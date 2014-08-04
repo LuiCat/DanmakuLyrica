@@ -1,10 +1,15 @@
 #include "noteentity.h"
 
 NoteEntity::NoteEntity(double _hitTime, double _hitBeat)
-    :hitTime(_hitTime)
-    ,hitBeat(_hitBeat)
-    ,judgeTime(-1e7)
+    :judgeTime(-1e7)
 {
+    setJudgeTime(_hitTime, _hitBeat);
+}
+
+void NoteEntity::setJudgeTime(double _hitTime, double _hitBeat)
+{
+    hitTime=_hitTime;
+    hitBeat=_hitBeat;
 }
 
 double NoteEntity::getTimeOffset(const MapState *state) const
