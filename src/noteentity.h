@@ -6,13 +6,17 @@
 #include "notedef.h"
 #include "notejudge.h"
 
-class NoteEntity : public Entity
+#include "mapstate.h"
+
+class Note : public Entity
 {
 public:
 
-    NoteEntity(double _hitTime, double _hitBeat);
+    Note(double _hitTime=0.0, double _hitBeat=0.0);
 
     void setJudgeTime(double _hitTime, double _hitBeat);
+    void setScrollSpeed(double hs);
+    void setNoteType(NoteType type);
 
     double getTimeOffset(const MapState* state) const;
 
@@ -23,6 +27,10 @@ protected:
 
     double hitTime;
     double hitBeat;
+
+    double scrollSpeed;
+
+    NoteType noteType;
 
     double judgeTime;
 

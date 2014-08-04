@@ -10,12 +10,12 @@ NoteList::NoteList()
 JudgeResult NoteList::judgeSingleNote(const MapState *state)
 {
     JudgeResult judge=miss;
-    NoteEntity* note;
+    Note* note;
 
     auto iter=entityList.begin();
     while(judge==miss && iter!=entityList.end())
     {
-        note=(NoteEntity*)*iter;
+        note=(Note*)*iter;
         if(!note->isJudged())
             judge=noteJudge.judgeNote(note->getTimeOffset(state));
         iter++;
@@ -29,7 +29,7 @@ JudgeResult NoteList::judgeSingleNote(const MapState *state)
     return judge;
 }
 
-void NoteList::pushNote(const NoteEntity& note)
+void NoteList::pushNote(const Note& note)
 {
-    entityList.push_back(new NoteEntity(note));
+    entityList.push_back(new Note(note));
 }

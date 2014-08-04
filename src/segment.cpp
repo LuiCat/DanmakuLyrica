@@ -50,40 +50,54 @@ void Segment::nextSegmentState()
     segmentState=getNextSegmentState();
 }
 
-void Segment::processEvent(MapState *state, const SegmentEvent *event) const
+void Segment::getEntityNotes(list<Note>& noteList)
 {
-    if(event==0)
-        return;
-    switch(event->type)
+    MapState tempState=segmentState;
+
+    int prevNum=0;
+
+    auto event_iter=events.begin();
+    auto note_iter=notes.begin();
+
+    Note tempNote;
+
+    while(note_iter!=notes.end() || event_iter!=events.end())
     {
-    case SegmentEvent::measure:
-        if(event->num==0)
+        while(event_iter!=events.end() && (note_iter==notes.end() || event_iter->num<=note_iter->num))
         {
-            state->measureDiv=event->parameter_i_2;
-            state->measureNum=event->parameter_i_1;
+            processEvent(&tempState, &*event_iter, event_iter->num-prevNum);
+            prevNum=event_iter->num;
+
+            ++event_iter;
         }
-        break;
-    case SegmentEvent::scroll:
-        state->hs=event->parameter_d;
-        break;
-    case SegmentEvent::bpmchange:
-        state->bpm=event->parameter_d;
-        break;
-    default:
-        break;
+
+        if(note_iter==notes.end())
+            continue;
+
+        processEvent(&tempState, 0, note_iter->num-prevNum);
+        prevNum=note_iter->num;
+
+        tempNote.setJudgeTime(tempState.timeOffset, tempState.beatOffset);
+        tempNote.setScrollSpeed(tempState.hs);
+        tempNote.setNoteType(note_iter->type);
+
+        noteList.push_back(tempNote);
+
+        ++note_iter;
     }
+
 }
 
 void Segment::processEvent(MapState *state, const SegmentEvent *event, int deltaNum) const
 {
     state->timeOffset+=state->calcOffset_segment((double)deltaNum/segmentDiv);
     state->beatOffset+=state->getTotalBeats()*((double)deltaNum/segmentDiv);
-    processEvent(state, event);
+    state->processEvent(event);
 }
 
 void Segment::processEvent(MapState *state, const SegmentEvent *event, double deltaOffset) const
 {
     state->timeOffset+=deltaOffset;
     state->beatOffset+=state->calcBeatOffset(deltaOffset);
-    processEvent(state, event);
+    state->processEvent(event);
 }

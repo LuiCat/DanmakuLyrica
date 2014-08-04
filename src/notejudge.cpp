@@ -1,9 +1,9 @@
 #include "notejudge.h"
 
 NoteJudge::NoteJudge()
-    :rangeBad(0.210)
-    ,rangeGood(0.150)
-    ,rangeGreat(0.075)
+    :rangeBad(0.240)
+    ,rangeGood(0.180)
+    ,rangeGreat(0.060)
 {
 }
 

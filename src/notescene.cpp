@@ -11,7 +11,7 @@ void NoteScene::init()
 
 void NoteScene::cleanup()
 {
-
+    noteList.clearAll();
 }
 
 void NoteScene::update(double deltaSec)

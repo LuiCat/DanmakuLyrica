@@ -2,13 +2,17 @@
 #define SEGMENT_H
 
 #include "notedef.h"
+#include "mapstate.h"
 
 #include <list>
 using namespace std;
 
+#include "noteentity.h"
+
 class Segment
 {
 public:
+
     Segment();
 
     void init(MapState *state=0);
@@ -21,13 +25,15 @@ public:
     MapState getNextSegmentState() const;
     void nextSegmentState();
 
+    void getEntityNotes(list<Note>& noteList);
+
 protected:
 
-    void processEvent(MapState* state, const SegmentEvent *event) const;
     void processEvent(MapState* state, const SegmentEvent *event, int deltaNum) const;
     void processEvent(MapState* state, const SegmentEvent *event, double deltaOffset) const;
 
 private:
+
     int segmentDiv;
     MapState segmentState;
 

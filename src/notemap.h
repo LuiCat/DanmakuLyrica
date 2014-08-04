@@ -3,6 +3,9 @@
 
 #include "notedef.h"
 #include "segment.h"
+#include "mapstate.h"
+
+#include "noteentity.h"
 
 #include <list>
 using namespace std;
@@ -15,6 +18,8 @@ public:
 
     bool loadTjaFile(const char* filename);
 
+    int getEntityNotes(list<Note>& noteList, int maxinum=-1);
+
 protected:
 
     char tjafile[100];
@@ -26,6 +31,8 @@ protected:
     MapState beginState;
 
     list<Segment> segments;
+
+    list<Segment>::iterator loadProc;
 
     bool reloadTjaFile();
 

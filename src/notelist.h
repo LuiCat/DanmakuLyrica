@@ -15,7 +15,7 @@ public:
 
     JudgeResult judgeSingleNote(const MapState* state);
 
-    void pushNote(const NoteEntity& note);
+    void pushNote(const Note& note);
 
 protected:
 

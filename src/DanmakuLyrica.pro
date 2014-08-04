@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     noteentity.cpp \
     notescene.cpp \
     notelist.cpp \
-    notejudge.cpp
+    notejudge.cpp \
+    mapstate.cpp
 
 HEADERS += \
     debug.h \
@@ -52,7 +53,8 @@ HEADERS += \
     noteentity.h \
     notescene.h \
     notelist.h \
-    notejudge.h
+    notejudge.h \
+    mapstate.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \

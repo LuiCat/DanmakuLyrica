@@ -20,6 +20,18 @@ bool NoteMap::loadTjaFile(const char *filename)
     return true;
 }
 
+int NoteMap::getEntityNotes(list<Note> &noteList, int maxinum)
+{
+    int loadedNum=0;
+    while(loadProc!=segments.end() && maxinum!=0)
+    {
+        loadProc->getEntityNotes(noteList);
+        maxinum--;
+        loadedNum++;
+    }
+    return loadedNum;
+}
+
 bool NoteMap::reloadTjaFile()
 {
     FILE* f=fopen(tjafile, "r");
@@ -108,7 +120,7 @@ bool NoteMap::reloadTjaFile()
             {
                 memset(&tempEvent, 0, sizeof(SegmentEvent));
                 tempEvent.num=currentNoteCount;
-                tempEvent.type=SegmentEvent::unknown;
+                tempEvent.type=unknown;
 
                 flag=true;
 
@@ -120,20 +132,20 @@ bool NoteMap::reloadTjaFile()
                 }
                 else if(strcmp(line, "#BPMCHANGE")==0)
                 {
-                    tempEvent.type=SegmentEvent::bpmchange;
+                    tempEvent.type=bpmchange;
                     sscanf(p, "%lf", &x);
                     tempEvent.parameter_d=x;
                 }
                 else if(strcmp(line, "#MEASURE")==0)
                 {
-                    tempEvent.type=SegmentEvent::measure;
+                    tempEvent.type=measure;
                     sscanf(p, "%d/%d", &j, &k);
                     tempEvent.parameter_i_1=j;
                     tempEvent.parameter_i_2=k;
                 }
                 else if(strcmp(line, "#SCROLL")==0)
                 {
-                    tempEvent.type=SegmentEvent::scroll;
+                    tempEvent.type=scroll;
                     sscanf(p, "%lf", &x);
                     tempEvent.parameter_d=x;
                 }
@@ -164,7 +176,7 @@ bool NoteMap::reloadTjaFile()
                         if(c!='0')
                         {
                             tempNote.num=currentNoteCount;
-                            tempNote.type=(SegmentNote::NoteType)(c-'0');
+                            tempNote.type=(NoteType)(c-'0');
                             currentSegment.appendNote(tempNote);
                         }
                         ++currentNoteCount;
@@ -181,6 +193,8 @@ bool NoteMap::reloadTjaFile()
     }
 
     fclose(f);
+
+    loadProc=segments.begin();
 
     return true;
 
