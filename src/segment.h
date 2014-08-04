@@ -18,7 +18,7 @@ public:
     void appendNote(const SegmentNote& note);
     void appendEvent(const SegmentEvent& event);
 
-    MapState getNextSegmentState();
+    MapState getNextSegmentState() const;
     void nextSegmentState();
 
 protected:

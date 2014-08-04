@@ -29,7 +29,7 @@ void Segment::appendEvent(const SegmentEvent &event)
     events.push_back(event);
 }
 
-MapState Segment::getNextSegmentState()
+MapState Segment::getNextSegmentState() const
 {
     MapState state=segmentState;
     int prevNum=0;

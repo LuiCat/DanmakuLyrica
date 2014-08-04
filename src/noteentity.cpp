@@ -25,7 +25,7 @@ void NoteEntity::setJudgeResult(const MapState *state, JudgeResult result)
     judgeTime=state->timeOffset;
 }
 
-bool NoteEntity::isJudged()
+bool NoteEntity::isJudged() const
 {
     return judgeResult!=bad;
 }

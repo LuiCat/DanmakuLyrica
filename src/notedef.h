@@ -40,32 +40,32 @@ struct MapState
 
     }
 
-    inline double calcOffset_segment(double deltaSegment)
+    inline double calcOffset_segment(double deltaSegment) const
     {
         return calcOffset_beat(deltaSegment*getTotalBeats());
     }
 
-    inline double calcOffset_beat(double deltaBeat)
+    inline double calcOffset_beat(double deltaBeat) const
     {
         return deltaBeat/bpm*60;
     }
 
-    inline double calcDeltaSegment_offset(double deltaOffset)
+    inline double calcDeltaSegment_offset(double deltaOffset) const
     {
         return calcBeatOffset(deltaOffset)/getTotalBeats();
     }
 
-    inline double calcDeltaSegment_beat(double deltaBeat)
+    inline double calcDeltaSegment_beat(double deltaBeat) const
     {
         return deltaBeat/getTotalBeats();
     }
 
-    inline double calcBeatOffset(double deltaOffset)
+    inline double calcBeatOffset(double deltaOffset) const
     {
         return deltaOffset/60*bpm;
     }
 
-    inline double getTotalBeats()
+    inline double getTotalBeats() const
     {
         return (double)measureNum*4/measureDiv;
     }
