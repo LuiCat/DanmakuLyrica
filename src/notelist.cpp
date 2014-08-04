@@ -33,3 +33,11 @@ void NoteList::pushNote(const Note& note)
 {
     entityList.push_back(new Note(note));
 }
+
+void NoteList::pushNotes(const list<Note> &notes)
+{
+    for(const Note& note : notes)
+    {
+        pushNote(note);
+    }
+}

@@ -10,10 +10,12 @@ DanmakuLyrica::DanmakuLyrica()
 
 void DanmakuLyrica::mainInit()
 {
+    noteScene.init();
 }
 
 void DanmakuLyrica::mainCleanup()
 {
+    noteScene.cleanup();
 }
 
 void DanmakuLyrica::mainUpdate()

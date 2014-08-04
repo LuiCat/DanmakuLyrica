@@ -28,6 +28,7 @@ int NoteMap::getEntityNotes(list<Note> &noteList, int maxinum)
         loadProc->getEntityNotes(noteList);
         maxinum--;
         loadedNum++;
+        loadProc++;
     }
     return loadedNum;
 }

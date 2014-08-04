@@ -7,6 +7,7 @@ NoteScene::NoteScene()
 void NoteScene::init()
 {
     noteMap.loadTjaFile("data/test.lrc");
+    reloadNotes();
 }
 
 void NoteScene::cleanup()
@@ -22,4 +23,11 @@ void NoteScene::update(double deltaSec)
 void NoteScene::render()
 {
     noteList.renderAll();
+}
+
+void NoteScene::reloadNotes()
+{
+    list<Note> tempList;
+    noteMap.getEntityNotes(tempList);
+    noteList.pushNotes(tempList);
 }

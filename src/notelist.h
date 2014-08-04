@@ -7,6 +7,9 @@
 #include "notejudge.h"
 #include "noteentity.h"
 
+#include <list>
+using namespace std;
+
 class NoteList : public EntityList
 {
 public:
@@ -16,6 +19,7 @@ public:
     JudgeResult judgeSingleNote(const MapState* state);
 
     void pushNote(const Note& note);
+    void pushNotes(const list<Note>& notes);
 
 protected:
 

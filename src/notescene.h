@@ -21,6 +21,8 @@ protected:
     NoteList noteList;
     NoteMap noteMap;
 
+    void reloadNotes();
+
 };
 
 #endif // NOTESCENE_H

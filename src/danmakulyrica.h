@@ -3,7 +3,7 @@
 
 #include "maingame.h"
 
-#include "notemap.h"
+#include "notescene.h"
 
 class DanmakuLyrica : public MainGame
 {
@@ -17,6 +17,10 @@ protected:
     void mainCleanup();
     void mainUpdate();
     void mainRender();
+
+private:
+
+    NoteScene noteScene;
 
 };
 
