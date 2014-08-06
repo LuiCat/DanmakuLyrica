@@ -10,11 +10,15 @@ DanmakuLyrica::DanmakuLyrica()
 
 void DanmakuLyrica::mainInit()
 {
+    char filename[200]="data/";
     noteScene.init();
+    bgm.loadWav(strcat(filename, noteScene.getBgmFilename()));
+    bgm.play(true);
 }
 
 void DanmakuLyrica::mainCleanup()
 {
+    bgm.release();
     noteScene.cleanup();
 }
 

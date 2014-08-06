@@ -4,6 +4,7 @@
 #include "maingame.h"
 
 #include "notescene.h"
+#include "sounds.h"
 
 class DanmakuLyrica : public MainGame
 {
@@ -21,6 +22,7 @@ protected:
 private:
 
     NoteScene noteScene;
+    StreamBuffer bgm;
 
 };
 

@@ -36,15 +36,17 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch(msg)
     {
-    case WM_DESTROY:
+    case WM_CLOSE:
         game.exit();
+        return 0;
+    case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
     case WM_KEYDOWN:
         if(wParam==VK_ESCAPE)
         {
             game.exit();
-            PostQuitMessage(0);
+            //PostQuitMessage(0);
         }
         return 0;
     case WM_RESETDEVICE:

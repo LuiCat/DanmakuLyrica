@@ -103,6 +103,7 @@ void MainGame::finish()
     CloseHandle(hTickSema);
     lastFrameTick=0;
     instance=0;
+    PostMessage(hWnd, WM_DESTROY, 0, 0);
 }
 
 void MainGame::process()
