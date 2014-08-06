@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-#define MAX_STREAM_BUF 4
+#define MAX_NOTIFY_NUM 4
 
 HRESULT Sound_Init(HWND hWnd);
 void Sound_Cleanup();
@@ -73,11 +73,10 @@ protected:
 
     static DWORD streamBufSize;
 
-    HANDLE event[MAX_STREAM_BUF];
+    HANDLE event[MAX_NOTIFY_NUM];
 
-    char* currentMemPos;
-    DWORD remainMemSize;
-    int lastWrittenMemIdx;
+    DWORD currentMemPos;
+    DWORD lastWrittenPos;
 
     bool isPlaying;
     bool paused;
@@ -85,7 +84,6 @@ protected:
     DWORD loopPosA, loopPosB;
 
     void prepareBuffer();
-    void processBuffer(int i);
 
     void copyBuffer(void *buffer, DWORD size);
 

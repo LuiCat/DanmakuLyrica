@@ -3,6 +3,8 @@
 #include <mmsystem.h>
 #include <cmath>
 
+#include "debug.h"
+
 //=============Globals============================
 
 LPDIRECTSOUND8       lpDirectSound = NULL;
@@ -269,7 +271,7 @@ void StreamBuffer::release()
 {
     if(isPlaying)
         stop();
-    for(int i=0;i<MAX_STREAM_BUF;++i)
+    for(int i=0;i<MAX_NOTIFY_NUM;++i)
         CloseHandle(event[i]);
     SoundBuffer::release();
 }
@@ -286,7 +288,7 @@ bool StreamBuffer::loadWav(const char *filename)
     memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));
     dsbdesc.dwSize = sizeof(DSBUFFERDESC);
     dsbdesc.dwFlags = DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPOSITIONNOTIFY;//DSBCAPS_CTRLFREQUENCY;
-    dsbdesc.dwBufferBytes = MAX_STREAM_BUF*streamBufSize;
+    dsbdesc.dwBufferBytes = streamBufSize;
     dsbdesc.lpwfxFormat = &waveFormat;
 
     LPDIRECTSOUNDBUFFER primaryBuffer;
@@ -308,12 +310,12 @@ bool StreamBuffer::loadWav(const char *filename)
     }
     */
 
-    DSBPOSITIONNOTIFY     posNotify[MAX_STREAM_BUF];
+    DSBPOSITIONNOTIFY     posNotify[MAX_NOTIFY_NUM];
     LPDIRECTSOUNDNOTIFY   notify = 0;
 
-    for(int i=0; i<MAX_STREAM_BUF; ++i)
+    for(int i=0; i<MAX_NOTIFY_NUM; ++i)
     {
-        posNotify[i].dwOffset=i*streamBufSize;
+        posNotify[i].dwOffset=i*streamBufSize/MAX_NOTIFY_NUM;
         posNotify[i].hEventNotify=event[i]=CreateEvent(0, false, false, 0);
     }
 
@@ -322,7 +324,7 @@ bool StreamBuffer::loadWav(const char *filename)
     if(FAILED(hr=primaryBuffer->QueryInterface(IID_IDirectSoundNotify8, (LPVOID*)&notify)))
         return false;
 
-    hr=notify->SetNotificationPositions(MAX_STREAM_BUF, posNotify);
+    hr=notify->SetNotificationPositions(MAX_NOTIFY_NUM, posNotify);
     notify->Release();
 
     primaryBuffer->Release();
@@ -338,16 +340,16 @@ void StreamBuffer::setLoopPos(DWORD posA, DWORD posB)
 
 DWORD WINAPI StreamBuffer::PlayThread(LPVOID lpParam)
 {
-    DWORD res;
     StreamBuffer* instance=(StreamBuffer*)lpParam;
 
     instance->prepareBuffer();
     instance->buffer->Play(0, 0, DSBPLAY_LOOPING);
-    res=WaitForSingleObject(instance->event[0], INFINITE);
+
+    WaitForSingleObject(instance->event[0], INFINITE);
     while(instance->isPlaying)
     {
-        res=WaitForMultipleObjects(MAX_STREAM_BUF, instance->event, false, INFINITE);
-        instance->processBuffer(res-WAIT_OBJECT_0);
+        WaitForMultipleObjects(MAX_NOTIFY_NUM, instance->event, false, INFINITE);
+        instance->prepareBuffer();
     }
 
     return 0;
@@ -355,38 +357,28 @@ DWORD WINAPI StreamBuffer::PlayThread(LPVOID lpParam)
 
 void StreamBuffer::prepareBuffer()
 {
-    void* buffer1;
-    DWORD bufferSize1;
-
-    currentMemPos=m_buffer;
-    remainMemSize=(loopPosB>0&&loopPosB<m_size?loopPosB:m_size);
-    lastWrittenMemIdx=0;
-
-    if (buffer->Lock(0, 0, &buffer1, &bufferSize1, 0, 0, DSBLOCK_ENTIREBUFFER)==S_OK)
-    {
-        copyBuffer(buffer1, bufferSize1);
-        buffer->Unlock(buffer1, bufferSize1, NULL, 0);
-    }
-
-}
-
-void StreamBuffer::processBuffer(int i)
-{
-    if(remainMemSize<=0)
+    if(currentMemPos>=m_size)
     {
         stop();
         return;
     }
 
-    void* buffer1 = NULL;
-    void* buffer2 = NULL;
-    DWORD bufferSize1;
-    DWORD bufferSize2;
-
-    DWORD pendingIndex=(lastWrittenMemIdx%MAX_STREAM_BUF)*streamBufSize;
-    DWORD pendingSize=(i-lastWrittenMemIdx+MAX_STREAM_BUF)%MAX_STREAM_BUF*streamBufSize;
-
     HRESULT hr;
+
+    void* buffer1=NULL;
+    void* buffer2=NULL;
+    DWORD bufferSize1=0;
+    DWORD bufferSize2=0;
+
+    DWORD currentPos;
+
+    buffer->GetCurrentPosition(&currentPos, 0);
+
+    DWORD pendingIndex=lastWrittenPos;
+    DWORD pendingSize=(isPlaying?(currentPos+streamBufSize-lastWrittenPos)%streamBufSize:streamBufSize);
+
+    if(pendingSize==0)
+        return;
 
     hr=buffer->Lock(pendingIndex, pendingSize, &buffer1, &bufferSize1, &buffer2, &bufferSize2, 0);
     if(hr==DSERR_BUFFERLOST)
@@ -395,18 +387,22 @@ void StreamBuffer::processBuffer(int i)
         hr=buffer->Lock(pendingIndex, pendingSize, &buffer1, &bufferSize1, &buffer2, &bufferSize2, 0);
     }
 
-    //cout<<i<<' '<<lastWrittenMemIdx<<' '<<buffer1<<' '<<bufferSize1<<' '<<buffer2<<' '<<bufferSize2<<endl;
-    lastWrittenMemIdx=i;
-
-    if(SUCCEEDED(hr))
+    if(hr!=S_OK)
     {
-        copyBuffer(buffer1, bufferSize1);
-
-        if (buffer2)
-            copyBuffer(buffer2, bufferSize2);
-
-        hr=buffer->Unlock(buffer1, bufferSize1, buffer2, bufferSize2);
+        stop();
+        cout<<"Failed locking sound buffer"<<endl;
+        return;
     }
+
+    copyBuffer(buffer1, bufferSize1);
+
+    if (buffer2)
+        copyBuffer(buffer2, bufferSize2);
+
+    lastWrittenPos%=streamBufSize;
+
+    hr=buffer->Unlock(buffer1, bufferSize1, buffer2, bufferSize2);
+
 }
 
 void StreamBuffer::copyBuffer(void* buffer, DWORD size)
@@ -418,21 +414,24 @@ void StreamBuffer::copyBuffer(void* buffer, DWORD size)
 
     while(size>0)
     {
-        tempBufferSize=(remainMemSize<size?remainMemSize:size);
-        memcpy(cBuffer, currentMemPos, tempBufferSize);
+        tempBufferSize=(loopPosB>0?loopPosB:m_size)-currentMemPos;
+        if(tempBufferSize>size)
+            tempBufferSize=size;
+
+        memcpy(cBuffer, m_buffer+currentMemPos, tempBufferSize);
+
         size-=tempBufferSize;
         cBuffer+=tempBufferSize;
 
-        remainMemSize-=tempBufferSize;
         currentMemPos+=tempBufferSize;
+        lastWrittenPos+=tempBufferSize;
 
         if(loopPosB==0 || loopPosB>m_size || loopPosA>=loopPosB)
             break;
 
-        if(remainMemSize==0)
+        if(currentMemPos==loopPosB)
         {
-            remainMemSize=loopPosB-loopPosA;
-            currentMemPos=m_buffer+loopPosA;
+            currentMemPos=loopPosA;
         }
     }
 
@@ -445,8 +444,13 @@ void StreamBuffer::play(bool restart)
     {
         stop();
     }
+
+    prepareBuffer();
+
     if(!isPlaying)
     {
+        currentMemPos=0;
+        lastWrittenPos=0;
         CloseHandle(CreateThread(0, 0, StreamBuffer::PlayThread, this, 0, 0));
         isPlaying=true;
         paused=false;
