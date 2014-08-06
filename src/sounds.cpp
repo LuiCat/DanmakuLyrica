@@ -156,11 +156,11 @@ void SoundBuffer::prepareBuffer()
 }
 
 SoundBuffer::SoundBuffer()
+    :m_buffer(0)
+    ,m_size(0)
+    ,playFlag(0)
 {
-    playFlag=0;
-    m_size=0;
-    m_buffer=0;
-    buffer=0;
+    memset(&waveFormat, 0, sizeof(waveFormat));
 }
 
 SoundBuffer::~SoundBuffer()
@@ -224,14 +224,14 @@ DWORD SoundBuffer::getPos() const
     return playPos;
 }
 
-void SoundBuffer::setTime(double time)
+void SoundBuffer::setTime(double timeSec)
 {
-    setPos(time*44.1*4);
+    setPos(timeSec*waveFormat.nAvgBytesPerSec);
 }
 
 double SoundBuffer::getTime() const
 {
-    return getPos() / 44.1 / 4;
+    return (double)getPos() / waveFormat.nAvgBytesPerSec;
 }
 
 void SoundBuffer::setVolume(long volume)
@@ -258,9 +258,16 @@ DWORD StreamBuffer::streamBufSize=88200;
 
 StreamBuffer::StreamBuffer()
     :SoundBuffer()
+    ,currentMemPos(0)
+    ,lastWrittenPos(0)
+    ,processedMemLen(0)
+    ,isPlaying(false)
+    ,paused(false)
+    ,loopPosA(0)
+    ,loopPosB(0)
 {
     setLoop(true);
-    loopPosA=loopPosB=0;
+    memset(event, 0, sizeof(event));
 }
 
 StreamBuffer::~StreamBuffer()
@@ -342,7 +349,6 @@ DWORD WINAPI StreamBuffer::PlayThread(LPVOID lpParam)
 {
     StreamBuffer* instance=(StreamBuffer*)lpParam;
 
-    instance->prepareBuffer();
     instance->buffer->Play(0, 0, DSBPLAY_LOOPING);
 
     WaitForSingleObject(instance->event[0], INFINITE);
@@ -425,6 +431,7 @@ void StreamBuffer::copyBuffer(void* buffer, DWORD size)
 
         currentMemPos+=tempBufferSize;
         lastWrittenPos+=tempBufferSize;
+        processedMemLen+=tempBufferSize;
 
         if(loopPosB==0 || loopPosB>m_size || loopPosA>=loopPosB)
             break;
@@ -449,8 +456,6 @@ void StreamBuffer::play(bool restart)
 
     if(!isPlaying)
     {
-        currentMemPos=0;
-        lastWrittenPos=0;
         CloseHandle(CreateThread(0, 0, StreamBuffer::PlayThread, this, 0, 0));
         isPlaying=true;
         paused=false;
@@ -469,6 +474,9 @@ void StreamBuffer::stop()
     buffer->SetCurrentPosition(0);
     isPlaying=false;
     paused=false;
+    currentMemPos=0;
+    lastWrittenPos=0;
+    processedMemLen=0;
 }
 
 void StreamBuffer::pause()
@@ -476,4 +484,18 @@ void StreamBuffer::pause()
     if(!isAvailable())return;
     buffer->Stop();
     paused=true;
+}
+
+void StreamBuffer::setPos(DWORD npos)
+{
+    currentMemPos=npos;
+}
+
+DWORD StreamBuffer::getPos() const
+{
+    if(processedMemLen==0)
+        return 0;
+    DWORD pos;
+    buffer->GetCurrentPosition(&pos, 0);
+    return processedMemLen-(lastWrittenPos>pos?lastWrittenPos-pos:lastWrittenPos+streamBufSize-pos);
 }

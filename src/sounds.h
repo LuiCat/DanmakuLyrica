@@ -49,7 +49,7 @@ public:
     virtual void setPos(DWORD npos);
     virtual DWORD getPos() const;
 
-    virtual void setTime(double time);
+    virtual void setTime(double timeSec);
     virtual double getTime() const;
 
     void setVolume(long volume);
@@ -77,6 +77,7 @@ protected:
 
     DWORD currentMemPos;
     DWORD lastWrittenPos;
+    DWORD processedMemLen;
 
     bool isPlaying;
     bool paused;
@@ -103,6 +104,9 @@ public:
     void pause();
 
     static DWORD WINAPI PlayThread(LPVOID lpParam);
+
+    void setPos(DWORD npos);
+    DWORD getPos() const;
 
 };
 
