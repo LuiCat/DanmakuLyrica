@@ -16,6 +16,8 @@ public:
     void update(double deltaSec);
     void render();
 
+    const char* getBgmFilename();
+
 protected:
 
     NoteList noteList;

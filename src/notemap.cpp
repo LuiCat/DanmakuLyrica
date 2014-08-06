@@ -33,6 +33,11 @@ int NoteMap::getEntityNotes(list<Note> &noteList, int maxinum)
     return loadedNum;
 }
 
+const char *NoteMap::getWavFilename()
+{
+    return wavfile;
+}
+
 bool NoteMap::reloadTjaFile()
 {
     FILE* f=fopen(tjafile, "r");

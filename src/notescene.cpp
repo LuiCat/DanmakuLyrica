@@ -25,6 +25,11 @@ void NoteScene::render()
     noteList.renderAll();
 }
 
+const char* NoteScene::getBgmFilename()
+{
+    return noteMap.getWavFilename();
+}
+
 void NoteScene::reloadNotes()
 {
     list<Note> tempList;

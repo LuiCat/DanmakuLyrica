@@ -20,6 +20,8 @@ public:
 
     int getEntityNotes(list<Note>& noteList, int maxinum=-1);
 
+    const char* getWavFilename();
+
 protected:
 
     char tjafile[100];
