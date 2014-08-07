@@ -13,7 +13,7 @@ public:
     void setTickRate(double ticksPerSec);
 
     int getTick() const;
-    double getSec() const;
+    double getTimeSec() const;
 
     virtual void update(double deltaSec);
 

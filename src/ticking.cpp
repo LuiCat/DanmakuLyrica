@@ -64,7 +64,7 @@ int Ticking::getTick() const
     return tick;
 }
 
-double Ticking::getSec() const
+double Ticking::getTimeSec() const
 {
     return timeSec;
 }
