@@ -5,6 +5,7 @@ CONFIG += c++11
 QMAKE_LFLAGS += -static-libgcc
 QMAKE_LFLAGS += -static-libstdc++
 
+QMAKE_CFLAGS_RELEASE += -O2
 
 DEFINES -= UNICODE
 

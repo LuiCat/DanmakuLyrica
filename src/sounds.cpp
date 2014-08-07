@@ -158,6 +158,7 @@ void SoundBuffer::prepareBuffer()
 SoundBuffer::SoundBuffer()
     :m_buffer(0)
     ,m_size(0)
+    ,buffer(0)
     ,playFlag(0)
 {
     memset(&waveFormat, 0, sizeof(waveFormat));
@@ -476,7 +477,7 @@ void StreamBuffer::stop()
     paused=false;
     currentMemPos=0;
     lastWrittenPos=0;
-    processedMemLen=0;
+    //processedMemLen=0;
 }
 
 void StreamBuffer::pause()
