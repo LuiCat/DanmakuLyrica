@@ -3,9 +3,6 @@
 
 #include "windef.h"
 
-#define FPS_UNLIMITED
-#define MAX_UNUPDATED_FRAME 5
-
 class MainGame
 {
 protected:

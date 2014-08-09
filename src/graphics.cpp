@@ -235,6 +235,11 @@ HRESULT D3D_Init(HWND hWnd)
     ZeroMemory( &d3dpp, sizeof( d3dpp ) );
     d3dpp.hDeviceWindow = hWnd;
     d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+#ifdef FPS_UNLIMITED
+    d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+#else
+    d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+#endif
 	d3dpp.BackBufferFormat = D3DFMT_A8R8G8B8;
 	d3dpp.BackBufferWidth = WIDTH;
 	d3dpp.BackBufferHeight = HEIGHT;

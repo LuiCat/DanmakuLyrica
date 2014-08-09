@@ -5,6 +5,7 @@
 
 #include "graphics.h"
 
+#include "commondef.h"
 #include "mathhelper.h"
 
 #include "debug.h"
