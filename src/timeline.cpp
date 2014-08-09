@@ -3,8 +3,6 @@
 #include "mathhelper.h"
 #include "commondef.h"
 
-#include "debug.h"
-
 TimeLine::TimeLine()
 {
     reset();
@@ -40,7 +38,6 @@ double TimeLine::getDeltaTimeFixed(double deltaSec)
 
     if(tabs(errorSum)>MAX_TIMEFIX_TOLERATION)
     {
-        cout<<"reset "<<timeStamp<<' '<<unfixStamp<<' '<<newFix<<endl;
         result+=errorSum;
         resetTimeRecord();
         insertTimeRecord(timeStamp, unfixStamp);

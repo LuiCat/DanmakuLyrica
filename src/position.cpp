@@ -1,5 +1,4 @@
 #include "position.h"
-#include "debug.h"
 
 Position::Position()
     :x(0.0)

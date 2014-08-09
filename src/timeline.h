@@ -39,7 +39,6 @@ private:
 
     int fixNum;
 
-
 };
 
 #endif // TIMELINE_H

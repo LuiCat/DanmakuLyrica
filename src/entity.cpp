@@ -2,8 +2,6 @@
 
 #include "mathhelper.h"
 
-#include "debug.h"
-
 //===================================================
 
 double Entity::getSpeed() const
