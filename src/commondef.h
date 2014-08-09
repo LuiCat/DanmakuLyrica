@@ -13,4 +13,6 @@
 //#define FPS_UNLIMITED
 #define MAX_UNUPDATED_FRAME 5
 
+#define UNUSED(x) (void)(x)
+
 #endif // COMMONDEF_H

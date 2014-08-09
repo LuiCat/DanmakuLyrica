@@ -60,8 +60,7 @@ void MainGame::mainRender()
 
 void MainGame::updateTick()
 {
-    long a;
-    ReleaseSemaphore(hTickSema, 1, &a);
+    ReleaseSemaphore(hTickSema, 1, 0);
 }
 
 void MainGame::waitForUpdateTick()
@@ -101,9 +100,9 @@ void MainGame::prepare()
 
 void MainGame::finish()
 {
+    instance=0;
     CloseHandle(hTickSema);
     lastFrameTick=0;
-    instance=0;
     PostMessage(hWnd, WM_DESTROY, 0, 0);
 }
 
@@ -139,5 +138,7 @@ DWORD MainGame::mainThreadFunc(LPVOID)
 
 void CALLBACK MainGame::tickFrame(UINT, UINT, DWORD_PTR, DWORD_PTR, DWORD_PTR)
 {
+    if(!instance)
+        return;
     instance->updateTick();
 }

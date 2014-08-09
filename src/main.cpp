@@ -65,6 +65,8 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 WINAPI INT WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
+    UNUSED(hInst);
+
     WNDCLASSEX wc =
     {
         sizeof(WNDCLASSEX), CS_CLASSDC, msgProc, 0L, 0L,
