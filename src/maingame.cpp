@@ -92,7 +92,7 @@ void MainGame::prepare()
 {
     hTickSema=CreateSemaphore(NULL, 0, MAX_UNUPDATED_FRAME, "tickupdate");
 #ifndef FPS_UNLIMITED
-    idTimer=timeSetEvent(16, 1, tickFrame, 0, TIME_PERIODIC);
+    idTimer=timeSetEvent(FPS_LIMIT_MSEC, 1, tickFrame, 0, TIME_PERIODIC);
 #endif
     lastFrameTick=0;
     tick=0;

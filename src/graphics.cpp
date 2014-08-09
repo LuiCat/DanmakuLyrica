@@ -235,7 +235,7 @@ HRESULT D3D_Init(HWND hWnd)
     ZeroMemory( &d3dpp, sizeof( d3dpp ) );
     d3dpp.hDeviceWindow = hWnd;
     d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-#ifdef FPS_UNLIMITED
+#ifndef FPS_VSYNC
     d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 #else
     d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
