@@ -35,10 +35,11 @@ void DanmakuLyrica::mainUpdate()
     if(timeStamp<0)
     {
         timeStamp=0;
+        timeLine.reset();
         bgm.play(true);
     }
     double newTime=bgm.getTime();
-    noteScene.update(newTime-timeStamp);
+    noteScene.update(timeLine.getDeltaTimeFixed(newTime-timeStamp));
     timeStamp=newTime;
 }
 

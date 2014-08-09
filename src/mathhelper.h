@@ -48,4 +48,10 @@ inline const T& max(const T& x, const T& y)
     return x>y?x:y;
 }
 
+template <typename T>
+inline const T tabs(const T& x)
+{
+    return x<0?-x:x;
+}
+
 #endif // MATHHELPER_H

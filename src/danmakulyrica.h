@@ -6,6 +6,8 @@
 #include "notescene.h"
 #include "sounds.h"
 
+#include "timeline.h"
+
 class DanmakuLyrica : public MainGame
 {
 public:
@@ -23,6 +25,8 @@ private:
 
     NoteScene noteScene;
     StreamBuffer bgm;
+
+    TimeLine timeLine;
 
 };
 

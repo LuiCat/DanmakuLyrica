@@ -17,6 +17,7 @@ void NoteScene::cleanup()
 
 void NoteScene::update(double deltaSec)
 {
+    cout<<deltaSec<<endl;
     noteList.updateAll(deltaSec);
 }
 
