@@ -13,6 +13,9 @@ unordered_map<DWORD, KeyBinding*> KeyBinding::joystickMap;
 LPDIRECTINPUTDEVICE8 KeyBinding::lpKeyboard = 0;
 LPDIRECTINPUTDEVICE8 KeyBinding::lpJoystick = 0;
 
+double KeyBinding::stickTriggerRange = 0.5;
+bool KeyBinding::useBufferedData = false;
+
 HRESULT DInput_Init(HWND hWnd, HINSTANCE hInst)
 {
     HRESULT hr;
@@ -29,6 +32,8 @@ HRESULT DInput_Init(HWND hWnd, HINSTANCE hInst)
 
 void DInput_Cleanup()
 {
+    KeyBinding::cleanupDevice();
+
     if (lpDirectInput)
     {
         lpDirectInput->Release();
@@ -57,13 +62,13 @@ HRESULT KeyBinding::initDevice(HWND hWnd)
 
     if(FAILED(hr=initKeyboard(hWnd)))
     {
-        cout<<"Keyboard init failed "<<hr<<endl;
+        cout<<"Keyboard init failed "<<hex<<hr<<endl;
         return hr;
     }
 
     if(FAILED(hr=initJoystick(hWnd)))
     {
-        cout<<"Joystick init failed "<<hr<<endl;
+        cout<<"Joystick init failed "<<hex<<hr<<endl;
     }
 
     return S_OK;
@@ -89,29 +94,28 @@ void KeyBinding::unacquire()
 
 void KeyBinding::refreshAll()
 {
-    // ...
-    for(auto x : bindingList)
-        x->refresh();
+    refreshKeyboard();
+    refreshJoystick();
 }
 
-void KeyBinding::refresh()
-{
-    // ...
-}
-
-bool KeyBinding::status()
+bool KeyBinding::isPushed() const
 {
     return pushed;
 }
 
-int KeyBinding::value()
+bool KeyBinding::isDown() const
 {
-    return pushCount;
+    return down;
 }
 
-bool KeyBinding::operator()()
+DWORD KeyBinding::getValue() const
 {
-    return status();
+    return value;
+}
+
+bool KeyBinding::operator()() const
+{
+    return isDown();
 }
 
 bool KeyBinding::setKey(DWORD newKey, bool isKeyboard)
@@ -144,6 +148,11 @@ bool KeyBinding::setKey(DWORD newKey, bool isKeyboard)
     return true;
 }
 
+void KeyBinding::setCallbackFunc(BindingCallback func)
+{
+    callbackFunc=func;
+}
+
 HRESULT KeyBinding::initKeyboard(HWND hWnd)
 {
     HRESULT hr;
@@ -168,9 +177,6 @@ HRESULT KeyBinding::initKeyboard(HWND hWnd)
     if(FAILED(hr=lpKeyboard->SetProperty(DIPROP_BUFFERSIZE, &property.diph)))
         return hr;
 
-    if(FAILED(hr=lpKeyboard->Acquire()))
-        return hr;
-
     return S_OK;
 }
 
@@ -184,9 +190,60 @@ void KeyBinding::cleanupKeyboard()
     }
 }
 
+void KeyBinding::refreshKeyboard()
+{
+    if(!lpKeyboard)
+        return;
+
+    HRESULT hr = DI_OK;
+
+    BYTE                diks[256];
+    DIDEVICEOBJECTDATA  didod[DINPUT_BUFFERSIZE];
+    DWORD               dwElements;
+
+    unordered_map<DWORD, KeyBinding*>::iterator iter;
+
+    DWORD currentTick=GetTickCount();
+
+    hr=lpKeyboard->Acquire();
+
+    hr=DI_OK;
+
+    if(useBufferedData)
+    {
+        hr=lpKeyboard->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), didod, &dwElements, 0);
+        if(hr==DI_OK || hr==DI_BUFFEROVERFLOW)
+        {
+            for(DWORD i=0; i<dwElements; ++i)
+            {
+                iter=keyboardMap.find(didod[i].dwOfs);
+                if(iter==keyboardMap.end())
+                    continue;
+                iter->second->pushKeyData(true, didod[i].dwOfs, didod[i].dwData, didod[i].dwTimeStamp);
+            }
+        }
+    }
+
+    if(!useBufferedData || hr==DI_BUFFEROVERFLOW)
+    {
+        hr=lpKeyboard->GetDeviceState(256, diks);
+        if(hr==DI_OK)
+        {
+            DWORD key;
+            for(auto x : bindingList)
+            {
+                key=x->keyKeyboard;
+                if(diks[key] & 0x80)
+                    x->pushKeyData(true, key, diks[key], currentTick);
+            }
+        }
+    }
+}
+
 HRESULT KeyBinding::initJoystick(HWND hWnd)
 {
     UNUSED(hWnd);
+    // ...
     return S_OK;
 }
 
@@ -200,8 +257,45 @@ void KeyBinding::cleanupJoystick()
     }
 }
 
-void KeyBinding::pushKeyData(DWORD data)
+void KeyBinding::refreshJoystick()
 {
-    UNUSED(data);
     // ...
+}
+
+void KeyBinding::pushKeyData(bool isKeyboard, DWORD key, DWORD data, DWORD timeStamp)
+{
+    KeyData keyData={isKeyboard, key, data, timeStamp};
+    dataBuffer.push_back(keyData);
+}
+
+void KeyBinding::dealKeyData()
+{
+    KeyData* keyData;
+
+    value=0;
+    pushed=false;
+
+    while(!dataBuffer.empty())
+    {
+        keyData=&(dataBuffer.front());
+
+        if(callbackFunc)
+            callbackFunc(this, keyData);
+
+        if(keyData->isKeyBoard)
+        {
+            down=(((keyData->data)&0x80)!=0);
+            if(down)
+            {
+                pushed=true;
+                value++;
+            }
+        }
+        else
+        {
+            // ...
+        }
+
+        dataBuffer.pop_front();
+    }
 }

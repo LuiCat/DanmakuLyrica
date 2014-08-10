@@ -5,6 +5,7 @@
 
 #include "notescene.h"
 #include "sounds.h"
+#include "keybinding.h"
 
 #include "timeline.h"
 
@@ -27,6 +28,9 @@ private:
     StreamBuffer bgm;
 
     TimeLine timeLine;
+
+    KeyBinding buttonA;
+    KeyBinding buttonB;
 
 };
 

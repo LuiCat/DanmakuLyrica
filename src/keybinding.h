@@ -9,14 +9,19 @@
 #include <list>
 using namespace std;
 
-#define DINPUT_BUFFERSIZE 50
-#define KEYDATA_BUFFERSIZE 20
+#define DINPUT_BUFFERSIZE 500
 
-struct KeyInfo
+struct KeyData
 {
+    bool isKeyBoard;
+    DWORD key;
     DWORD data;
     DWORD timeStamp;
 };
+
+class KeyBinding;
+
+typedef void(*BindingCallback)(KeyBinding*, const KeyData*);
 
 class KeyBinding
 {
@@ -33,14 +38,15 @@ public:
     KeyBinding(DWORD _keyKeyboard=0, DWORD _keyJoystick=0);
     ~KeyBinding();
 
-    void refresh();
+    bool isPushed() const;
+    bool isDown() const;
+    DWORD getValue() const;
 
-    virtual bool status();
-    virtual int value();
-
-    bool operator()();
+    bool operator()() const;
 
     bool setKey(DWORD key, bool isKeyboard);
+
+    void setCallbackFunc(BindingCallback func);
 
 protected:
 
@@ -51,13 +57,19 @@ protected:
     static LPDIRECTINPUTDEVICE8 lpKeyboard;
     static LPDIRECTINPUTDEVICE8 lpJoystick;
 
+    static double stickTriggerRange;
+    static bool useBufferedData;
+
     static HRESULT initKeyboard(HWND hWnd);
     static void cleanupKeyboard();
+    static void refreshKeyboard();
 
     static HRESULT initJoystick(HWND hWnd);
     static void cleanupJoystick();
+    static void refreshJoystick();
 
-    virtual void pushKeyData(DWORD data);
+    void pushKeyData(bool isKeyboard, DWORD key, DWORD data, DWORD timeStamp);
+    void dealKeyData();
 
 private:
 
@@ -65,9 +77,12 @@ private:
     DWORD keyJoystick;
 
     bool pushed;
-    int pushCount;
+    bool down;
+    DWORD value;
 
-    list<KeyInfo> dataBuffer;
+    list<KeyData> dataBuffer;
+
+    BindingCallback callbackFunc;
 
 };
 

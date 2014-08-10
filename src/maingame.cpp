@@ -4,6 +4,7 @@
 #include "soundregistry.h"
 
 #include "graphics.h"
+#include "keybinding.h"
 
 #include "commondef.h"
 #include "mathhelper.h"
@@ -108,6 +109,8 @@ void MainGame::finish()
 
 void MainGame::process()
 {
+    KeyBinding::refreshAll();
+
     mainUpdate();
 
     mainRender();

@@ -1,14 +1,16 @@
 #include "danmakulyrica.h"
 
 #include "graphics.h"
+
 #include "commondef.h"
 
 #include "soundregistry.h"
 
 DanmakuLyrica::DanmakuLyrica()
+    :buttonA(DIK_Z, 0)
+    ,buttonB(DIK_X, 0)
 {
 }
-
 
 void DanmakuLyrica::mainInit()
 {
@@ -19,6 +21,7 @@ void DanmakuLyrica::mainInit()
     bgm.loadWav(strcat(filename, noteScene.getBgmFilename()));
     bgm.setVolume(0.5f);
 
+    SoundRegistry::registerSoundFile("hit0", false, "data/lyrica_notehit0.wav", 1.0f);
     SoundRegistry::registerSoundFile("hit1", false, "data/lyrica_notehit1.wav", 1.0f);
 
 }
@@ -41,6 +44,12 @@ void DanmakuLyrica::mainUpdate()
     double newTime=bgm.getTime();
     noteScene.update(timeLine.getDeltaTimeFixed(newTime-timeStamp));
     timeStamp=newTime;
+
+    if(buttonA())
+        SOUND("hit0")->play(true);
+    if(buttonB())
+        SOUND("hit0")->play(true);
+
 }
 
 void DanmakuLyrica::mainRender()
