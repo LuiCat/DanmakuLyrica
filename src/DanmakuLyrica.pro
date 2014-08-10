@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     notelist.cpp \
     notejudge.cpp \
     mapstate.cpp \
-    timeline.cpp
+    timeline.cpp \
+    keybinding.cpp
 
 HEADERS += \
     debug.h \
@@ -57,12 +58,14 @@ HEADERS += \
     notelist.h \
     notejudge.h \
     mapstate.h \
-    timeline.h
+    timeline.h \
+    keybinding.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
 		-lwinmm \
 		-ldsound \
+		-ldinput8 \
 		-ldxguid
 
 LIBS += $$PWD/lua/lua.a
