@@ -14,7 +14,17 @@ LPDIRECTINPUTDEVICE8 KeyBinding::lpKeyboard = 0;
 LPDIRECTINPUTDEVICE8 KeyBinding::lpJoystick = 0;
 
 double KeyBinding::stickTriggerRange = 0.5;
-bool KeyBinding::useBufferedData = false;
+bool KeyBinding::useBufferedData = true;
+
+LPCDIDEVICEINSTANCE lpddikeyboard;
+
+BOOL WINAPI EnumDevicesCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID)
+{
+    lpddikeyboard=lpddi;
+    cout<<"current is "<<lpddi->tszInstanceName<<", "<<lpddi->tszProductName<<endl;
+    return DIENUM_STOP;
+}
+
 
 HRESULT DInput_Init(HWND hWnd, HINSTANCE hInst)
 {
@@ -22,6 +32,8 @@ HRESULT DInput_Init(HWND hWnd, HINSTANCE hInst)
 
     if(FAILED(hr=DirectInput8Create(hInst, DIRECTINPUT_VERSION, IID_IDirectInput8A, (LPVOID*)&lpDirectInput, NULL)))
         return hr;
+
+    lpDirectInput->EnumDevices(DI8DEVCLASS_KEYBOARD, EnumDevicesCallback, 0, DIEDFL_ATTACHEDONLY);
 
     if(FAILED(hr=KeyBinding::initDevice(hWnd)))
         return hr;
@@ -157,6 +169,7 @@ HRESULT KeyBinding::initKeyboard(HWND hWnd)
 {
     HRESULT hr;
 
+    //lpddikeyboard->guidInstance;
     if(FAILED(hr=lpDirectInput->CreateDevice(GUID_SysKeyboard, &lpKeyboard, NULL)))
         return hr;
 
@@ -214,6 +227,8 @@ void KeyBinding::refreshKeyboard()
         hr=lpKeyboard->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), didod, &dwElements, 0);
         if(hr==DI_OK || hr==DI_BUFFEROVERFLOW)
         {
+            if(dwElements>0)
+                cout<<"buffered "<<dwElements<<endl;
             for(DWORD i=0; i<dwElements; ++i)
             {
                 iter=keyboardMap.find(didod[i].dwOfs);
