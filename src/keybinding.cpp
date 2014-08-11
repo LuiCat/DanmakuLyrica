@@ -16,6 +16,7 @@ LPDIRECTINPUTDEVICE8 KeyBinding::lpJoystick = 0;
 double KeyBinding::stickTriggerRange = 0.5;
 bool KeyBinding::useBufferedData = false;
 
+
 HRESULT DInput_Init(HWND hWnd, HINSTANCE hInst)
 {
     HRESULT hr;
@@ -41,18 +42,17 @@ void DInput_Cleanup()
     }
 }
 
-
 KeyBinding::KeyBinding(DWORD _keyKeyboard, DWORD _keyJoystick)
 {
     bindingList.push_back(this);
     setKey(_keyKeyboard, true);
-    setKey(_keyJoystick, true);
+    setKey(_keyJoystick, false);
 }
 
 KeyBinding::~KeyBinding()
 {
     setKey(0, true);
-    setKey(0, true);
+    setKey(0, false);
     bindingList.remove(this);
 }
 
@@ -96,6 +96,7 @@ void KeyBinding::refreshAll()
 {
     refreshKeyboard();
     refreshJoystick();
+    dealAllKeyData();
 }
 
 bool KeyBinding::isPushed() const
@@ -140,7 +141,7 @@ bool KeyBinding::setKey(DWORD newKey, bool isKeyboard)
 
     if(newKey)
     {
-        map[(newKey)]=this;
+        map[newKey]=this;
     }
 
     oldKey=newKey;
@@ -214,6 +215,8 @@ void KeyBinding::refreshKeyboard()
         hr=lpKeyboard->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), didod, &dwElements, 0);
         if(hr==DI_OK || hr==DI_BUFFEROVERFLOW)
         {
+            if(dwElements>0)
+                cout<<"buffered "<<dwElements<<endl;
             for(DWORD i=0; i<dwElements; ++i)
             {
                 iter=keyboardMap.find(didod[i].dwOfs);
@@ -233,8 +236,7 @@ void KeyBinding::refreshKeyboard()
             for(auto x : bindingList)
             {
                 key=x->keyKeyboard;
-                if(diks[key] & 0x80)
-                    x->pushKeyData(true, key, diks[key], currentTick);
+                x->pushKeyData(true, key, diks[key], currentTick);
             }
         }
     }
@@ -262,6 +264,14 @@ void KeyBinding::refreshJoystick()
     // ...
 }
 
+void KeyBinding::dealAllKeyData()
+{
+    for(auto x : bindingList)
+    {
+        x->dealKeyData();
+    }
+}
+
 void KeyBinding::pushKeyData(bool isKeyboard, DWORD key, DWORD data, DWORD timeStamp)
 {
     KeyData keyData={isKeyboard, key, data, timeStamp};
@@ -271,6 +281,8 @@ void KeyBinding::pushKeyData(bool isKeyboard, DWORD key, DWORD data, DWORD timeS
 void KeyBinding::dealKeyData()
 {
     KeyData* keyData;
+
+    bool newDown;
 
     value=0;
     pushed=false;
@@ -284,12 +296,13 @@ void KeyBinding::dealKeyData()
 
         if(keyData->isKeyBoard)
         {
-            down=(((keyData->data)&0x80)!=0);
-            if(down)
+            newDown=(((keyData->data)&0x80)!=0);
+            if(newDown && !down)
             {
                 pushed=true;
                 value++;
             }
+            down=newDown;
         }
         else
         {

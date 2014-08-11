@@ -44,7 +44,7 @@ void Note::setJudgeResult(const MapState *state, JudgeResult result)
     judgeResult=result;
     judgeTime=(state?state->timeOffset:hitTime);
     if(judgeResult!=miss)
-        SOUND("hit1")->play(true);
+        SOUND("hit0")->play(true);
 }
 
 bool Note::isJudged() const
