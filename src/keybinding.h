@@ -68,6 +68,8 @@ protected:
     static void cleanupJoystick();
     static void refreshJoystick();
 
+    static void dealAllKeyData();
+
     void pushKeyData(bool isKeyboard, DWORD key, DWORD data, DWORD timeStamp);
     void dealKeyData();
 

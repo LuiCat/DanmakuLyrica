@@ -45,10 +45,10 @@ void DanmakuLyrica::mainUpdate()
     noteScene.update(timeLine.getDeltaTimeFixed(newTime-timeStamp));
     timeStamp=newTime;
 
-    if(buttonA())
-        SOUND("hit0")->play(true);
-    if(buttonB())
-        SOUND("hit0")->play(true);
+    if(buttonA.isPushed())
+        SOUND("hit1")->play(true);
+    if(buttonB.isPushed())
+        SOUND("hit1")->play(true);
 
 }
 
