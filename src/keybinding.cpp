@@ -14,7 +14,7 @@ LPDIRECTINPUTDEVICE8 KeyBinding::lpKeyboard = 0;
 LPDIRECTINPUTDEVICE8 KeyBinding::lpJoystick = 0;
 
 double KeyBinding::stickTriggerRange = 0.5;
-bool KeyBinding::useBufferedData = false;
+bool KeyBinding::useBufferedData = true;
 
 
 HRESULT DInput_Init(HWND hWnd, HINSTANCE hInst)
@@ -200,7 +200,7 @@ void KeyBinding::refreshKeyboard()
 
     BYTE                diks[256];
     DIDEVICEOBJECTDATA  didod[DINPUT_BUFFERSIZE];
-    DWORD               dwElements;
+    DWORD               dwElements = DINPUT_BUFFERSIZE;
 
     unordered_map<DWORD, KeyBinding*>::iterator iter;
 
@@ -215,8 +215,6 @@ void KeyBinding::refreshKeyboard()
         hr=lpKeyboard->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), didod, &dwElements, 0);
         if(hr==DI_OK || hr==DI_BUFFEROVERFLOW)
         {
-            if(dwElements>0)
-                cout<<"buffered "<<dwElements<<endl;
             for(DWORD i=0; i<dwElements; ++i)
             {
                 iter=keyboardMap.find(didod[i].dwOfs);
