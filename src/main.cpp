@@ -50,7 +50,6 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if(wParam==VK_ESCAPE)
         {
             game.exit();
-            //PostQuitMessage(0);
         }
         return 0;
     case WM_RESETDEVICE:
