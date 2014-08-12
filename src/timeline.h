@@ -2,7 +2,7 @@
 #define TIMELINE_H
 
 #define MAX_TIMEFIX_RECORD 3
-#define MAX_TIMEFIX_TOLERATION 0.016
+#define MAX_TIMEFIX_TOLERATION 0.010
 
 class TimeLine
 {

@@ -2,6 +2,7 @@
 
 #include "mathhelper.h"
 #include "commondef.h"
+#include "debug.h"
 
 TimeLine::TimeLine()
 {
@@ -33,12 +34,11 @@ double TimeLine::getDeltaTimeFixed(double deltaSec)
 
     double newFix=getTimeFixed(timeStamp);
     double result=newFix-fixStamp;
-    errorSum+=unfixStamp-newFix;
     fixStamp=newFix;
 
-    if(tabs(errorSum)>MAX_TIMEFIX_TOLERATION)
+    if(tabs(unfixStamp-fixStamp)>MAX_TIMEFIX_TOLERATION)
     {
-        result+=errorSum;
+        result+=(unfixStamp-fixStamp);
         resetTimeRecord();
         insertTimeRecord(timeStamp, unfixStamp);
     }
@@ -55,7 +55,6 @@ void TimeLine::resetTimeRecord()
 {
     fixNum=0;
     fixStamp=unfixStamp=timeStamp;
-    errorSum=0;
 }
 
 void TimeLine::insertTimeRecord(double stamp, double unfix)

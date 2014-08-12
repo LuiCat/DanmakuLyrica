@@ -166,6 +166,7 @@ SoundBuffer::SoundBuffer()
 
 SoundBuffer::~SoundBuffer()
 {
+
 }
 
 void SoundBuffer::release()
@@ -273,6 +274,7 @@ StreamBuffer::StreamBuffer()
 
 StreamBuffer::~StreamBuffer()
 {
+
 }
 
 void StreamBuffer::release()
@@ -280,7 +282,12 @@ void StreamBuffer::release()
     if(isPlaying)
         stop();
     for(int i=0;i<MAX_NOTIFY_NUM;++i)
+    {
+        if(event[i]==0)
+            continue;
         CloseHandle(event[i]);
+        event[i]=0;
+    }
     SoundBuffer::release();
 }
 
@@ -306,17 +313,6 @@ bool StreamBuffer::loadWav(const char *filename)
 
     if(FAILED(primaryBuffer->QueryInterface(IID_IDirectSoundBuffer8, (LPVOID*)&buffer)))
         return false;
-
-    /*
-    void* lpvWrite;
-    DWORD  dwLength;
-
-    if (buffer->Lock(0, 0, &lpvWrite, &dwLength, NULL, 0, DSBLOCK_ENTIREBUFFER)==S_OK)
-    {
-      memcpy(lpvWrite, m_buffer, dwLength);
-      buffer->Unlock(lpvWrite, dwLength, NULL, 0);
-    }
-    */
 
     DSBPOSITIONNOTIFY     posNotify[MAX_NOTIFY_NUM];
     LPDIRECTSOUNDNOTIFY   notify = 0;
