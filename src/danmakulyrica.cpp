@@ -59,7 +59,7 @@ void DanmakuLyrica::mainRender()
     d3d.resetMatrix();
 
     d3d.pushMatrix();
-    d3d.translate(100, 300.0);
+    d3d.translate2D(100, 300.0);
 
     d3d.pushMatrix();
 

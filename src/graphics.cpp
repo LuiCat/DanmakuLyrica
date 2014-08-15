@@ -216,6 +216,53 @@ void VertexBuffer::pushVertex(double x, double y, double u, double v)
 
 //-----------------------------------------------------------------------------------------------------------
 
+void VertexBuffer::translate2D(double x, double y)
+{
+    Matrix t;
+    D3DXMatrixTranslation(&t, x, y, 0.0);
+    currentMatrix.matrix=t*currentMatrix.matrix;
+}
+
+void VertexBuffer::rotate2D(double rotation)
+{
+    Matrix t;
+    D3DXMatrixRotationZ(&t, rotation);
+    currentMatrix.matrix=t*currentMatrix.matrix;
+}
+
+void VertexBuffer::scale2D(double scaleX, double scaleY)
+{
+    Matrix t;
+    D3DXMatrixScaling(&t, scaleX, scaleY, 1.0);
+    currentMatrix.matrix=t*currentMatrix.matrix;
+}
+
+void VertexBuffer::setBlend(bool add)
+{
+    currentMatrix.isAddBlend=add;
+}
+
+void VertexBuffer::setTexture(Texture tex)
+{
+    currentMatrix.texture=tex;
+}
+
+void VertexBuffer::setAlpha(double alpha)
+{
+    currentMatrix.defaultColor&=0xffffff;
+    alpha*=0xff000000;
+    currentMatrix.defaultColor|=(((int)alpha)&0xff000000);
+}
+
+void VertexBuffer::setColor(DWORD color)
+{
+    currentMatrix.defaultColor&=0xff000000;
+    currentMatrix.defaultColor|=(color&0xffffff);
+}
+
+
+//-----------------------------------------------------------------------------------------------------------
+
 HRESULT D3D_Init(HWND hWnd)
 {
     HRESULT res;

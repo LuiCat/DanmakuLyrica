@@ -75,49 +75,14 @@ public:
 	
     void pushVertex(double x, double y, double u, double v);
 
-    inline void translate(double x, double y)
-    {
-        Matrix t;
-        D3DXMatrixTranslation(&t, x, y, 0.0);
-        currentMatrix.matrix=t*currentMatrix.matrix;
-	}
+    void translate2D(double x, double y);
+    void rotate2D(double rotation);
+    void scale2D(double scaleX, double scaleY);
 
-    inline void rotate(double rotation)
-    {
-        Matrix t;
-        D3DXMatrixRotationZ(&t, rotation);
-        currentMatrix.matrix=t*currentMatrix.matrix;
-	}
-
-    inline void scale(double scaleX, double scaleY)
-    {
-        Matrix t;
-        D3DXMatrixScaling(&t, scaleX, scaleY, 1.0);
-        currentMatrix.matrix=t*currentMatrix.matrix;
-	}
-
-    inline void setBlend(bool add)
-    {
-        currentMatrix.isAddBlend=add;
-	}
-
-    inline void setTexture(Texture tex)
-    {
-        currentMatrix.texture=tex;
-	}
-
-    inline void setAlpha(double alpha)
-    {
-        currentMatrix.defaultColor&=0xffffff;
-        alpha*=0xff000000;
-        currentMatrix.defaultColor|=(((int)alpha)&0xff000000);
-    }
-
-    inline void setColor(DWORD color)
-    {
-        currentMatrix.defaultColor&=0xff000000;
-        currentMatrix.defaultColor|=(color&0xffffff);
-    }
+    void setBlend(bool add);
+    void setTexture(Texture tex);
+    void setAlpha(double alpha);
+    void setColor(DWORD color);
 
 };
 

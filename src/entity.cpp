@@ -213,8 +213,8 @@ void Entity::render()
     d3d.pushMatrix();
     if(useDefaultRendering)
     {
-        d3d.translate(x, y);
-        d3d.rotate(-facingAngle);
+        d3d.translate2D(x, y);
+        d3d.rotate2D(-facingAngle);
     }
     onRender();
     d3d.popMatrix();

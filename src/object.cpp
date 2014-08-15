@@ -97,8 +97,8 @@ void Object::onTick()
 void Object::onRender()
 {
     d3d.pushMatrix();
-    d3d.translate(-renderCenterX, -renderCenterY);
-    d3d.scale(renderSizeX, renderSizeY);
+    d3d.translate2D(-renderCenterX, -renderCenterY);
+    d3d.scale2D(renderSizeX, renderSizeY);
     d3d.setTexture(texture);
     if(useAlpha)
         d3d.setAlpha(alpha);
