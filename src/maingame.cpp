@@ -85,7 +85,7 @@ void MainGame::updateFps(DWORD rate)
     if(newFrameTick>lastFrameTick)
         frameRate=rate*1000.0/(newFrameTick-lastFrameTick);
     lastFrameTick=newFrameTick;
-    sprintf(buffer, "Dx Danmaku Test [Fps%.1f]", frameRate);
+    sprintf(buffer, "Danmaku Lyrica [Fps%.1f]", frameRate);
     SetWindowText(hWnd, buffer);
 }
 

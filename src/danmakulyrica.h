@@ -33,6 +33,7 @@ private:
 
     KeyBinding buttonA;
     KeyBinding buttonB;
+    KeyBinding buttonPause;
 
     Texture tex;
     TextureStrip strip;

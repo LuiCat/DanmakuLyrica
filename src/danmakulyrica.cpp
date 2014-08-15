@@ -9,6 +9,7 @@
 DanmakuLyrica::DanmakuLyrica()
     :buttonA(DIK_Z, 0)
     ,buttonB(DIK_X, 0)
+    ,buttonPause(DIK_SPACE, 0)
 {
 }
 
@@ -39,16 +40,28 @@ void DanmakuLyrica::mainCleanup()
 
 void DanmakuLyrica::mainUpdate()
 {
-    static double timeStamp=-1;
-    if(timeStamp<0)
+    static double timeStamp=0;
+    static bool isPaused=true;
+
+    if(!isPaused)
     {
-        timeStamp=0;
-        timeLine.reset();
-        bgm.play(true);
+        double newTime=bgm.getTime();
+        noteScene.update(timeLine.getDeltaTimeFixed(newTime-timeStamp));
+        timeStamp=newTime;
     }
-    double newTime=bgm.getTime();
-    noteScene.update(timeLine.getDeltaTimeFixed(newTime-timeStamp));
-    timeStamp=newTime;
+
+    if(buttonPause.isPushed())
+    {
+        isPaused=!isPaused;
+        if(isPaused)
+        {
+            bgm.pause();
+        }
+        else
+        {
+            bgm.play();
+        }
+    }
 
     if(buttonA.isPushed())
         SOUND("hit1")->play(true);

@@ -74,16 +74,16 @@ WINAPI INT WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     {
         sizeof(WNDCLASSEX), CS_CLASSDC, msgProc, 0L, 0L,
         GetModuleHandle( NULL ), NULL, NULL, NULL, NULL,
-        "DanmakuLyrica", NULL
+        "Danmaku Lyrica", NULL
     };
     RegisterClassEx(&wc);
 
     #ifndef WINDOWED
-    hWnd = CreateWindowEx(WS_EX_LAYERED|WS_EX_TOPMOST, "DanmakuLyrica", "DanmakuLyrica",
+    hWnd = CreateWindowEx(WS_EX_LAYERED|WS_EX_TOPMOST, "Danmaku Lyrica", "Danmaku Lyrica",
                               WS_POPUP, 0, 0, WIDTH, HEIGHT,
                               NULL, NULL, wc.hInstance, NULL);
     #else
-    hWnd = CreateWindow("DanmakuLyrica", "DanmakuLyrica",
+    hWnd = CreateWindow("Danmaku Lyrica", "Danmaku Lyrica",
                               WS_SYSMENU|WS_CAPTION|WS_MINIMIZEBOX, 0, 0, WIDTH, HEIGHT,
                               NULL, NULL, wc.hInstance, NULL);
     #endif
@@ -124,7 +124,7 @@ WINAPI INT WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 
     Main_Cleanup();
 
-    UnregisterClass("Dx Danmaku Test", wc.hInstance);
+    UnregisterClass("Danmaku Lyrica", wc.hInstance);
 
     return 0;
 }
