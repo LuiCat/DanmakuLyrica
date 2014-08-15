@@ -54,12 +54,13 @@ bool Note::isJudged() const
 
 void Note::onTick()
 {
-    if(!isJudged() && hitTime<getTimeSec()+0.05)
+    if(!isJudged() && hitTime<getTimeSec()+0.01)
         setJudgeResult(0, great);
 }
 
 void Note::onRender()
 {
+    d3d.setColor(judgeTime<0?0xffffff:judgeResult==miss?0xff0000:0x00ff00);
     d3d.pushVertex( 0.5,  10, 0.0, 0.0);
     d3d.pushVertex(-0.5,  10, 1.0, 0.0);
     d3d.pushVertex(-0.5, -10, 1.0, 1.0);
