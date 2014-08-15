@@ -32,19 +32,15 @@ void Note::setNoteType(NoteType type)
     noteType=type;
 }
 
-double Note::getTimeOffset(const MapState *state) const
+double Note::getTimeOffset(double timeSec) const
 {
-    double currentTime=0.0;
-    if(state)currentTime=state->timeOffset;
-    return hitTime-currentTime;
+    return hitTime-timeSec;
 }
 
-void Note::setJudgeResult(const MapState *state, JudgeResult result)
+void Note::setJudgeResult(double timeSec, JudgeResult result)
 {
     judgeResult=result;
-    judgeTime=(state?state->timeOffset:hitTime);
-    if(judgeResult!=miss)
-        SOUND("hit0")->play(true);
+    judgeTime=(timeSec>0?timeSec:hitTime);
 }
 
 bool Note::isJudged() const
@@ -54,13 +50,13 @@ bool Note::isJudged() const
 
 void Note::onTick()
 {
-    if(!isJudged() && hitTime<getTimeSec()+0.01)
-        setJudgeResult(0, great);
+    //if(!isJudged() && hitTime<getTimeSec()+0.01)
+        //setJudgeResult(0, great);
 }
 
 void Note::onRender()
 {
-    d3d.setColor(judgeTime<0?0xffffff:judgeResult==miss?0xff0000:0x00ff00);
+    d3d.setColor(judgeResult==miss?0xffffff:judgeResult==bad?0xff0000:judgeResult==good?0xffff00:0x00ff00);
     d3d.pushVertex( 0.5,  10, 0.0, 0.0);
     d3d.pushVertex(-0.5,  10, 1.0, 0.0);
     d3d.pushVertex(-0.5, -10, 1.0, 1.0);

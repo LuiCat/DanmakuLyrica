@@ -2,8 +2,8 @@
 
 NoteJudge::NoteJudge()
     :rangeBad(0.240)
-    ,rangeGood(0.180)
-    ,rangeGreat(0.060)
+    ,rangeGood(0.150)
+    ,rangeGreat(0.045)
 {
 }
 

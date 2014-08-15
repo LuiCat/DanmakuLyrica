@@ -18,9 +18,9 @@ public:
     void setScrollSpeed(double hs);
     void setNoteType(NoteType type);
 
-    double getTimeOffset(const MapState* state) const;
+    double getTimeOffset(double timeSec) const;
 
-    void setJudgeResult(const MapState *state, JudgeResult result);
+    void setJudgeResult(double timeSec, JudgeResult result);
     bool isJudged() const;
 
 protected:

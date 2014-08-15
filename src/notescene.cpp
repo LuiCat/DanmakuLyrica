@@ -30,6 +30,11 @@ const char* NoteScene::getBgmFilename()
     return noteMap.getWavFilename();
 }
 
+JudgeResult NoteScene::judgeSingleNote(double timeSec)
+{
+    return noteList.judgeSingleNote(timeSec);
+}
+
 void NoteScene::reloadNotes()
 {
     list<Note> tempList;

@@ -43,6 +43,8 @@ void DanmakuLyrica::mainUpdate()
     static double timeStamp=0;
     static bool isPaused=true;
 
+    JudgeResult judgeResult;
+
     if(!isPaused)
     {
         double newTime=bgm.getTime();
@@ -63,10 +65,14 @@ void DanmakuLyrica::mainUpdate()
         }
     }
 
-    if(buttonA.isPushed())
-        SOUND("hit1")->play(true);
-    if(buttonB.isPushed())
-        SOUND("hit1")->play(true);
+    if(buttonA.isPushed() || buttonB.isPushed())
+    {
+        judgeResult=noteScene.judgeSingleNote(timeStamp-0.015);
+        if(judgeResult==miss || judgeResult== bad)
+            SOUND("hit0")->play(true);
+        else
+            SOUND("hit1")->play(true);
+    }
 
 }
 

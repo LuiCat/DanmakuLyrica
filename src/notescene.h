@@ -18,6 +18,8 @@ public:
 
     const char* getBgmFilename();
 
+    JudgeResult judgeSingleNote(double timeSec);
+
 protected:
 
     NoteList noteList;

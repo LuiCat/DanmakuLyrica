@@ -16,7 +16,7 @@ public:
 
     NoteList();
 
-    JudgeResult judgeSingleNote(const MapState* state);
+    JudgeResult judgeSingleNote(double timeSec);
 
     void pushNote(const Note& note);
     void pushNotes(const list<Note>& notes);
