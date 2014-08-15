@@ -31,7 +31,8 @@ SOURCES += main.cpp \
     notejudge.cpp \
     mapstate.cpp \
     timeline.cpp \
-    keybinding.cpp
+    keybinding.cpp \
+    texturestrip.cpp
 
 HEADERS += \
     debug.h \
@@ -59,7 +60,8 @@ HEADERS += \
     notejudge.h \
     mapstate.h \
     timeline.h \
-    keybinding.h
+    keybinding.h \
+    texturestrip.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
