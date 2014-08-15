@@ -9,6 +9,8 @@
 
 #include "timeline.h"
 
+#include "texturestrip.h"
+
 class DanmakuLyrica : public MainGame
 {
 public:
@@ -31,6 +33,9 @@ private:
 
     KeyBinding buttonA;
     KeyBinding buttonB;
+
+    Texture tex;
+    TextureStrip strip;
 
 };
 

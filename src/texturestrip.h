@@ -7,7 +7,7 @@ class TextureStrip
 {
 public:
 
-    TextureStrip(Texture tex);
+    TextureStrip(Texture tex=0);
 
     void setTexture(Texture tex);
     void setStripPos(double x, double y, double w, double h);
