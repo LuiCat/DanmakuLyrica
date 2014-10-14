@@ -2,16 +2,15 @@
 #define OBJECT_H
 
 #include "entity.h"
+#include "texturestrip.h"
 
 class Object : public Entity
 {
 protected:
 
-    Texture texture;
+    TextureStrip textureStrip;
     double renderSizeX, renderSizeY;
     double renderCenterX, renderCenterY;
-    double texturePosX, texturePosY;
-    double textureSizeX, textureSizeY;
 
     bool useAlpha;
     double alpha;
@@ -21,7 +20,6 @@ protected:
 
 public:
 
-    Texture getTexture() const;
     Object* setTexture(Texture tex);
     Object* setRenderSize(double x, double y);
     Object* setRenderCenter(double x, double y);

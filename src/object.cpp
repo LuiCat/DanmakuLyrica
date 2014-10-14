@@ -2,14 +2,9 @@
 
 //===================================================
 
-Texture Object::getTexture() const
-{
-    return texture;
-}
-
 Object* Object::setTexture(Texture tex)
 {
-    texture=tex;
+    textureStrip.setTexture(tex);
     return this;
 }
 
@@ -29,10 +24,7 @@ Object* Object::setRenderCenter(double x, double y)
 
 Object* Object::setTextureSize(double posX, double posY, double sizeX, double sizeY)
 {
-    texturePosX=posX;
-    texturePosY=posY;
-    textureSizeX=sizeX;
-    textureSizeY=sizeY;
+    textureStrip.setStripPos(posX, posY, sizeX, sizeY);
     return this;
 }
 
@@ -60,15 +52,11 @@ Object* Object::setAlpha(double x)
 
 Object::Object()
     :Entity()
-    ,texture(0)
+    ,textureStrip(0)
     ,renderSizeX(16.0)
     ,renderSizeY(16.0)
     ,renderCenterX(8.0)
     ,renderCenterY(8.0)
-    ,texturePosX(0.0)
-    ,texturePosY(0.0)
-    ,textureSizeX(1.0)
-    ,textureSizeY(1.0)
     ,useAlpha(false)
     ,alpha(1.0)
 {
@@ -76,15 +64,11 @@ Object::Object()
 
 Object::Object(double x, double y)
     :Entity(x, y)
-    ,texture(0)
+    ,textureStrip(0)
     ,renderSizeX(16.0)
     ,renderSizeY(16.0)
     ,renderCenterX(8.0)
     ,renderCenterY(8.0)
-    ,texturePosX(0.0)
-    ,texturePosY(0.0)
-    ,textureSizeX(1.0)
-    ,textureSizeY(1.0)
     ,useAlpha(false)
     ,alpha(1.0)
 {
@@ -99,12 +83,8 @@ void Object::onRender()
     d3d.pushMatrix();
     d3d.translate2D(-renderCenterX, -renderCenterY);
     d3d.scale2D(renderSizeX, renderSizeY);
-    d3d.setTexture(texture);
     if(useAlpha)
         d3d.setAlpha(alpha);
-    d3d.pushVertex(0.0, 0.0, texturePosX,              texturePosY             );
-    d3d.pushVertex(1.0, 0.0, texturePosX+textureSizeX, texturePosY             );
-    d3d.pushVertex(1.0, 1.0, texturePosX+textureSizeX, texturePosY+textureSizeY);
-    d3d.pushVertex(0.0, 1.0, texturePosX,              texturePosY+textureSizeY);
+    textureStrip.pushVertices(0, 0);
     d3d.popMatrix();
 }
