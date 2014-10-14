@@ -50,10 +50,6 @@ private:
 
     HANDLE mutex;
 
-protected:
-
-    HRESULT initVB();
-
 public:
 
     VertexBuffer();
@@ -63,6 +59,7 @@ public:
     HRESULT reset();
     void cleanup();
 
+    void drawMatrix();
     void present();
 
     void beginScene();

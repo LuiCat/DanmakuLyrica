@@ -6,8 +6,11 @@
 
 #define D3D_VERTEXBUFFERSIZE 120000
 
-LPDIRECT3D9             g_pD3D = NULL; // Used to create the D3DDevice
+LPDIRECT3D9             g_pd3d = NULL; // Used to create the D3DDevice
 LPDIRECT3DDEVICE9       g_pd3dDevice = NULL; // Our rendering device
+LPDIRECT3DSURFACE9      g_pd3dSurface = NULL;
+
+LPDIRECT3DSURFACE9      Backbuffer = NULL;
 
 D3DPRESENT_PARAMETERS   d3dpp;
 
@@ -40,6 +43,8 @@ DWORD createTexture(const char* filename, Texture *tex, DWORD w, DWORD h)
 VertexBuffer::VertexBuffer()
 {
     pD3DVertexBuffer=0;
+    hWnd=0;
+    mutex=0;
 }
 
 VertexBuffer::~VertexBuffer()
@@ -49,9 +54,11 @@ VertexBuffer::~VertexBuffer()
     pD3DVertexBuffer=0;
 }
 
-HRESULT VertexBuffer::initVB()
+HRESULT VertexBuffer::init(HWND hWnd)
 {
     HRESULT hr;
+
+    this->hWnd=hWnd;
 
     if(FAILED(hr=g_pd3dDevice->CreateVertexBuffer(D3D_VERTEXBUFFERSIZE*sizeof(Vertex),
                                                   D3DUSAGE_DYNAMIC, D3DFVF_CUSTOMVERTEX,
@@ -60,38 +67,10 @@ HRESULT VertexBuffer::initVB()
         return hr;
     }
 
-    g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-    g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-    g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-    //g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);D3DTADDRESS_CLAMP
-
-    g_pd3dDevice->SetSamplerState(0,   D3DSAMP_MAGFILTER,   D3DTEXF_LINEAR );//D3DTEXF_LINEAR
-    g_pd3dDevice->SetSamplerState(0,   D3DSAMP_MINFILTER,   D3DTEXF_LINEAR );//
-    //g_pd3dDevice->SetSamplerState(0,   D3DSAMP_MIPFILTER,   D3DTEXF_LINEAR);
-
-    g_pd3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
-    g_pd3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
-
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);//D3DTOP_MODULATE
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
-
-    return S_OK;
-}
-
-HRESULT VertexBuffer::init(HWND hWnd)
-{
-    this->hWnd=hWnd;
-
-    if(FAILED(initVB()))
-        return E_FAIL;
-
     resetMatrix();
 
-    mutex=CreateMutex(0, false, "D3DMutex");
+    if(!mutex)
+        mutex=CreateMutex(0, false, "D3DMutex");
 
     return S_OK;
 }
@@ -108,8 +87,7 @@ HRESULT VertexBuffer::reset()
     cleanup();
     if(FAILED(hr=g_pd3dDevice->Reset(&d3dpp)))
         return hr;
-    if(FAILED(hr=initVB()))
-        return hr;
+    init(hWnd);
     return S_OK;
 }
 
@@ -122,6 +100,8 @@ void VertexBuffer::cleanup()
 
 void VertexBuffer::present()
 {
+    HRESULT hr;
+
     beginScene();
 
     void* pVertices;
@@ -141,6 +121,8 @@ void VertexBuffer::present()
 
     if(SUCCEEDED(g_pd3dDevice->BeginScene()))
     {
+        //g_pd3dDevice->SetRenderTarget(0, g_pd3dSurface);
+
         g_pd3dDevice->SetStreamSource(0, pD3DVertexBuffer, 0, sizeof(Vertex));
         g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
 
@@ -154,12 +136,18 @@ void VertexBuffer::present()
 
             g_pd3dDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, i, 2);
         }
+
+        //g_pd3dDevice->SetRenderTarget(0, 0);
+
+        //g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &Backbuffer);
+        //hr=g_pd3dDevice->StretchRect(g_pd3dSurface, 0, Backbuffer, 0, D3DTEXF_NONE);
+
         g_pd3dDevice->EndScene();
     }
 
     endScene();
 
-    HRESULT hr=g_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+    hr=g_pd3dDevice->Present( NULL, NULL, NULL, NULL );
 
     if(FAILED(hr))
     {
@@ -265,18 +253,18 @@ void VertexBuffer::setColor(DWORD color)
 
 HRESULT D3D_Init(HWND hWnd)
 {
-    HRESULT res;
+    HRESULT hr;
 
-    g_pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-    if(!g_pD3D)
+    g_pd3d = Direct3DCreate9(D3D_SDK_VERSION);
+    if(!g_pd3d)
         return E_FAIL;
 
 	D3DDISPLAYMODE displayMode;
-	if(FAILED(g_pD3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &displayMode)))
+    if(FAILED(g_pd3d->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &displayMode)))
 		return E_FAIL;
 
 	D3DMULTISAMPLE_TYPE multiType = D3DMULTISAMPLE_NONE;
-    if(g_pD3D->CheckDeviceMultiSampleType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, displayMode.Format, true, D3DMULTISAMPLE_4_SAMPLES, NULL) == D3D_OK)
+    if(g_pd3d->CheckDeviceMultiSampleType(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, displayMode.Format, true, D3DMULTISAMPLE_4_SAMPLES, NULL) == D3D_OK)
         multiType = D3DMULTISAMPLE_4_SAMPLES;
 
     ZeroMemory( &d3dpp, sizeof( d3dpp ) );
@@ -299,11 +287,11 @@ HRESULT D3D_Init(HWND hWnd)
 	#endif
 
     // Create the D3DDevice    
-	if( FAILED( res=g_pD3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
+    if( FAILED( hr=g_pd3d->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd,
                                       D3DCREATE_SOFTWARE_VERTEXPROCESSING|D3DCREATE_FPU_PRESERVE|D3DCREATE_MULTITHREADED,
                                       &d3dpp, &g_pd3dDevice ) ) )
 	{
-		switch(res){
+        switch(hr){
 		case D3DERR_DEVICELOST:
             cout<<"D3DERR_DEVICELOST"<<endl;
             break;
@@ -317,8 +305,36 @@ HRESULT D3D_Init(HWND hWnd)
             cout<<"D3DERR_OUTOFVIDEOMEMORY"<<endl;
             break;
 		}
-        return res;
+        return hr;
     }
+
+    g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+    g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+    g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+    //g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);D3DTADDRESS_CLAMP
+
+    g_pd3dDevice->SetSamplerState(0,   D3DSAMP_MAGFILTER,   D3DTEXF_LINEAR );//D3DTEXF_LINEAR
+    g_pd3dDevice->SetSamplerState(0,   D3DSAMP_MINFILTER,   D3DTEXF_LINEAR );//
+    //g_pd3dDevice->SetSamplerState(0,   D3DSAMP_MIPFILTER,   D3DTEXF_LINEAR);
+
+    g_pd3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
+    g_pd3dDevice->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
+
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);//D3DTOP_MODULATE
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+    g_pd3dDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+
+    /*
+    if(FAILED(hr=g_pd3dDevice->CreateRenderTarget(WIDTH, HEIGHT, d3dpp.BackBufferFormat,
+                                     d3dpp.MultiSampleType, d3dpp.MultiSampleQuality, FALSE,
+                                     &g_pd3dSurface, NULL)))
+    {
+        cout<<"failed to create render target"<<endl;
+    }
+    */
 
     if(FAILED(d3d.init(hWnd)))
 		return E_FAIL;
@@ -330,9 +346,12 @@ void D3D_Cleanup()
 {
     d3d.cleanup();
 
-    if( g_pd3dDevice != NULL )
+    if(g_pd3dSurface)
+        g_pd3dSurface->Release();
+
+    if(g_pd3dDevice)
         g_pd3dDevice->Release();
 
-    if( g_pD3D != NULL )
-        g_pD3D->Release();
+    if(g_pd3d)
+        g_pd3d->Release();
 }
