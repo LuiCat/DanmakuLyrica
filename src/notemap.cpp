@@ -7,6 +7,7 @@
 
 NoteMap::NoteMap()
 {
+
 }
 
 bool NoteMap::loadTjaFile(const char *filename)
@@ -20,7 +21,7 @@ bool NoteMap::loadTjaFile(const char *filename)
     return true;
 }
 
-int NoteMap::getEntityNotes(list<Note> &noteList, int maxinum)
+int NoteMap::getEntityNotes(list<Note*> &noteList, int maxinum)
 {
     int loadedNum=0;
     while(loadProc!=segments.end() && maxinum!=0)

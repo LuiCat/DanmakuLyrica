@@ -50,7 +50,7 @@ void Segment::nextSegmentState()
     segmentState=getNextSegmentState();
 }
 
-void Segment::getEntityNotes(list<Note>& noteList)
+void Segment::getEntityNotes(list<Note*>& noteList)
 {
     MapState tempState=segmentState;
 
@@ -81,7 +81,7 @@ void Segment::getEntityNotes(list<Note>& noteList)
         tempNote.setScrollSpeed(tempState.hs);
         tempNote.setNoteType(note_iter->type);
 
-        noteList.push_back(tempNote);
+        noteList.push_back(new Note(tempNote));
 
         ++note_iter;
     }

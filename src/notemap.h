@@ -18,7 +18,7 @@ public:
 
     bool loadTjaFile(const char* filename);
 
-    int getEntityNotes(list<Note>& noteList, int maxinum=-1);
+    int getEntityNotes(list<Note*> &noteList, int maxinum=-1);
 
     const char* getWavFilename();
 

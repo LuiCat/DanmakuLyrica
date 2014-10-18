@@ -37,7 +37,7 @@ JudgeResult NoteScene::judgeSingleNote(double timeSec)
 
 void NoteScene::reloadNotes()
 {
-    list<Note> tempList;
+    list<Note*> tempList;
     noteMap.getEntityNotes(tempList);
-    noteList.pushNotes(tempList);
+    noteList.pushEntities(tempList);
 }

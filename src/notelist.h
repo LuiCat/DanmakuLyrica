@@ -10,16 +10,13 @@
 #include <list>
 using namespace std;
 
-class NoteList : public EntityList
+class NoteList : public EntityList<Note>
 {
 public:
 
     NoteList();
 
     JudgeResult judgeSingleNote(double timeSec);
-
-    void pushNote(const Note& note);
-    void pushNotes(const list<Note>& notes);
 
 protected:
 

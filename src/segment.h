@@ -25,7 +25,7 @@ public:
     MapState getNextSegmentState() const;
     void nextSegmentState();
 
-    void getEntityNotes(list<Note>& noteList);
+    void getEntityNotes(list<Note*> &noteList);
 
 protected:
 
