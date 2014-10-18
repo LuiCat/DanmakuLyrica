@@ -22,7 +22,6 @@ SOURCES += main.cpp \
     danmakulyrica.cpp \
     luascript.cpp \
     entitylist.cpp \
-    notemap.cpp \
     segment.cpp \
     noteluafunc.cpp \
     noteentity.cpp \
@@ -32,7 +31,11 @@ SOURCES += main.cpp \
     mapstate.cpp \
     timeline.cpp \
     keybinding.cpp \
-    texturestrip.cpp
+    texturestrip.cpp \
+    notemap.cpp \
+    bullet.cpp \
+    bulletlist.cpp \
+    bulletscene.cpp
 
 HEADERS += \
     debug.h \
@@ -49,7 +52,6 @@ HEADERS += \
     danmakulyrica.h \
     luascript.h \
     entitylist.h \
-    notemap.h \
     segment.h \
     notedef.h \
     commondef.h \
@@ -61,7 +63,11 @@ HEADERS += \
     mapstate.h \
     timeline.h \
     keybinding.h \
-    texturestrip.h
+    texturestrip.h \
+    notemap.h \
+    bullet.h \
+    bulletlist.h \
+    bulletscene.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
