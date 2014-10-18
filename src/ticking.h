@@ -11,6 +11,7 @@ public:
     bool dead() const;
 
     void setTickRate(double ticksPerSec);
+    void setTickSec(double secsPerTick);
 
     int getTick() const;
     double getTimeSec() const;
