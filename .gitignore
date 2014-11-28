@@ -40,5 +40,6 @@ Icon
 # =========================
 
 *.user
+*.user.*
 *.autosave
 build*/
