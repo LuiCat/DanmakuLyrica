@@ -45,6 +45,13 @@ void DanmakuLyrica::mainUpdate()
 
     JudgeResult judgeResult;
 
+    //1: do time line
+    //2: update scenes
+    //2.1: get process time from lua events
+    //2.2: update note scene
+    //2.3: update bullet scene and lua events
+    //2.4: if still have processing time left, repeat 2
+
     if(!isPaused)
     {
         double newTime=bgm.getTime();

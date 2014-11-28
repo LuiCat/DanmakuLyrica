@@ -17,6 +17,10 @@ void NoteScene::cleanup()
 
 void NoteScene::update(double deltaSec)
 {
+    //1: load new notes (selectable)
+    //2: update notemap timeline, process time to next event
+    //3:
+
     noteList.updateAll(deltaSec);
 }
 
