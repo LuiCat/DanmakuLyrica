@@ -7,6 +7,7 @@ LuaTaskList* LuaTaskList::instance = 0;
 LuaTaskList::Task* LuaTaskList::currentTask = 0;
 
 LuaTaskList::LuaTaskList()
+    :Ticking(1)
 {
     if(!instance)
     {
@@ -22,8 +23,11 @@ LuaTaskList::~LuaTaskList()
 
 int LuaTaskList::lua_pushTask(lua_State *L)
 {
-    if(lua_isthread(L, 1))
-        instance->taskList.push_back(Task(lua_tothread(L, 1), luaL_ref(L, LUA_REGISTRYINDEX)));
+    if(!lua_isthread(L, 1))return 0;
+    lua_State *t=lua_tothread(L, 1);
+    lua_pushthread(t);
+    int ref=luaL_ref(t, LUA_REGISTRYINDEX);
+    instance->taskList.push_back(Task(t, ref));
     return 0;
 }
 
@@ -58,31 +62,27 @@ void LuaTaskList::registerLuaFuncs(lua_State *L)
 
 void LuaTaskList::onTick()
 {
-    bool removeFlag;
+    int result=LUA_OK;
     list<Task>::iterator iter=taskList.begin();
 
     while(iter!=taskList.end())
     {
-        removeFlag=false;
         currentTask=&*iter;
+
+        if(currentTask->tickDelay>0)
+            currentTask->tickDelay--;
 
         if(currentTask->tickDelay<=0)
         {
-            lua_getglobal(_L, "resumeTask");
-            lua_pushthread(currentTask->luaThread);
-
-            LuaScript::lua_excall(1, 1);
-
-            removeFlag=!lua_toboolean(_L, -1);
-            lua_pop(_L, 1);
-
+            if(currentTask->luaThread)
+                result=lua_resume(currentTask->luaThread, 0, 0);
         }
         else
         {
-            currentTask->tickDelay--;
+            result=LUA_YIELD;
         }
 
-        if(removeFlag)
+        if(result!=LUA_YIELD)
         {
             luaL_unref(_L, LUA_REGISTRYINDEX, currentTask->luaRef);
             iter=taskList.erase(iter);

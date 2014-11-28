@@ -59,8 +59,6 @@ void LuaScript::init()
     luaL_openlibs(luaState);
 
     initLuaFuncs();
-
-    loadScriptFile("data/main.lua");
 }
 
 void LuaScript::cleanup()

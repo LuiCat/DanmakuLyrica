@@ -33,10 +33,13 @@ void DanmakuLyrica::mainInit()
     LuaScript::init();
     LuaTaskList::registerLuaFuncs(_L);
 
+    LuaScript::loadScriptFile("data/main.lua");
+
 }
 
 void DanmakuLyrica::mainCleanup()
 {
+    LuaScript::cleanup();
     bgm.release();
     noteScene.cleanup();
 }
@@ -58,7 +61,9 @@ void DanmakuLyrica::mainUpdate()
     if(!isPaused)
     {
         double newTime=bgm.getTime();
-        noteScene.update(timeLine.getDeltaTimeFixed(newTime-timeStamp));
+        double deltaTime=timeLine.getDeltaTimeFixed(newTime-timeStamp);
+        noteScene.update(deltaTime);
+        taskList.update(deltaTime);
         timeStamp=newTime;
     }
 
