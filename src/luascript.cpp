@@ -60,7 +60,7 @@ void LuaScript::init()
 
     initLuaFuncs();
 
-    //loadScriptFile("main.lua");
+    loadScriptFile("data/main.lua");
 }
 
 void LuaScript::cleanup()
@@ -68,4 +68,9 @@ void LuaScript::cleanup()
     if(luaState)
         lua_close(luaState);
     luaState=0;
+}
+
+lua_State *LuaScript::getLuaState()
+{
+    return luaState;
 }

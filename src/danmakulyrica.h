@@ -11,6 +11,9 @@
 
 #include "texturestrip.h"
 
+#include "luascript.h"
+#include "luatasklist.h"
+
 class DanmakuLyrica : public MainGame
 {
 public:
@@ -28,6 +31,8 @@ private:
 
     NoteScene noteScene;
     StreamBuffer bgm;
+
+    LuaTaskList taskList;
 
     TimeLine timeLine;
 

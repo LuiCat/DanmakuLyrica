@@ -30,6 +30,9 @@ void DanmakuLyrica::mainInit()
     strip.setStripPos(0, 0, 0.5, 0.5);
     strip.setMaxIndex(2, 2);
 
+    LuaScript::init();
+    LuaTaskList::registerLuaFuncs(_L);
+
 }
 
 void DanmakuLyrica::mainCleanup()

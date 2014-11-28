@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     notemap.cpp \
     bullet.cpp \
     bulletlist.cpp \
-    bulletscene.cpp
+    bulletscene.cpp \
+    luatasklist.cpp
 
 HEADERS += \
     debug.h \
@@ -52,7 +53,7 @@ HEADERS += \
     danmakulyrica.h \
     luascript.h \
     entitylist.h \
-    segment.h \
+	segment.h \
     notedef.h \
     commondef.h \
     noteluafunc.h \
@@ -67,7 +68,8 @@ HEADERS += \
     notemap.h \
     bullet.h \
     bulletlist.h \
-    bulletscene.h
+    bulletscene.h \
+    luatasklist.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
