@@ -42,6 +42,26 @@ void Ticking::update(double deltaSec)
     }
 }
 
+double Ticking::singleTick(double deltaSec)
+{
+    if(isDead)return deltaSec;
+    if(processSec<deltaSec)
+    {
+        onUpdateMotion(processSec, processSec*tickRate);
+        ++tick;
+        timeSec+=processSec;
+        onTick();
+        deltaSec-=processSec;
+        if(!isDead)
+            processSec=tickSec;
+        return deltaSec;
+    }
+    onUpdateMotion(deltaSec, deltaSec*tickRate);
+    processSec-=deltaSec;
+    timeSec+=deltaSec;
+    return 0.0;
+}
+
 void Ticking::setDead()
 {
     isDead=true;
@@ -50,6 +70,13 @@ void Ticking::setDead()
 bool Ticking::dead() const
 {
     return isDead;
+}
+
+void Ticking::reset(bool tickZero)
+{
+    tick=0;
+    timeSec=0.0;
+    processSec=(tickZero?0.0:tickSec);
 }
 
 void Ticking::setTickRate(double ticksPerSec)

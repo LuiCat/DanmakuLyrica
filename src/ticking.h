@@ -9,6 +9,7 @@ public:
 
     void setDead();
     bool dead() const;
+    void reset(bool tickZero=true);
 
     void setTickRate(double ticksPerSec);
     void setTickSec(double secsPerTick);
@@ -16,7 +17,8 @@ public:
     int getTick() const;
     double getTimeSec() const;
 
-    virtual void update(double deltaSec);
+    void update(double deltaSec);
+    double singleTick(double deltaSec);
 
 protected:
 
