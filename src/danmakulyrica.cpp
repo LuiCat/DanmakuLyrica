@@ -62,8 +62,14 @@ void DanmakuLyrica::mainUpdate()
     {
         double newTime=bgm.getTime();
         double deltaTime=timeLine.getDeltaTimeFixed(newTime-timeStamp);
-        noteScene.update(deltaTime);
-        taskList.update(deltaTime);
+        double newDelta;
+        while(deltaTime>0)
+        {
+            newDelta=taskList.singleTick(deltaTime);
+            noteScene.update(deltaTime-newDelta);
+            deltaTime=newDelta;
+        }
+
         timeStamp=newTime;
     }
 
