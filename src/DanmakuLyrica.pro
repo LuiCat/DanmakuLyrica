@@ -69,7 +69,8 @@ HEADERS += \
     bullet.h \
     bulletlist.h \
     bulletscene.h \
-    luatasklist.h
+    luatasklist.h \
+    luatask.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \

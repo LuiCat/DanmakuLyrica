@@ -2,6 +2,8 @@
 #define LUATASKLIST_H
 
 #include "ticking.h"
+#include "luatask.h"
+
 #include "lua/lua.hpp"
 
 #include <list>
@@ -19,20 +21,8 @@ public:
 
 protected:
 
-    struct Task
-    {
-        lua_State* luaThread;
-        int luaRef;
-        int tickDelay;
-        Task(lua_State* thread=0, int ref=-1)
-            :luaThread(thread)
-            ,luaRef(ref)
-            ,tickDelay(0)
-        {}
-    };
-
     static LuaTaskList* instance;
-    static Task* currentTask;
+    static LuaTask* currentTask;
 
     static int lua_pushTask(lua_State* L);
     static int lua_setTickRate(lua_State* L);
@@ -41,7 +31,7 @@ protected:
     static int lua_testFunc(lua_State* L);
 
 
-    list<Task> taskList;
+    list<LuaTask> taskList;
 
     void onTick();
 
