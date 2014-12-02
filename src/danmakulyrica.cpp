@@ -62,11 +62,13 @@ void DanmakuLyrica::mainUpdate()
     {
         double newTime=bgm.getTime();
         double deltaTime=timeLine.getDeltaTimeFixed(newTime-timeStamp);
-        double newDelta;
+        double newDelta, deltaDelta;
         while(deltaTime>0)
         {
             newDelta=taskList.singleTick(deltaTime);
-            noteScene.update(deltaTime-newDelta);
+            deltaTime-=newDelta;
+            noteScene.update(deltaTime);
+            bulletScene.update(deltaTime);
             deltaTime=newDelta;
         }
 
@@ -103,6 +105,7 @@ void DanmakuLyrica::mainRender()
 
     d3d.resetMatrix();
 
+    /*
     d3d.pushMatrix();
     d3d.scale2D(100.0, 100.0);
     strip.pushVertices(0, 0);
@@ -121,6 +124,7 @@ void DanmakuLyrica::mainRender()
     d3d.translate2D(1.0, 0.0);
     strip.pushVertices(1, 1);
     d3d.popMatrix();
+    */
 
     d3d.pushMatrix();
     d3d.translate2D(100, 300.0);    
@@ -138,6 +142,11 @@ void DanmakuLyrica::mainRender()
     d3d.popMatrix();
 
     d3d.popMatrix();
+
+    d3d.pushMatrix();
+    bulletScene.render();
+    d3d.popMatrix();
+
     d3d.endScene();
 
     d3d.present();

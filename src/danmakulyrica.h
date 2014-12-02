@@ -11,6 +11,7 @@
 
 #include "texturestrip.h"
 
+#include "bulletscene.h"
 #include "luascript.h"
 #include "luatasklist.h"
 
@@ -31,6 +32,8 @@ private:
 
     NoteScene noteScene;
     StreamBuffer bgm;
+
+    BulletScene bulletScene;
 
     LuaTaskList taskList;
 

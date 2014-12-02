@@ -3,6 +3,7 @@
 #include "luascript.h"
 #include "debug.h"
 
+
 LuaTaskList* LuaTaskList::instance = 0;
 LuaTaskList::Task* LuaTaskList::currentTask = 0;
 
