@@ -35,6 +35,12 @@ void DanmakuLyrica::mainInit()
 
     LuaScript::loadScriptFile("data/main.lua");
 
+    Texture tex;
+    createTexture("data/etama2.png", &tex);
+    Bullet::registerBullet("rice", tex, 16, 16, 8, 8, Forward, Round, 4, 4);
+
+    LuaTaskList::bulletScene=&bulletScene;
+
 }
 
 void DanmakuLyrica::mainCleanup()

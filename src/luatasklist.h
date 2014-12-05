@@ -3,6 +3,7 @@
 
 #include "ticking.h"
 #include "luatask.h"
+#include "bulletscene.h"
 
 #include "lua/lua.hpp"
 
@@ -18,6 +19,7 @@ public:
     LuaTaskList();
     ~LuaTaskList();
 
+    static BulletScene* bulletScene;
 
 protected:
 
@@ -28,7 +30,18 @@ protected:
     static int lua_setTickRate(lua_State* L);
     static int lua_taskDelayTicks(lua_State* L);
 
+    /*
+     * todo:
+     * lua_newBullet
+     * lua_attachBullet funcs
+     * lua_changeAttachedBullet funcs
+     * lua_setCenter/Type/Angle funcs
+     */
+
+
     static int lua_testFunc(lua_State* L);
+
+
 
 
     list<LuaTask> taskList;

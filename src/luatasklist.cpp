@@ -5,7 +5,9 @@
 
 
 LuaTaskList* LuaTaskList::instance = 0;
-LuaTaskList::Task* LuaTaskList::currentTask = 0;
+LuaTask* LuaTaskList::currentTask = 0;
+BulletScene* LuaTaskList::bulletScene = 0;
+
 
 LuaTaskList::LuaTaskList()
     :Ticking(1)
@@ -28,7 +30,7 @@ int LuaTaskList::lua_pushTask(lua_State *L)
     lua_State *t=lua_tothread(L, 1);
     lua_pushthread(t);
     int ref=luaL_ref(t, LUA_REGISTRYINDEX);
-    instance->taskList.push_back(Task(t, ref));
+    instance->taskList.push_back(LuaTask(t, ref));
     return 0;
 }
 
@@ -48,7 +50,7 @@ int LuaTaskList::lua_taskDelayTicks(lua_State *L)
 
 int LuaTaskList::lua_testFunc(lua_State *L)
 {
-    cout<<"ayayaya"<<endl;
+    bulletScene->pushBullet(new Bullet(320, 120, 1.2, 0, BULLET("rice")));
     return 0;
 }
 
@@ -64,7 +66,7 @@ void LuaTaskList::registerLuaFuncs(lua_State *L)
 void LuaTaskList::onTick()
 {
     int result=LUA_OK;
-    list<Task>::iterator iter=taskList.begin();
+    list<LuaTask>::iterator iter=taskList.begin();
 
     while(iter!=taskList.end())
     {
