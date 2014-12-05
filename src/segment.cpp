@@ -36,11 +36,11 @@ MapState Segment::getNextSegmentState() const
 
     for(auto iter=events.begin(); iter!=events.end(); ++iter)
     {
-        processEvent(&state, &*iter, iter->num-prevNum);
+        state.processEvent(&*iter, iter->num-prevNum, segmentDiv);
         prevNum=iter->num;
     }
 
-    processEvent(&state, 0, segmentDiv-prevNum);
+    state.processEvent(0, segmentDiv-prevNum, segmentDiv);
 
     return state;
 }
@@ -48,6 +48,54 @@ MapState Segment::getNextSegmentState() const
 void Segment::nextSegmentState()
 {
     segmentState=getNextSegmentState();
+}
+
+double Segment::offsetMapState(MapState &state, double deltaSec) const
+{
+    MapState tempState=segmentState;
+    int prevNum=0;
+    auto iter=events.cbegin();
+    double deltaOffset;
+
+    for(; iter!=events.cend(); ++iter)
+    {
+        tempState.processEvent(&*iter, iter->num-prevNum, segmentDiv);
+        if(tempState.timeOffset>state.timeOffset)
+            break;
+        prevNum=iter->num;
+    }
+
+    deltaOffset=tempState.timeOffset-state.timeOffset;
+    if(deltaOffset>deltaSec)
+    {
+        state.processEvent(0, deltaSec);
+        return 0.0;
+    }
+    state.processEvent(0, deltaOffset);
+    deltaSec-=deltaOffset;
+
+    for(; iter!=events.cend(); ++iter)
+    {
+        deltaOffset=state.calcOffset_segment((double)(iter->num-prevNum)/segmentDiv);
+        if(deltaOffset>deltaSec)
+        {
+            state.processEvent(0, deltaSec);
+            return 0.0;
+        }
+        state.processEvent(&*iter, deltaOffset);
+        deltaSec-=deltaOffset;
+        prevNum=iter->num;
+    }
+
+    deltaOffset=state.calcOffset_segment((double)(segmentDiv-prevNum)/segmentDiv);
+    if(deltaOffset>deltaSec)
+    {
+        state.processEvent(0, deltaSec);
+        return 0.0;
+    }
+    state.processEvent(0, deltaOffset);
+    state.currentSegment++;
+    return deltaSec-deltaOffset;
 }
 
 void Segment::getEntityNotes(list<Note*>& noteList)
@@ -65,7 +113,7 @@ void Segment::getEntityNotes(list<Note*>& noteList)
     {
         while(event_iter!=events.end() && (note_iter==notes.end() || event_iter->num<=note_iter->num))
         {
-            processEvent(&tempState, &*event_iter, event_iter->num-prevNum);
+            tempState.processEvent(&*event_iter, event_iter->num-prevNum, segmentDiv);
             prevNum=event_iter->num;
 
             ++event_iter;
@@ -74,7 +122,7 @@ void Segment::getEntityNotes(list<Note*>& noteList)
         if(note_iter==notes.end())
             continue;
 
-        processEvent(&tempState, 0, note_iter->num-prevNum);
+        tempState.processEvent(0, note_iter->num-prevNum, segmentDiv);
         prevNum=note_iter->num;
 
         tempNote.setJudgeTime(tempState.timeOffset, tempState.beatOffset);
@@ -86,18 +134,4 @@ void Segment::getEntityNotes(list<Note*>& noteList)
         ++note_iter;
     }
 
-}
-
-void Segment::processEvent(MapState *state, const SegmentEvent *event, int deltaNum) const
-{
-    state->timeOffset+=state->calcOffset_segment((double)deltaNum/segmentDiv);
-    state->beatOffset+=state->getTotalBeats()*((double)deltaNum/segmentDiv);
-    state->processEvent(event);
-}
-
-void Segment::processEvent(MapState *state, const SegmentEvent *event, double deltaOffset) const
-{
-    state->timeOffset+=deltaOffset;
-    state->beatOffset+=state->calcBeatOffset(deltaOffset);
-    state->processEvent(event);
 }

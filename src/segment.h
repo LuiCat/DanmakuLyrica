@@ -25,12 +25,9 @@ public:
     MapState getNextSegmentState() const;
     void nextSegmentState();
 
+    double offsetMapState(MapState& state, double deltaSec) const;
+
     void getEntityNotes(list<Note*> &noteList);
-
-protected:
-
-    void processEvent(MapState* state, const SegmentEvent *event, int deltaNum) const;
-    void processEvent(MapState* state, const SegmentEvent *event, double deltaOffset) const;
 
 private:
 

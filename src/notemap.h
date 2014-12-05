@@ -18,6 +18,8 @@ public:
 
     bool loadTjaFile(const char* filename);
 
+    void offsetMapState(MapState &state, double deltaSec) const;
+
     int getEntityNotes(list<Note*> &noteList, int maxinum=-1);
 
     const char* getWavFilename();

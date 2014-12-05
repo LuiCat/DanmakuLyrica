@@ -35,3 +35,18 @@ void MapState::processEvent(const SegmentEvent *event)
         break;
     }
 }
+
+void MapState::processEvent(const SegmentEvent *event, int deltaNum, int segmentDiv)
+{
+    timeOffset+=calcOffset_segment((double)deltaNum/segmentDiv);
+    beatOffset+=getTotalBeats()*((double)deltaNum/segmentDiv);
+    processEvent(event);
+}
+
+void MapState::processEvent(const SegmentEvent *event, double deltaOffset)
+{
+    timeOffset+=deltaOffset;
+    beatOffset+=calcBeatOffset(deltaOffset);
+    processEvent(event);
+}
+

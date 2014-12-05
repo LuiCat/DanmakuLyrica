@@ -21,6 +21,27 @@ bool NoteMap::loadTjaFile(const char *filename)
     return true;
 }
 
+void NoteMap::offsetMapState(MapState &state, double deltaSec) const
+{
+    if(state.currentSegment<(int)segments.size())
+    {
+        auto iter=segments.cbegin();
+        for(int i=0; i<state.currentSegment; ++i)
+            ++iter;
+        for(; iter!=segments.cend()&&deltaSec<1e-7; ++iter)
+        {
+            deltaSec=iter->offsetMapState(state, deltaSec);
+        }
+    }
+
+    if(deltaSec>=1e-7)
+    {
+        state.timeOffset+=deltaSec;
+        state.beatOffset+=state.calcBeatOffset(deltaSec);\
+    }
+
+}
+
 int NoteMap::getEntityNotes(list<Note*> &noteList, int maxinum)
 {
     int loadedNum=0;

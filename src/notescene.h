@@ -16,6 +16,8 @@ public:
     void update(double deltaSec);
     void render();
 
+    double getBeatOffset();
+
     const char* getBgmFilename();
 
     JudgeResult judgeSingleNote(double timeSec);

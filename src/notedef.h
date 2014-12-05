@@ -32,4 +32,8 @@ struct SegmentEvent
     double parameter_d;
 };
 
+class NoteMap;
+class Segment;
+struct MapState;
+
 #endif // NOTEDEF_H

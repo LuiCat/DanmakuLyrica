@@ -3,6 +3,9 @@
 
 #include "notedef.h"
 
+#include <list>
+using namespace std;
+
 struct MapState
 {
     double timeOffset;
@@ -13,6 +16,8 @@ struct MapState
 
     int measureDiv;
     int measureNum;
+
+    int currentSegment;
 
     MapState(double _offset=0.0, double _bpm=120.0);
 
@@ -47,6 +52,8 @@ struct MapState
     }
 
     void processEvent(const SegmentEvent *event);
+    void processEvent(const SegmentEvent *event, int deltaNum, int segmentDiv);
+    void processEvent(const SegmentEvent *event, double deltaOffset);
 
 };
 
