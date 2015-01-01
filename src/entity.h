@@ -39,8 +39,13 @@ public:
     Entity* setVelocityOffset(double offsetVel, double offsetAngle);
     Entity* setAxisSpeedOffset(double offsetVelX, double offsetVelY);
 
+    double getAccelerateSpeed() const;
+    double getRotateSpeed() const;
+    Entity* setAcceleration(double accVel);
+    Entity* setRotateSpeed(double rotateVel);
+
     // main method making motions
-    Entity* offsetMotion(double ticks);
+    Entity* offsetMotion(double secs);
 
     // inherited render method
     virtual void render();
@@ -52,6 +57,7 @@ protected:
 
     double speed, rotation;
     double speedX, speedY;
+    double accelerateSpeed, rotateSpeed;
     double facingAngle;
 
     bool forceFacing;    

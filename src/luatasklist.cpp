@@ -3,6 +3,7 @@
 #include "luascript.h"
 #include "debug.h"
 
+#include "mathhelper.h"
 
 LuaTaskList* LuaTaskList::instance = 0;
 LuaTask* LuaTaskList::currentTask = 0;
@@ -10,7 +11,7 @@ BulletScene* LuaTaskList::bulletScene = 0;
 
 
 LuaTaskList::LuaTaskList()
-    :Ticking(1)
+    :Ticking(167.00/120)
 {
     if(!instance)
     {
@@ -50,7 +51,14 @@ int LuaTaskList::lua_taskDelayTicks(lua_State *L)
 
 int LuaTaskList::lua_testFunc(lua_State *L)
 {
-    bulletScene->pushBullet(new Bullet(320, 120, 1.2, 0, BULLET("rice")));
+    static int t=0;
+    double w=M_PI*167.00/120;
+    double a=17.2;
+    double r=a/w/w;
+    Bullet *b=new Bullet(320, 240, 0, 0, BULLET("rice"));
+    b->setAcceleration(a)->setRotateSpeed(w);
+    bulletScene->pushBullet(b);
+    t++;
     return 0;
 }
 

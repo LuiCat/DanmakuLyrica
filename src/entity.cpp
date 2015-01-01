@@ -2,6 +2,8 @@
 
 #include "mathhelper.h"
 
+#include "debug.h"
+
 //===================================================
 
 double Entity::getSpeed() const
@@ -36,8 +38,9 @@ Entity* Entity::setSpeed(double value)
     speed=value;
     if(speed<0.0)
     {
-        speed=-speed;
-        rotation+=M_PI;
+        speed=0;
+        //speed=-speed;
+        //rotation+=M_PI;
     }
     isAxisVelocityCorrect=false;
     return this;
@@ -113,12 +116,25 @@ Entity* Entity::setAxisSpeedOffset(double offsetVelX, double offsetVelY)
     return this;
 }
 
-Entity* Entity::offsetMotion(double ticks)
+double Entity::getAccelerateSpeed() const
 {
-    if(!useDefaultMotion)return this;
-    correctAxisSpeed();
-    x+=speedX*ticks;
-    y+=speedY*ticks;
+    return accelerateSpeed;
+}
+
+double Entity::getRotateSpeed() const
+{
+    return rotateSpeed;
+}
+
+Entity *Entity::setAcceleration(double accVel)
+{
+    accelerateSpeed=accVel;
+    return this;
+}
+
+Entity *Entity::setRotateSpeed(double rotateVel)
+{
+    rotateSpeed=rotateVel;
     return this;
 }
 
@@ -141,12 +157,60 @@ void Entity::correctVelocityAngle()
 
 //===================================================
 
+Entity* Entity::offsetMotion(double secs)
+{
+    if(!useDefaultMotion)return this;
+    if(rotateSpeed<M_INFS&&rotateSpeed>-M_INFS)
+    {
+        if(accelerateSpeed<M_INFS&&accelerateSpeed>-M_INFS) // uniform linear motion
+        {
+            correctAxisSpeed();
+            x+=speedX*secs;
+            y+=speedY*secs;
+        }
+        else // accelerated linear motion
+        {
+            setSpeed(getSpeed()+0.5*accelerateSpeed*secs);
+            correctAxisSpeed();
+            x+=speedX*secs;
+            y+=speedY*secs;
+            setSpeed(getSpeed()+0.5*accelerateSpeed*secs);
+        }
+    }
+    else // accelerated rotate motion, go along involute path
+    {
+        double oldSpeed=getSpeed();
+        double oldRot=getRotation();
+        double newSpeed=oldSpeed+accelerateSpeed*secs;
+        double newRot=oldRot+rotateSpeed*secs;
+        setSpeedRotation(newSpeed, newRot);
+        if(newSpeed<0.0)
+        {
+            newSpeed=0;
+            newRot=oldRot+rotateSpeed*oldSpeed/accelerateSpeed;
+        }
+
+        double ra=accelerateSpeed/rotateSpeed/rotateSpeed;
+        double oldcos=cos(oldRot), oldsin=sin(oldRot);
+        double newcos=cos(newRot), newsin=sin(newRot);
+
+        x+=(oldSpeed*oldcos-newSpeed*newcos)/rotateSpeed+ra*(newsin-oldsin);
+        y+=(newSpeed*newsin-oldSpeed*oldsin)/rotateSpeed+ra*(newcos-oldcos);
+
+    }
+    return this;
+}
+
+//===================================================
+
 Entity::Entity()
     :Sprite()
     ,speed(0.0)
     ,rotation(0.0)
     ,speedX(0.0)
     ,speedY(0.0)
+    ,accelerateSpeed(0.0)
+    ,rotateSpeed(0.0)
     ,facingAngle(0.0)
     ,forceFacing(true)
     ,useDefaultMotion(true)
@@ -161,6 +225,8 @@ Entity::Entity(double posX, double posY)
     ,rotation(0.0)
     ,speedX(0.0)
     ,speedY(0.0)
+    ,accelerateSpeed(0.0)
+    ,rotateSpeed(0.0)
     ,facingAngle(0.0)
     ,forceFacing(true)
     ,useDefaultMotion(true)
@@ -181,9 +247,9 @@ Entity::~Entity()
 
 //===================================================
 
-void Entity::onUpdateMotion(double, double deltaTick)
+void Entity::onUpdateMotion(double deltaSec, double)
 {
-    offsetMotion(deltaTick);
+    offsetMotion(deltaSec);
 }
 
 void Entity::onTick(){}
