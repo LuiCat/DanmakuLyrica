@@ -5,7 +5,7 @@ class Ticking
 {
 public:
 
-    Ticking(double _tickRate=60.0);
+    Ticking(double _tickRate=0.0);
 
     void setDead();
     bool dead() const;

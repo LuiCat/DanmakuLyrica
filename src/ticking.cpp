@@ -81,14 +81,22 @@ void Ticking::reset(bool tickZero)
 
 void Ticking::setTickRate(double ticksPerSec)
 {
-    if(ticksPerSec<0.01)ticksPerSec=0.01;
-    tickRate=ticksPerSec;
-    tickSec=1.0/tickRate;
+    if(ticksPerSec>100.0)ticksPerSec=100.0;
+    if(ticksPerSec<M_INFS)
+    {
+        tickRate=0;
+        tickSec=M_INF;
+    }
+    else
+    {
+        tickRate=ticksPerSec;
+        tickSec=1.0/tickRate;
+    }
 }
 
 void Ticking::setTickSec(double secsPerTick)
 {
-    if(secsPerTick>100.0)secsPerTick=100.0;
+    if(secsPerTick<0.01)secsPerTick=0.01;
     tickSec=secsPerTick;
     tickRate=1.0/tickSec;
 }

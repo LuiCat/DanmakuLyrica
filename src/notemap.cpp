@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include "mathhelper.h"
+
 #include "debug.h"
 
 NoteMap::NoteMap()
@@ -28,13 +30,13 @@ void NoteMap::offsetMapState(MapState &state, double deltaSec) const
         auto iter=segments.cbegin();
         for(int i=0; i<state.currentSegment; ++i)
             ++iter;
-        for(; iter!=segments.cend()&&deltaSec<1e-7; ++iter)
+        for(; iter!=segments.cend()&&deltaSec<M_INFS; ++iter)
         {
             deltaSec=iter->offsetMapState(state, deltaSec);
         }
     }
 
-    if(deltaSec>=1e-7)
+    if(deltaSec>=M_INFS)
     {
         state.timeOffset+=deltaSec;
         state.beatOffset+=state.calcBeatOffset(deltaSec);\
