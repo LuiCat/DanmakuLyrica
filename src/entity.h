@@ -3,22 +3,19 @@
 
 #include "graphics.h"
 
-#include "ticking.h"
-#include "position.h"
+#include "sprite.h"
 
-class Entity : public Ticking, public Position
+class Entity : public Sprite
 {
 public:
 
+    // constructors
     Entity();
     Entity(double posX, double posY);
     Entity(double posX, double posY, double vel, double angle);
     virtual ~Entity();
 
-    virtual void render();
-
-    Entity* offsetMotion(double ticks);
-
+    // motion properties
     double getSpeed() const;
     double getRotation() const;
     double getSpeedX();
@@ -42,6 +39,15 @@ public:
     Entity* setVelocityOffset(double offsetVel, double offsetAngle);
     Entity* setAxisSpeedOffset(double offsetVelX, double offsetVelY);
 
+    // main method making motions
+    Entity* offsetMotion(double ticks);
+
+    // inherited render method
+    virtual void render();
+
+    // method to make destroying animations & set dead later
+    void destroy();
+
 protected:
 
     double speed, rotation;
@@ -51,13 +57,11 @@ protected:
     bool forceFacing;    
 
     bool useDefaultMotion;
-    bool useDefaultRendering;
 
     virtual void onUpdateMotion(double deltaSec, double deltaTick);
     virtual void onTick();
-
     virtual void onRender();
-    virtual void destroy();
+    virtual void onDestory();
 
 private:
 

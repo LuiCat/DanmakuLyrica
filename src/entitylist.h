@@ -9,7 +9,7 @@ using namespace std;
 template <typename T>
 class EntityList
 {
-    static_assert(std::is_base_of<Entity, T>::value, "Template parameter is not a Entity class");
+    static_assert(std::is_base_of<Entity, T>::value, "Template parameter is not an Entity based class");
 
 public:
 

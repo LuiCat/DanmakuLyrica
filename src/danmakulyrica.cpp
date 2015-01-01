@@ -37,7 +37,7 @@ void DanmakuLyrica::mainInit()
 
     Texture tex;
     createTexture("data/etama2.png", &tex);
-    Bullet::registerBullet("rice", tex, 16, 16, 8, 8, Forward, Round, 4, 4);
+    Bullet::registerBullet("rice", tex, 16, 16, 8, 8, BulletType::forward, BulletType::round, 4, 4);
 
     LuaTaskList::bulletScene=&bulletScene;
 

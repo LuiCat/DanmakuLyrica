@@ -142,8 +142,7 @@ void Entity::correctVelocityAngle()
 //===================================================
 
 Entity::Entity()
-    :Ticking()
-    ,Position()
+    :Sprite()
     ,speed(0.0)
     ,rotation(0.0)
     ,speedX(0.0)
@@ -151,15 +150,13 @@ Entity::Entity()
     ,facingAngle(0.0)
     ,forceFacing(true)
     ,useDefaultMotion(true)
-    ,useDefaultRendering(true)
     ,isAxisVelocityCorrect(true)
 {
 
 }
 
 Entity::Entity(double posX, double posY)
-    :Ticking()
-    ,Position(posX, posY)
+    :Sprite(posX, posY)
     ,speed(0.0)
     ,rotation(0.0)
     ,speedX(0.0)
@@ -167,7 +164,6 @@ Entity::Entity(double posX, double posY)
     ,facingAngle(0.0)
     ,forceFacing(true)
     ,useDefaultMotion(true)
-    ,useDefaultRendering(true)
     ,isAxisVelocityCorrect(true)
 {
 }
@@ -194,28 +190,30 @@ void Entity::onTick(){}
 
 void Entity::onRender()
 {
-    if(!useDefaultRendering)
-        return;
     d3d.pushVertex(0.0, 0.0, 0.0, 0.0);
     d3d.pushVertex(1.0, 0.0, 1.0, 0.0);
     d3d.pushVertex(1.0, 1.0, 1.0, 1.0);
     d3d.pushVertex(0.0, 1.0, 0.0, 1.0);
 }
 
-void Entity::destroy()
+void Entity::onDestory()
 {
     setDead();
+}
+
+//===================================================
+
+void Entity::destroy()
+{
+    onDestory();
 }
 
 void Entity::render()
 {
     if(isDead)return;
     d3d.pushMatrix();
-    if(useDefaultRendering)
-    {
-        d3d.translate2D(x, y);
-        d3d.rotate2D(-facingAngle);
-    }
+    d3d.translate2D(x, y);
+    d3d.rotate2D(-facingAngle);
     onRender();
     d3d.popMatrix();
 }

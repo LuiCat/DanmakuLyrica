@@ -36,7 +36,8 @@ SOURCES += main.cpp \
     bullet.cpp \
     bulletlist.cpp \
     bulletscene.cpp \
-    luatasklist.cpp
+    luatasklist.cpp \
+    sprite.cpp
 
 HEADERS += \
     debug.h \
@@ -70,7 +71,8 @@ HEADERS += \
     bulletlist.h \
     bulletscene.h \
     luatasklist.h \
-    luatask.h
+    luatask.h \
+    sprite.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \

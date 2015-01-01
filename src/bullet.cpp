@@ -5,10 +5,15 @@
 
 #include <cstring>
 
-BulletType Bullet::defaultBullet={0, 16, 16, 8, 8, None, Rect, 8, 8};
+BulletType Bullet::defaultBullet={0, 16, 16, 8, 8, BulletType::none, BulletType::rect, 8, 8};
 Registry<BulletType> Bullet::reg;
 
-void Bullet::registerBullet(const char *typeName, Texture texture, double sizeX, double sizeY, double centerX, double centerY, FacingType facingType, JudgeType judgeType, double judgeSizeX, double judgeSizeY)
+void Bullet::registerBullet(const char *typeName, const BulletType *typeInfo)
+{
+    reg(typeName, typeInfo);
+}
+
+void Bullet::registerBullet(const char *typeName, Texture texture, double sizeX, double sizeY, double centerX, double centerY, BulletType::FacingType facingType, BulletType::JudgeType judgeType, double judgeSizeX, double judgeSizeY)
 {
     BulletType info={texture, sizeX, sizeY, centerX, centerY, facingType, judgeType, judgeSizeX, judgeSizeY};
     reg(typeName, &info);
@@ -32,14 +37,31 @@ Bullet* Bullet::setBulletType(int type)
 {
     typeInfo=reg.getIdInfo(type);
     if(typeInfo==0)typeInfo=&defaultBullet;
-    setForceFacing(typeInfo->facingType==Forward, true);
+    setForceFacing(typeInfo->facingType==BulletType::forward, true);
     return this;
 }
 
-void Bullet::onTick()
+Bullet *Bullet::animate(AnimType type, double deltaValue, double deltaSec)
 {
-
+    return this;
 }
+
+Bullet *Bullet::animateTo(AnimType type, double value, double deltaSec)
+{
+    return this;
+}
+
+Bullet *Bullet::clearAnim()
+{
+    return this;
+}
+
+Bullet *Bullet::finishAnim()
+{
+    return this;
+}
+
+void Bullet::onTick(){}
 
 void Bullet::onRender()
 {
