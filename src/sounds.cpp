@@ -491,6 +491,9 @@ void StreamBuffer::setPos(DWORD npos)
         pause();
     currentMemPos=npos;
     lastWrittenPos=0;
+    isPlaying=false;
+    prepareBuffer();
+    isPlaying=true;
     if(flag)
         play();
 }
