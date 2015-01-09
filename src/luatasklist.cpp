@@ -76,14 +76,6 @@ void LuaTaskList::onTick()
     int result=LUA_OK;
     list<LuaTask>::iterator iter=taskList.begin();
 
-    static double temptime=0;
-    double newtime=getTimeSec();
-
-    cout<<newtime-temptime<<endl;
-    temptime=newtime;
-
-    lua_testFunc(0);
-    /*
     while(iter!=taskList.end())
     {
         currentTask=&*iter;
@@ -113,6 +105,5 @@ void LuaTaskList::onTick()
 
         currentTask=0;
     }
-    */
 }
 

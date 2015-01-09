@@ -73,12 +73,15 @@ void DanmakuLyrica::mainUpdate()
         double newTime=bgm.getTime()+timeTwigger;
         double deltaTime=timeLine.getDeltaTimeFixed(newTime-timeStamp);
         double newDelta;
+
         while(deltaTime>0)
         {
-            newDelta=taskList.singleTick(deltaTime);
+            newDelta=taskList.seekNextTick(deltaTime);
             deltaTime-=newDelta;
             noteScene.update(deltaTime);
             bulletScene.update(deltaTime);
+            if(newDelta!=0.0)
+                taskList.singleTick();
             deltaTime=newDelta;
         }
 
@@ -102,7 +105,7 @@ void DanmakuLyrica::mainUpdate()
     {
         double btime=bgm.getTime();
         cout<<btime<<endl;
-        bgm.setTime(btime+10);
+        bgm.setTime(btime+2);
         //nothing else happens....
     }
 

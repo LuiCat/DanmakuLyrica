@@ -150,7 +150,7 @@ void Entity::correctVelocityAngle()
 {
     if(isAxisVelocityCorrect)return;
     setSpeed(dist(speedX, speedY));
-    if(speed>M_INFS)
+    if(speed>M_DINFS)
         setRotation(atan2(speedX, speedY));
     isAxisVelocityCorrect=true;
 }
@@ -160,9 +160,9 @@ void Entity::correctVelocityAngle()
 Entity* Entity::offsetMotion(double secs)
 {
     if(!useDefaultMotion)return this;
-    if(rotateSpeed<M_INFS&&rotateSpeed>-M_INFS)
+    if(rotateSpeed<M_DINFS&&rotateSpeed>-M_DINFS)
     {
-        if(accelerateSpeed<M_INFS&&accelerateSpeed>-M_INFS) // uniform linear motion
+        if(accelerateSpeed<M_DINFS&&accelerateSpeed>-M_DINFS) // uniform linear motion
         {
             correctAxisSpeed();
             x+=speedX*secs;

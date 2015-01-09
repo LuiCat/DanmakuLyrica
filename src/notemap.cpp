@@ -30,16 +30,16 @@ void NoteMap::offsetMapState(MapState &state, double deltaSec) const
         auto iter=segments.cbegin();
         for(int i=0; i<state.currentSegment; ++i)
             ++iter;
-        for(; iter!=segments.cend()&&deltaSec<M_INFS; ++iter)
+        for(; iter!=segments.cend()&&deltaSec<M_DINFS; ++iter)
         {
             deltaSec=iter->offsetMapState(state, deltaSec);
         }
     }
 
-    if(deltaSec>=M_INFS)
+    if(deltaSec>=M_DINFS)
     {
         state.timeOffset+=deltaSec;
-        state.beatOffset+=state.calcBeatOffset(deltaSec);\
+        state.beatOffset+=state.calcBeatOffset(deltaSec);
     }
 
 }

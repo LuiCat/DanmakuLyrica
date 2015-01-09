@@ -17,8 +17,16 @@ public:
     int getTick() const;
     double getTimeSec() const;
 
+    // update and do ticks
     void update(double deltaSec);
+
+    // only update appropiate time and do next tick
+    void singleTick();
     double singleTick(double deltaSec);
+
+    // only update appropiate time and not do next tick, normally use seekNextTick() and singleTick() as a pair;
+    void seekNextTick();
+    double seekNextTick(double deltaSec);
 
 protected:
 

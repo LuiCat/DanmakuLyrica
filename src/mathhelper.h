@@ -3,8 +3,8 @@
 
 #include <cmath>
 
-#define M_INFS 1e-7
-#define M_INF ((double)0x7FF0000000000000LL)
+#define M_DINFS 1e-7
+#define M_DINF ((double)0x7FF0000000000000LL)
 #define M_PI 3.14159265258979323846264
 
 inline double sind(double x)

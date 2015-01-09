@@ -42,7 +42,38 @@ void Ticking::update(double deltaSec)
     }
 }
 
+void Ticking::singleTick()
+{
+    singleTick(M_DINF);
+}
+
 double Ticking::singleTick(double deltaSec)
+{
+    if(isDead)return deltaSec;
+    if(processSec<deltaSec)
+    {
+        if(processSec!=0.0)
+            onUpdateMotion(processSec, processSec*tickRate);
+        ++tick;
+        timeSec+=processSec;
+        onTick();
+        deltaSec-=processSec;
+        if(!isDead)
+            processSec=tickSec;
+        return deltaSec;
+    }
+    onUpdateMotion(deltaSec, deltaSec*tickRate);
+    processSec-=deltaSec;
+    timeSec+=deltaSec;
+    return 0.0;
+}
+
+void Ticking::seekNextTick()
+{
+    seekNextTick(M_DINF);
+}
+
+double Ticking::seekNextTick(double deltaSec)
 {
     if(isDead)return deltaSec;
     if(processSec<deltaSec)
@@ -50,10 +81,8 @@ double Ticking::singleTick(double deltaSec)
         onUpdateMotion(processSec, processSec*tickRate);
         ++tick;
         timeSec+=processSec;
-        onTick();
         deltaSec-=processSec;
-        if(!isDead)
-            processSec=tickSec;
+        processSec=0.0;
         return deltaSec;
     }
     onUpdateMotion(deltaSec, deltaSec*tickRate);
@@ -82,10 +111,10 @@ void Ticking::reset(bool tickZero)
 void Ticking::setTickRate(double ticksPerSec)
 {
     if(ticksPerSec>100.0)ticksPerSec=100.0;
-    if(ticksPerSec<M_INFS)
+    if(ticksPerSec<M_DINFS)
     {
         tickRate=0;
-        tickSec=M_INF;
+        tickSec=M_DINF;
     }
     else
     {
