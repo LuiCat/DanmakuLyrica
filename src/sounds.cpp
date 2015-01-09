@@ -215,6 +215,7 @@ void SoundBuffer::pause()
 void SoundBuffer::setPos(DWORD npos)
 {
     if(!isAvailable())return;
+    npos=npos/waveFormat.wBitsPerSample*waveFormat.wBitsPerSample;
     buffer->SetCurrentPosition(npos);
 }
 
@@ -262,7 +263,6 @@ StreamBuffer::StreamBuffer()
     :SoundBuffer()
     ,currentMemPos(0)
     ,lastWrittenPos(0)
-    ,processedMemLen(0)
     ,isPlaying(false)
     ,paused(false)
     ,loopPosA(0)
@@ -428,7 +428,7 @@ void StreamBuffer::copyBuffer(void* buffer, DWORD size)
 
         currentMemPos+=tempBufferSize;
         lastWrittenPos+=tempBufferSize;
-        processedMemLen+=tempBufferSize;
+        //processedMemLen+=tempBufferSize;
 
         if(loopPosB==0 || loopPosB>m_size || loopPosA>=loopPosB)
             break;
@@ -467,7 +467,6 @@ void StreamBuffer::play(bool restart)
 void StreamBuffer::stop()
 {
     if(!isAvailable())return;
-    buffer->Stop();
     buffer->SetCurrentPosition(0);
     isPlaying=false;
     paused=false;
@@ -485,14 +484,22 @@ void StreamBuffer::pause()
 
 void StreamBuffer::setPos(DWORD npos)
 {
+    if(!isAvailable())return;
+    npos=npos/waveFormat.wBitsPerSample*waveFormat.wBitsPerSample;
+    bool flag=(isPlaying&&!paused);
+    if(flag)
+        pause();
     currentMemPos=npos;
+    lastWrittenPos=0;
+    if(flag)
+        play();
 }
 
 DWORD StreamBuffer::getPos() const
 {
-    if(processedMemLen==0)
+    if(currentMemPos==0)
         return 0;
     DWORD pos;
     buffer->GetCurrentPosition(&pos, 0);
-    return processedMemLen-(lastWrittenPos>pos?lastWrittenPos-pos:lastWrittenPos+streamBufSize-pos);
+    return currentMemPos-(lastWrittenPos>pos?lastWrittenPos-pos:lastWrittenPos+streamBufSize-pos);
 }

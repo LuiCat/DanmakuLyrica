@@ -42,6 +42,7 @@ private:
     KeyBinding buttonA;
     KeyBinding buttonB;
     KeyBinding buttonPause;
+    KeyBinding buttonSkip;
 
     Texture tex;
     TextureStrip strip;

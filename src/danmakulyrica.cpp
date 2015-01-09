@@ -6,10 +6,13 @@
 
 #include "soundregistry.h"
 
+#include "debug.h"
+
 DanmakuLyrica::DanmakuLyrica()
     :buttonA(DIK_Z, 0)
     ,buttonB(DIK_X, 0)
     ,buttonPause(DIK_SPACE, 0)
+    ,buttonSkip(DIK_S, 0)
 {
 }
 
@@ -54,6 +57,7 @@ void DanmakuLyrica::mainUpdate()
 {
     static double timeStamp=0;
     static bool isPaused=true;
+    static double timeTwigger=0;
 
     JudgeResult judgeResult;
 
@@ -66,7 +70,7 @@ void DanmakuLyrica::mainUpdate()
 
     if(!isPaused)
     {
-        double newTime=bgm.getTime();
+        double newTime=bgm.getTime()+timeTwigger;
         double deltaTime=timeLine.getDeltaTimeFixed(newTime-timeStamp);
         double newDelta;
         while(deltaTime>0)
@@ -92,6 +96,14 @@ void DanmakuLyrica::mainUpdate()
         {
             bgm.play();
         }
+    }
+
+    if(buttonSkip.isPushed())
+    {
+        double btime=bgm.getTime();
+        cout<<btime<<endl;
+        bgm.setTime(btime+10);
+        //nothing else happens....
     }
 
     if(buttonA.isPushed() || buttonB.isPushed())

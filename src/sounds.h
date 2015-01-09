@@ -26,6 +26,7 @@ protected:
 
     static bool loadWavFile(const char *filename, char **mem, DWORD *memsize, WAVEFORMATEX* format);
 
+    // Prepare (copy, reset, etc.) wav data to buffer
     virtual void prepareBuffer();
 
 public:
@@ -75,17 +76,19 @@ protected:
 
     HANDLE event[MAX_NOTIFY_NUM];
 
-    DWORD currentMemPos;
-    DWORD lastWrittenPos;
-    DWORD processedMemLen;
+    DWORD currentMemPos; // copy processing position in wav data
+    DWORD lastWrittenPos; // the position in buffer to continue copying at
+    //DWORD processedMemLen;
 
     bool isPlaying;
     bool paused;
 
     DWORD loopPosA, loopPosB;
 
+    // Prepare (copy, reset, etc.) wav data to buffer
     void prepareBuffer();
 
+    // Copy wav data to some position of buffer from currentMemPos
     void copyBuffer(void *buffer, DWORD size);
 
 public:
