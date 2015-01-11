@@ -34,6 +34,7 @@ protected:
 
     int tick;
     double timeSec;
+    double processSec;
 
     bool useDefaultTicking;
 
@@ -44,8 +45,6 @@ private:
 
     double tickRate;
     double tickSec;
-
-    double processSec;
 
 };
 
