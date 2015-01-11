@@ -6,8 +6,8 @@ Ticking::Ticking(double tickRate)
     :isDead(false)
     ,tick(0)
     ,timeSec(0.0)
-    ,useDefaultTicking(true)
     ,processSec(0.0)
+    ,useDefaultTicking(true)
 {
     setTickRate(tickRate);
 }
