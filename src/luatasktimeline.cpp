@@ -2,13 +2,17 @@
 
 #include "mathhelper.h"
 
+#include "debug.h"
+
 LuaTaskTimeline* LuaTaskTimeline::instance = 0;
 LuaTask LuaTaskTimeline::currentTask;
 
 void LuaTaskTimeline::registerLuaFuncs()
 {
     lua_register(_L, "pushTask", lua_pushTask);
-    lua_register(_L, "delaySecs", lua_taskDelaySecs);
+    lua_register(_L, "delay", lua_taskDelay);
+    lua_register(_L, "delayUntil", lua_taskDelayUntil);
+    lua_register(_L, "getTime", lua_getTime);
 
     lua_register(_L, "test", lua_testFunc);
 }
@@ -23,19 +27,33 @@ int LuaTaskTimeline::lua_pushTask(lua_State* L)
     return 0;
 }
 
-int LuaTaskTimeline::lua_taskDelaySecs(lua_State* L)
+int LuaTaskTimeline::lua_taskDelay(lua_State* L)
 {
     if(lua_isnumber(L, 1))
         currentTask.nextTime+=lua_tonumber(L, 1);
     return 0;
 }
 
+int LuaTaskTimeline::lua_taskDelayUntil(lua_State* L)
+{
+    if(lua_isnumber(L, 1))
+        currentTask.nextTime=lua_tonumber(L, 1);
+    return 0;
+}
+
+int LuaTaskTimeline::lua_getTime(lua_State* L)
+{
+    lua_pushnumber(L, instance->timeSec);
+    return 1;
+}
+
 int LuaTaskTimeline::lua_testFunc(lua_State* L)
 {
     static int t=0;
-    double w=M_PI*167.00/120;
-    double a=17.2;
-    double r=a/w/w;
+    //double w=M_PI*167.00/120;
+    double w=M_PI*0.5;
+    double a=3.2;
+    //double r=a/w/w;
     Bullet b(320, 240, 0, 0, BULLET("rice"));
     b.setAcceleration(a).setRotateSpeed(w);
     instance->scene->pushBullet(b);
@@ -52,6 +70,11 @@ LuaTaskTimeline::LuaTaskTimeline(BulletScene* bulletScene)
 LuaTaskTimeline::~LuaTaskTimeline()
 {
     clear();
+}
+
+void LuaTaskTimeline::setTime(double newTime)
+{
+    timeSec=newTime;
 }
 
 void LuaTaskTimeline::push(const LuaTask& task)
@@ -94,8 +117,34 @@ void LuaTaskTimeline::update(double deltaSec)
 
 }
 
+double LuaTaskTimeline::seekNextTask(double limitDeltaSec)
+{
+    if(taskList.empty())
+    {
+        return limitDeltaSec;
+    }
+
+    double newSec=timeSec+limitDeltaSec;
+    const LuaTask& task=taskList.top();
+
+    if(task.nextTime>newSec)
+    {
+        timeSec=newSec;
+        return 0.0;
+    }
+
+    timeSec=task.nextTime;
+    return newSec-timeSec;
+
+}
+
 double LuaTaskTimeline::updateSingleTask(double limitDeltaSec)
 {
+    if(taskList.empty())
+    {
+        return limitDeltaSec;
+    }
+
     double newSec=timeSec+limitDeltaSec;
 
     int result=LUA_OK;
@@ -139,6 +188,11 @@ void LuaTaskTimeline::clear()
         }
         taskList.pop();
     }
+}
+
+bool LuaTaskTimeline::empty()
+{
+    return taskList.empty();
 }
 
 

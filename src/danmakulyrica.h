@@ -19,6 +19,8 @@ class DanmakuLyrica : public MainGame
 {
 public:
 
+    static DanmakuLyrica* instance;
+
     DanmakuLyrica();
 
 protected:
@@ -30,7 +32,11 @@ protected:
 
 private:
 
+    NoteMap noteMap;
     NoteScene noteScene;
+
+    MapState mapState;
+
     StreamBuffer bgm;
 
     BulletScene bulletScene;

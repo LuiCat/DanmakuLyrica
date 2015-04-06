@@ -6,8 +6,7 @@ NoteScene::NoteScene()
 
 void NoteScene::init()
 {
-    noteMap.loadTjaFile("data/test.lrc");
-    reloadNotes();
+
 }
 
 void NoteScene::cleanup()
@@ -17,10 +16,6 @@ void NoteScene::cleanup()
 
 void NoteScene::update(double deltaSec)
 {
-    //1: load new notes (selectable)
-    //2: update notemap timeline, process time to next event
-    //3:
-
     noteList.updateAll(deltaSec);
 }
 
@@ -29,15 +24,9 @@ void NoteScene::render()
     noteList.renderAll();
 }
 
-double NoteScene::getBeginBeatOffset()
+void NoteScene::setNoteMap(NoteMap* m)
 {
-    const MapState& s=noteMap.getBeginState();
-    return s.calcBeatOffset(s.timeOffset);
-}
-
-const char* NoteScene::getBgmFilename()
-{
-    return noteMap.getWavFilename();
+    noteMap=m;
 }
 
 JudgeResult NoteScene::judgeSingleNote(double timeSec)
@@ -47,10 +36,13 @@ JudgeResult NoteScene::judgeSingleNote(double timeSec)
 
 void NoteScene::reloadNotes()
 {
+    noteList.clearAll();
+    if(!noteMap)return;
     list<NoteInfo> tempList;
-    noteMap.getNoteInfo(tempList);
+    noteMap->getNoteInfo(tempList);
+    double forward=noteMap->getBeginState().calcBeatOffset(noteMap->getBeginState().timeOffset);
     for(NoteInfo& x : tempList)
     {
-        noteList.newEntity(x);
+        noteList.newEntity(x, forward);
     }
 }

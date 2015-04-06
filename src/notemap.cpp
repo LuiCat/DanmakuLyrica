@@ -23,8 +23,10 @@ bool NoteMap::loadTjaFile(const char *filename)
     return true;
 }
 
-void NoteMap::offsetMapState(MapState &state, double deltaSec) const
-{
+double NoteMap::offsetMapState(MapState &state, double deltaSec) const
+{    
+    double originBeat=state.beatOffset;
+
     if(state.currentSegment<(int)segments.size())
     {
         auto iter=segments.cbegin();
@@ -42,6 +44,7 @@ void NoteMap::offsetMapState(MapState &state, double deltaSec) const
         state.beatOffset+=state.calcBeatOffset(deltaSec);
     }
 
+    return state.beatOffset-originBeat;
 }
 
 int NoteMap::getNoteInfo(list<NoteInfo>& infoList, int maxinum)
@@ -60,6 +63,14 @@ int NoteMap::getNoteInfo(list<NoteInfo>& infoList, int maxinum)
 const MapState& NoteMap::getBeginState()
 {
     return beginState;
+}
+
+MapState NoteMap::getBgmBeginState()
+{
+    MapState tempState=beginState;
+    tempState.beatOffset-=tempState.calcBeatOffset(tempState.timeOffset);
+    tempState.timeOffset=0.0;
+    return tempState;
 }
 
 const char* NoteMap::getWavFilename()

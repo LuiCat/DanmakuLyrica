@@ -16,18 +16,15 @@ public:
     void update(double deltaSec);
     void render();
 
-    double getBeginBeatOffset();
-
-    const char* getBgmFilename();
+    void setNoteMap(NoteMap* m);
+    void reloadNotes();
 
     JudgeResult judgeSingleNote(double timeSec);
 
 protected:
 
     NoteList noteList;
-    NoteMap noteMap;
-
-    void reloadNotes();
+    NoteMap* noteMap;
 
 };
 

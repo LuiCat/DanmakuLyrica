@@ -14,22 +14,22 @@ Note::Note(double _hitTime, double _hitBeat)
     setJudgeTime(_hitTime, _hitBeat);
 }
 
-Note::Note(const NoteInfo& info)
+Note::Note(const NoteInfo& info, double forwardBeat)
     :scrollSpeed(info.hs)
     ,noteType(info.noteType)
     ,judgeTime(-1e7)
     ,judgeResult(miss)
 {
     setForceFacing(false);
-    setJudgeTime(info.offsetSec, info.offsetBeat);
+    setJudgeTime(info.offsetSec, info.offsetBeat+forwardBeat);
 }
 
 void Note::setJudgeTime(double _hitTime, double _hitBeat)
 {
     hitTime=_hitTime;
     hitBeat=_hitBeat;
-    setPosition(_hitTime*300, 0);
-    setSpeedRotation(300.0, rad(-90));
+    setPosition(_hitBeat*120, 0);
+    setSpeedRotation(120.0, rad(-90));
 }
 
 void Note::setScrollSpeed(double hs)

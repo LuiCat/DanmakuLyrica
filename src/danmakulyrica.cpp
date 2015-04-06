@@ -7,6 +7,8 @@
 #include "commondef.h"
 #include "debug.h"
 
+DanmakuLyrica* DanmakuLyrica::instance = 0;
+
 DanmakuLyrica::DanmakuLyrica()
     :taskList(&bulletScene)
     ,buttonA(DIK_Z, 0)
@@ -14,16 +16,23 @@ DanmakuLyrica::DanmakuLyrica()
     ,buttonPause(DIK_SPACE, 0)
     ,buttonSkip(DIK_S, 0)
 {
+    instance=this;
 }
 
 void DanmakuLyrica::mainInit()
 {
     char filename[200]="data/";
 
-    noteScene.init();
+    noteMap.loadTjaFile("data/test.lrc");
 
-    bgm.loadWav(strcat(filename, noteScene.getBgmFilename()));
+    bgm.loadWav(strcat(filename, noteMap.getWavFilename()));
     bgm.setVolume(0.5f);
+
+    noteScene.init();
+    noteScene.setNoteMap(&noteMap);
+    noteScene.reloadNotes();
+
+    mapState=noteMap.getBgmBeginState();
 
     SoundRegistry::registerSoundFile("hit0", false, "data/lyrica_notehit0.wav", 1.0f);
     SoundRegistry::registerSoundFile("hit1", false, "data/lyrica_notehit1.wav", 1.0f);
@@ -35,6 +44,8 @@ void DanmakuLyrica::mainInit()
 
     LuaScript::init();
     LuaTaskTimeline::registerLuaFuncs();
+
+    taskList.setTime(mapState.beatOffset);
 
     LuaScript::loadScriptFile("data/main.lua");
 
@@ -72,18 +83,26 @@ void DanmakuLyrica::mainUpdate()
     {
         double newTime=bgm.getTime()+timeTwigger;
         double deltaTime=timeLine.getDeltaTimeFixed(newTime-timeStamp);
+        double deltaBeat=noteMap.offsetMapState(mapState, deltaTime);
         double newDelta;
 
-        while(deltaTime>0)
+        timeStamp=newTime;
+
+        while(deltaBeat>0)
         {
-            newDelta=taskList.updateSingleTask(deltaTime);
-            deltaTime-=newDelta;
-            noteScene.update(deltaTime);
-            bulletScene.update(deltaTime);
-            deltaTime=newDelta;
+            if(taskList.empty())
+                newDelta=0.0;
+            else
+                newDelta=taskList.seekNextTask(deltaBeat);
+            deltaBeat-=newDelta;
+            noteScene.update(deltaBeat);
+            bulletScene.update(deltaBeat);
+            deltaBeat=newDelta;
+            if(deltaBeat<=0.0)
+                break;
+            taskList.updateSingleTask(deltaBeat);
         }
 
-        timeStamp=newTime;
     }
 
     if(buttonPause.isPushed())
