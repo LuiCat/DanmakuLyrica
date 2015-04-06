@@ -57,7 +57,12 @@ int NoteMap::getEntityNotes(list<Note*> &noteList, int maxinum)
     return loadedNum;
 }
 
-const char *NoteMap::getWavFilename()
+const MapState& NoteMap::getBeginState()
+{
+    return beginState;
+}
+
+const char* NoteMap::getWavFilename()
 {
     return wavfile;
 }

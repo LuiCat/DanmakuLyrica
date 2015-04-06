@@ -34,7 +34,7 @@ void DanmakuLyrica::mainInit()
     strip.setMaxIndex(2, 2);
 
     LuaScript::init();
-    LuaTaskList::registerLuaFuncs(_L);
+    LuaTaskList::registerLuaFuncs();
 
     LuaScript::loadScriptFile("data/main.lua");
 
@@ -42,7 +42,9 @@ void DanmakuLyrica::mainInit()
     createTexture("data/etama2.png", &tex);
     Bullet::registerBullet("rice", tex, 16, 16, 8, 8, BulletType::forward, BulletType::round, 4, 4);
 
-    LuaTaskList::bulletScene=&bulletScene;
+    LuaTaskList::bulletScene=&bulletScene;    
+
+    //taskList.resetBeat(noteScene.getBeginBeatOffset());
 
 }
 

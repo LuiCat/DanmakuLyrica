@@ -9,10 +9,10 @@ BeatTicking::BeatTicking(double _beatTickRate, double _secTickRate)
     setBeatTickRate(_beatTickRate);
 }
 
-void BeatTicking::resetBeat(bool tickZero)
+void BeatTicking::resetBeat(double beatOffset)
 {
     timeBeat=0.0;
-    processBeat=(tickZero?0.0:beatTickBeat);
+    processBeat=beatOffset;
 }
 
 void BeatTicking::setBeatTickRate(double ticksPerBeat)

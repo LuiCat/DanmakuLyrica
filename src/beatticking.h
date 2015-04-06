@@ -9,7 +9,7 @@ public:
 
     BeatTicking(double _beatTickRate=1.0, double _secTickRate=0.0);
 
-    void resetBeat(bool tickZero=true);
+    void resetBeat(double beatOffset=0.0);
 
     void setBeatTickRate(double ticksPerBeat);
     void setBeatTickBeat(double beatsPerTick);

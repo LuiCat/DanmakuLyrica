@@ -29,6 +29,12 @@ void NoteScene::render()
     noteList.renderAll();
 }
 
+double NoteScene::getBeginBeatOffset()
+{
+    const MapState& s=noteMap.getBeginState();
+    return s.calcBeatOffset(s.timeOffset);
+}
+
 const char* NoteScene::getBgmFilename()
 {
     return noteMap.getWavFilename();

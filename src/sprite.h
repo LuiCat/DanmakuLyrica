@@ -3,8 +3,8 @@
 
 #include "graphics.h"
 
-#include "ticking.h"
 #include "position.h"
+#include "beatticking.h"
 
 class Sprite : public Ticking, public Position
 {

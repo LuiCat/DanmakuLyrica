@@ -16,7 +16,7 @@ public:
     void update(double deltaSec);
     void render();
 
-    double getBeatOffset();
+    double getBeginBeatOffset();
 
     const char* getBgmFilename();
 

@@ -14,7 +14,7 @@ class LuaTaskList : public Ticking
 {
 public:
 
-    static void registerLuaFuncs(lua_State* L);
+    static void registerLuaFuncs();
 
     LuaTaskList();
     ~LuaTaskList();

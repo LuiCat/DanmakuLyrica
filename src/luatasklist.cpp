@@ -11,7 +11,7 @@ BulletScene* LuaTaskList::bulletScene = 0;
 
 
 LuaTaskList::LuaTaskList()
-    :Ticking(167.00/120)
+    :Ticking(167.0/120)
 {
     if(!instance)
     {
@@ -62,12 +62,12 @@ int LuaTaskList::lua_testFunc(lua_State *L)
     return 0;
 }
 
-void LuaTaskList::registerLuaFuncs(lua_State *L)
+void LuaTaskList::registerLuaFuncs()
 {
-    lua_register(L, "registerTask", lua_pushTask);
-    lua_register(L, "setTickRate", lua_pushTask);
-    lua_register(L, "delayTicks", lua_taskDelayTicks);
-    lua_register(L, "test", lua_testFunc);
+    lua_register(_L, "registerTask", lua_pushTask);
+    lua_register(_L, "setTickRate", lua_pushTask);
+    lua_register(_L, "delayTicks", lua_taskDelayTicks);
+    lua_register(_L, "test", lua_testFunc);
 }
 
 

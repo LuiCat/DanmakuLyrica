@@ -22,6 +22,8 @@ public:
 
     int getEntityNotes(list<Note*> &noteList, int maxinum=-1);
 
+    const MapState& getBeginState();
+
     const char* getWavFilename();
 
 protected:
