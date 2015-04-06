@@ -7,7 +7,7 @@ struct LuaTask
 {
     lua_State* luaThread;
     int luaRef;
-    int tickDelay;
+    double nextTime;
 
     /*
      * todo:
@@ -16,12 +16,30 @@ struct LuaTask
      * bullet type, sound type, etc.
      */
 
-    LuaTask(lua_State* thread=0, int ref=-1)
+    LuaTask(lua_State* thread, int ref, double beginTime)
         :luaThread(thread)
         ,luaRef(ref)
-        ,tickDelay(0)
+        ,nextTime(beginTime)
     {
 
+    }
+
+    LuaTask()
+        :luaThread(0)
+        ,luaRef(-1)
+        ,nextTime(0.0)
+    {
+
+    }
+
+    inline bool operator<(const LuaTask& t) const
+    {
+        return nextTime<t.nextTime;
+    }
+
+    inline bool operator>(const LuaTask& t) const
+    {
+        return nextTime>t.nextTime;
     }
 
 };

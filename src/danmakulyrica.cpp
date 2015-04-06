@@ -1,15 +1,15 @@
 #include "danmakulyrica.h"
 
 #include "graphics.h"
-
-#include "commondef.h"
-
 #include "soundregistry.h"
 
+#include "mathhelper.h"
+#include "commondef.h"
 #include "debug.h"
 
 DanmakuLyrica::DanmakuLyrica()
-    :buttonA(DIK_Z, 0)
+    :taskList(&bulletScene)
+    ,buttonA(DIK_Z, 0)
     ,buttonB(DIK_X, 0)
     ,buttonPause(DIK_SPACE, 0)
     ,buttonSkip(DIK_S, 0)
@@ -34,15 +34,13 @@ void DanmakuLyrica::mainInit()
     strip.setMaxIndex(2, 2);
 
     LuaScript::init();
-    LuaTaskList::registerLuaFuncs();
+    LuaTaskTimeline::registerLuaFuncs();
 
     LuaScript::loadScriptFile("data/main.lua");
 
     Texture tex;
     createTexture("data/etama2.png", &tex);
     Bullet::registerBullet("rice", tex, 16, 16, 8, 8, BulletType::forward, BulletType::round, 4, 4);
-
-    LuaTaskList::bulletScene=&bulletScene;    
 
     //taskList.resetBeat(noteScene.getBeginBeatOffset());
 
@@ -78,12 +76,10 @@ void DanmakuLyrica::mainUpdate()
 
         while(deltaTime>0)
         {
-            newDelta=taskList.seekNextTick(deltaTime);
+            newDelta=taskList.updateSingleTask(deltaTime);
             deltaTime-=newDelta;
             noteScene.update(deltaTime);
             bulletScene.update(deltaTime);
-            if(newDelta!=0.0)
-                taskList.singleTick();
             deltaTime=newDelta;
         }
 

@@ -10,4 +10,4 @@ function main()
 	end
 end
 
-newTask(main);
+task(main);

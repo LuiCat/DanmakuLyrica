@@ -1,19 +1,10 @@
 
-
-function newTask(func)
+function task(func)
 	local co=coroutine.create(func)
-	registerTask(co)
-end
-
-function resumeTask(co)
-	if coroutine.status(co)=='dead' then
-		return false
-	end
-	coroutine.resume(co)
-	return true
+	pushTask(co)
 end
 
 function sleep(tick)
-	delayTicks(tick)
+	delaySecs(tick)
 	coroutine.yield()
 end

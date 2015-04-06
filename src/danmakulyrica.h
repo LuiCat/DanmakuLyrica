@@ -13,7 +13,7 @@
 
 #include "bulletscene.h"
 #include "luascript.h"
-#include "luatasklist.h"
+#include "luatasktimeline.h"
 
 class DanmakuLyrica : public MainGame
 {
@@ -35,7 +35,7 @@ private:
 
     BulletScene bulletScene;
 
-    LuaTaskList taskList;
+    LuaTaskTimeline taskList;
 
     TimeLine timeLine;
 
