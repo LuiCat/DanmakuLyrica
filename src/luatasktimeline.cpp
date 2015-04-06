@@ -36,8 +36,8 @@ int LuaTaskTimeline::lua_testFunc(lua_State* L)
     double w=M_PI*167.00/120;
     double a=17.2;
     double r=a/w/w;
-    Bullet *b=new Bullet(320, 240, 0, 0, BULLET("rice"));
-    b->setAcceleration(a)->setRotateSpeed(w);
+    Bullet b(320, 240, 0, 0, BULLET("rice"));
+    b.setAcceleration(a).setRotateSpeed(w);
     instance->scene->pushBullet(b);
     t++;
     return 0;

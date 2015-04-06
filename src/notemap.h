@@ -20,7 +20,7 @@ public:
 
     void offsetMapState(MapState &state, double deltaSec) const;
 
-    int getEntityNotes(list<Note*> &noteList, int maxinum=-1);
+    int getNoteInfo(list<NoteInfo> &infoList, int maxinum=-1);
 
     const MapState& getBeginState();
 

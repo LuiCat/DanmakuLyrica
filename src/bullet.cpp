@@ -33,32 +33,12 @@ Bullet::Bullet(double posX, double posY, double vel, double angle, int type)
     setBulletType(type);
 }
 
-Bullet* Bullet::setBulletType(int type)
+Bullet& Bullet::setBulletType(int type)
 {
     typeInfo=reg.getIdInfo(type);
     if(typeInfo==0)typeInfo=&defaultBullet;
     setForceFacing(typeInfo->facingType==BulletType::forward, true);
-    return this;
-}
-
-Bullet *Bullet::animate(AnimType type, double deltaValue, double deltaSec)
-{
-    return this;
-}
-
-Bullet *Bullet::animateTo(AnimType type, double value, double deltaSec)
-{
-    return this;
-}
-
-Bullet *Bullet::clearAnim()
-{
-    return this;
-}
-
-Bullet *Bullet::finishAnim()
-{
-    return this;
+    return *this;
 }
 
 void Bullet::onTick(){}

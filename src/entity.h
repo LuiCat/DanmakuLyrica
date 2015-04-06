@@ -21,31 +21,31 @@ public:
     double getSpeedX();
     double getSpeedY();
 
-    Entity* setSpeed(double value);
-    Entity* setRotation(double value);
-    Entity* setSpeedRotation(double vel, double angle);
+    Entity& setSpeed(double value);
+    Entity& setRotation(double value);
+    Entity& setSpeedRotation(double vel, double angle);
 
     void correctAxisSpeed();
     void correctVelocityAngle();
 
     double getFacingAngle() const;
-    Entity* setFacingAngle(double value);
+    Entity& setFacingAngle(double value);
 
-    Entity* setForceFacing(bool forced, bool refreshFacing=false);
+    Entity& setForceFacing(bool forced, bool refreshFacing=false);
 
-    Entity* setPositionOffset(double offsetX, double offsetY);
-    Entity* setSpeedOffset(double offsetVel);
-    Entity* setRotationOffset(double offsetAngle);
-    Entity* setVelocityOffset(double offsetVel, double offsetAngle);
-    Entity* setAxisSpeedOffset(double offsetVelX, double offsetVelY);
+    Entity& setPositionOffset(double offsetX, double offsetY);
+    Entity& setSpeedOffset(double offsetVel);
+    Entity& setRotationOffset(double offsetAngle);
+    Entity& setVelocityOffset(double offsetVel, double offsetAngle);
+    Entity& setAxisSpeedOffset(double offsetVelX, double offsetVelY);
 
     double getAccelerateSpeed() const;
     double getRotateSpeed() const;
-    Entity* setAcceleration(double accVel);
-    Entity* setRotateSpeed(double rotateVel);
+    Entity& setAcceleration(double accVel);
+    Entity& setRotateSpeed(double rotateVel);
 
     // main method making motions
-    Entity* offsetMotion(double secs);
+    Entity& offsetMotion(double secs);
 
     // inherited render method
     virtual void render();

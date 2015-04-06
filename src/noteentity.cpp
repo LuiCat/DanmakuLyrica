@@ -14,6 +14,16 @@ Note::Note(double _hitTime, double _hitBeat)
     setJudgeTime(_hitTime, _hitBeat);
 }
 
+Note::Note(const NoteInfo& info)
+    :scrollSpeed(info.hs)
+    ,noteType(info.noteType)
+    ,judgeTime(-1e7)
+    ,judgeResult(miss)
+{
+    setForceFacing(false);
+    setJudgeTime(info.offsetSec, info.offsetBeat);
+}
+
 void Note::setJudgeTime(double _hitTime, double _hitBeat)
 {
     hitTime=_hitTime;

@@ -22,10 +22,14 @@ Bullet* BulletScene::newBullet(double x, double y, double speed, double angle, i
     return new Bullet(x, y, speed, angle, type);
 }
 
-Bullet* BulletScene::pushBullet(Bullet *bullet)
+void BulletScene::pushBullet(const Bullet& bullet)
 {
     bulletList.pushEntity(bullet);
-    return bullet;
+}
+
+void BulletScene::pushBullet(double x, double y, double speed, double angle, int type)
+{
+    bulletList.newEntity(x, y, speed, angle, type);
 }
 
 bool BulletScene::checkSceneBorder(Entity *entity, double offsetLength)

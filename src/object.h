@@ -20,13 +20,13 @@ protected:
 
 public:
 
-    Object* setTexture(Texture tex);
-    Object* setRenderSize(double x, double y);
-    Object* setRenderCenter(double x, double y);
-    Object* setTextureSize(double posX, double posY, double sizeX, double sizeY);
+    Object& setTexture(Texture tex);
+    Object& setRenderSize(double x, double y);
+    Object& setRenderCenter(double x, double y);
+    Object& setTextureSize(double posX, double posY, double sizeX, double sizeY);
 
     double getAlpha() const;
-    Object* setAlpha(double x);
+    Object& setAlpha(double x);
 
     Object();
     Object(double x, double y);

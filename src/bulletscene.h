@@ -38,7 +38,8 @@ public:
     static Bullet* newBullet(double x, double y, double speed, double angle, int type);
     //static BulletTask* newBulletTask(lua_State *coroutine, Bullet *bullet, int paraRef=-1);
 
-    Bullet* pushBullet(Bullet *bullet);
+    void pushBullet(const Bullet& bullet);
+    void pushBullet(double x, double y, double speed, double angle, int type);
     //LuaTask* pushTask(LuaTask *task);
 
     bool checkSceneBorder(Entity* entity, double offsetLength);

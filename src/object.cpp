@@ -2,30 +2,30 @@
 
 //===================================================
 
-Object* Object::setTexture(Texture tex)
+Object& Object::setTexture(Texture tex)
 {
     textureStrip.setTexture(tex);
-    return this;
+    return *this;
 }
 
-Object* Object::setRenderSize(double x, double y)
+Object& Object::setRenderSize(double x, double y)
 {
     renderSizeX=x;
     renderSizeY=y;
-    return this;
+    return *this;
 }
 
-Object* Object::setRenderCenter(double x, double y)
+Object& Object::setRenderCenter(double x, double y)
 {
     renderCenterX=x;
     renderCenterY=y;
-    return this;
+    return *this;
 }
 
-Object* Object::setTextureSize(double posX, double posY, double sizeX, double sizeY)
+Object& Object::setTextureSize(double posX, double posY, double sizeX, double sizeY)
 {
     textureStrip.setStripPos(posX, posY, sizeX, sizeY);
-    return this;
+    return *this;
 }
 
 double Object::getAlpha() const
@@ -33,7 +33,7 @@ double Object::getAlpha() const
     return useAlpha?x:1.0;
 }
 
-Object* Object::setAlpha(double x)
+Object& Object::setAlpha(double x)
 {
     if(x<0.0)
     {
@@ -45,7 +45,7 @@ Object* Object::setAlpha(double x)
         if(x>1.0)x=1.0;
         alpha=x;
     }
-    return this;
+    return *this;
 }
 
 //===================================================

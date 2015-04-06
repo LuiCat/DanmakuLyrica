@@ -27,7 +27,7 @@ public:
 
     double offsetMapState(MapState& state, double deltaSec) const;
 
-    void getEntityNotes(list<Note*> &noteList);
+    void getNoteInfo(list<NoteInfo>& infoList);
 
 private:
 

@@ -15,7 +15,7 @@ JudgeResult NoteList::judgeSingleNote(double timeSec)
     auto iter=entityList.begin();
     while(judge==miss && iter!=entityList.end())
     {
-        note=(Note*)*iter;
+        note=&(*iter);
         if(!note->isJudged())
             judge=noteJudge.judgeNote(note->getTimeOffset(timeSec));
         iter++;

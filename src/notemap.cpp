@@ -44,12 +44,12 @@ void NoteMap::offsetMapState(MapState &state, double deltaSec) const
 
 }
 
-int NoteMap::getEntityNotes(list<Note*> &noteList, int maxinum)
+int NoteMap::getNoteInfo(list<NoteInfo>& infoList, int maxinum)
 {
     int loadedNum=0;
     while(loadProc!=segments.end() && maxinum!=0)
     {
-        loadProc->getEntityNotes(noteList);
+        loadProc->getNoteInfo(infoList);
         maxinum--;
         loadedNum++;
         loadProc++;

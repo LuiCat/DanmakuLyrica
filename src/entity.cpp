@@ -33,7 +33,7 @@ double Entity::getFacingAngle() const
     return facingAngle;
 }
 
-Entity* Entity::setSpeed(double value)
+Entity& Entity::setSpeed(double value)
 {
     speed=value;
     if(speed<0.0)
@@ -43,33 +43,33 @@ Entity* Entity::setSpeed(double value)
         //rotation+=M_PI;
     }
     isAxisVelocityCorrect=false;
-    return this;
+    return *this;
 }
 
-Entity* Entity::setRotation(double value)
+Entity& Entity::setRotation(double value)
 {
     rotation=value;
     isAxisVelocityCorrect=false;
     if(forceFacing)
         setFacingAngle(rotation);
-    return this;
+    return *this;
 }
 
-Entity *Entity::setSpeedRotation(double vel, double angle)
+Entity& Entity::setSpeedRotation(double vel, double angle)
 {
     setSpeed(vel);
     setRotation(angle);
     correctAxisSpeed();
-    return this;
+    return *this;
 }
 
-Entity* Entity::setFacingAngle(double value)
+Entity& Entity::setFacingAngle(double value)
 {
     facingAngle=value;
-    return this;
+    return *this;
 }
 
-Entity* Entity::setForceFacing(bool forced, bool refreshFacing)
+Entity& Entity::setForceFacing(bool forced, bool refreshFacing)
 {
     forceFacing=forced;
     if(refreshFacing)
@@ -79,41 +79,41 @@ Entity* Entity::setForceFacing(bool forced, bool refreshFacing)
         else
             setFacingAngle(0.0);
     }
-    return this;
+    return *this;
 }
 
-Entity* Entity::setPositionOffset(double offsetX, double offsetY)
+Entity& Entity::setPositionOffset(double offsetX, double offsetY)
 {
     x+=offsetX;
     y+=offsetY;
-    return this;
+    return *this;
 }
 
-Entity* Entity::setSpeedOffset(double offsetVel)
+Entity& Entity::setSpeedOffset(double offsetVel)
 {
     setSpeed(speed+offsetVel);
-    return this;
+    return *this;
 }
 
-Entity* Entity::setRotationOffset(double offsetAngle)
+Entity& Entity::setRotationOffset(double offsetAngle)
 {
     setRotation(rotation+offsetAngle);
-    return this;
+    return *this;
 }
 
-Entity* Entity::setVelocityOffset(double offsetVel, double offsetAngle)
+Entity& Entity::setVelocityOffset(double offsetVel, double offsetAngle)
 {
     setAxisSpeedOffset(offsetVel*sin(offsetAngle),offsetVel*cos(offsetAngle));
-    return this;
+    return *this;
 }
 
-Entity* Entity::setAxisSpeedOffset(double offsetVelX, double offsetVelY)
+Entity& Entity::setAxisSpeedOffset(double offsetVelX, double offsetVelY)
 {
     correctAxisSpeed();
     speedX+=offsetVelX;
     speedY+=offsetVelY;
     correctVelocityAngle();
-    return this;
+    return *this;
 }
 
 double Entity::getAccelerateSpeed() const
@@ -126,16 +126,16 @@ double Entity::getRotateSpeed() const
     return rotateSpeed;
 }
 
-Entity *Entity::setAcceleration(double accVel)
+Entity& Entity::setAcceleration(double accVel)
 {
     accelerateSpeed=accVel;
-    return this;
+    return *this;
 }
 
-Entity *Entity::setRotateSpeed(double rotateVel)
+Entity& Entity::setRotateSpeed(double rotateVel)
 {
     rotateSpeed=rotateVel;
-    return this;
+    return *this;
 }
 
 void Entity::correctAxisSpeed()
@@ -157,9 +157,9 @@ void Entity::correctVelocityAngle()
 
 //===================================================
 
-Entity* Entity::offsetMotion(double secs)
+Entity& Entity::offsetMotion(double secs)
 {
-    if(!useDefaultMotion)return this;
+    if(!useDefaultMotion)return *this;
     if(rotateSpeed<M_DINFS&&rotateSpeed>-M_DINFS)
     {
         if(accelerateSpeed<M_DINFS&&accelerateSpeed>-M_DINFS) // uniform linear motion
@@ -198,7 +198,7 @@ Entity* Entity::offsetMotion(double secs)
         y+=(newSpeed*newsin-oldSpeed*oldsin)/rotateSpeed+ra*(newcos-oldcos);
 
     }
-    return this;
+    return *this;
 }
 
 //===================================================

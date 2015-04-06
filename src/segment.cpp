@@ -98,7 +98,7 @@ double Segment::offsetMapState(MapState &state, double deltaSec) const
     return deltaSec-deltaOffset;
 }
 
-void Segment::getEntityNotes(list<Note*>& noteList)
+void Segment::getNoteInfo(list<NoteInfo>& infoList)
 {
     MapState tempState=segmentState;
 
@@ -107,7 +107,7 @@ void Segment::getEntityNotes(list<Note*>& noteList)
     auto event_iter=events.begin();
     auto note_iter=notes.begin();
 
-    Note tempNote;
+    NoteInfo t;
 
     while(note_iter!=notes.end() || event_iter!=events.end())
     {
@@ -125,11 +125,12 @@ void Segment::getEntityNotes(list<Note*>& noteList)
         tempState.processEvent(0, note_iter->num-prevNum, segmentDiv);
         prevNum=note_iter->num;
 
-        tempNote.setJudgeTime(tempState.timeOffset, tempState.beatOffset);
-        tempNote.setScrollSpeed(tempState.hs);
-        tempNote.setNoteType(note_iter->type);
+        t.offsetSec=tempState.timeOffset;
+        t.offsetBeat=tempState.beatOffset;
+        t.hs=tempState.hs;
+        t.noteType=note_iter->type;
 
-        noteList.push_back(new Note(tempNote));
+        infoList.push_back(t);
 
         ++note_iter;
     }

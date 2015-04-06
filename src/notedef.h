@@ -32,6 +32,14 @@ struct SegmentEvent
     double parameter_d;
 };
 
+struct NoteInfo
+{
+    double offsetSec;
+    double offsetBeat;
+    double hs;
+    NoteType noteType;
+};
+
 class NoteMap;
 class Segment;
 struct MapState;

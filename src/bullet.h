@@ -31,11 +31,6 @@ struct BulletType
     double judgeSizeX, judgeSizeY;
 };
 
-enum AnimType
-{
-    x,y,speed,angle,vx,vy
-};
-
 class Bullet : public Entity
 {
 private:
@@ -58,13 +53,7 @@ public:
     Bullet();
     Bullet(double posX, double posY, double vel, double angle, int type);
 
-    Bullet* setBulletType(int type);
-
-    // animation funcs
-    Bullet* animate(AnimType type, double deltaValue, double deltaSec);
-    Bullet* animateTo(AnimType type, double value, double deltaSec);
-    Bullet* clearAnim();
-    Bullet* finishAnim();
+    Bullet& setBulletType(int type);
 
 protected:
 

@@ -13,6 +13,7 @@ class Note : public Entity
 public:
 
     Note(double _hitTime=0.0, double _hitBeat=0.0);
+    Note(const NoteInfo& info);
 
     void setJudgeTime(double _hitTime, double _hitBeat);
     void setScrollSpeed(double hs);

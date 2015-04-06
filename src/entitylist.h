@@ -19,11 +19,9 @@ public:
         clearAll();
     }
 
-    void pushEntity(T* entity)
+    void pushEntity(const T& entity)
     {
-        T* p=dynamic_cast<T*>(entity);
-        if(p)
-            entityList.push_back(p);
+        entityList.push_back(entity);
     }
 
     void pushEntities(list<T>& entities)
@@ -34,19 +32,17 @@ public:
         }
     }
 
-    void pushEntities(list<T*>& entities)
+    template <class... Args>
+    void newEntity(Args&&... args)
     {
-        for(T* e : entities)
-        {
-            pushEntity(e);
-        }
+        entityList.emplace_back(args...);
     }
 
     void updateAll(double deltaSec)
     {
-        for(auto x : entityList)
+        for(T& x : entityList)
         {
-            x->update(deltaSec);
+            x.update(deltaSec);
         }
         if(autoClear)
             clearDead();
@@ -54,19 +50,15 @@ public:
 
     void renderAll()
     {
-        for(auto x : entityList)
+        for(T& x : entityList)
         {
-            x->render();
+            x.render();
         }
     }
 
     void clearAll()
     {
-        while(!entityList.empty())
-        {
-            delete entityList.front();
-            entityList.pop_front();
-        }
+        entityList.clear();
     }
 
     void clearDead()
@@ -74,9 +66,8 @@ public:
         auto iter=entityList.begin();
         while(iter!=entityList.end())
         {
-            if((*iter)->dead())
+            if(iter->dead())
             {
-                delete *iter;
                 iter=entityList.erase(iter);
             }
             else
@@ -98,7 +89,7 @@ public:
 
 protected:
 
-    list<Entity*> entityList;
+    list<T> entityList;
 
 private:
 
