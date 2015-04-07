@@ -32,16 +32,6 @@ struct LuaTask
 
     }
 
-    inline bool operator<(const LuaTask& t) const
-    {
-        return nextTime<t.nextTime;
-    }
-
-    inline bool operator>(const LuaTask& t) const
-    {
-        return nextTime>t.nextTime;
-    }
-
 };
 
 #endif // LUATASK_H

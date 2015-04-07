@@ -54,4 +54,15 @@ private:
 
 };
 
+
+inline bool operator<(const LuaTask& a, const LuaTask& b)
+{
+    return a.nextTime>b.nextTime;
+}
+
+inline bool operator>(const LuaTask& a, const LuaTask& b)
+{
+    return a.nextTime<b.nextTime;
+}
+
 #endif // LUATASKTIMELINE_H
