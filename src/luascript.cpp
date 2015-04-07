@@ -8,7 +8,8 @@
 
 //===========================================================================
 
-lua_State* LuaScript::luaState=0;
+lua_State* LuaScript::luaState = 0;
+char LuaScript::currentPath[256] = "/";
 
 //===========================================================================
 
@@ -39,6 +40,9 @@ lua_State* LuaScript::lua_createthread(int idx)
 bool LuaScript::loadScriptFile(const char* filename){
     if(lua_exload(filename)==0)
     {
+        strcpy(currentPath, filename);
+        for(int i=strlen(currentPath)-1;i>=0&&currentPath[i]!='/';--i)
+            currentPath[i]=0;
         return (lua_excall(0, 0)==LUA_OK);
     }
     return false;
@@ -68,7 +72,12 @@ void LuaScript::cleanup()
     luaState=0;
 }
 
-lua_State *LuaScript::getLuaState()
+lua_State* LuaScript::getLuaState()
 {
     return luaState;
+}
+
+const char* LuaScript::getCurrentPath()
+{
+    return currentPath;
 }

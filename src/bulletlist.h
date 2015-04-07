@@ -1,6 +1,7 @@
 #ifndef BULLETLIST_H
 #define BULLETLIST_H
 
+#include "bulletdef.h"
 #include "entitylist.h"
 
 #include "bullet.h"

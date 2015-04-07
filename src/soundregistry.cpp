@@ -30,10 +30,10 @@ void SoundRegistry::releaseAllSounds()
 
 SoundBuffer *SoundRegistry::get(int id)
 {
-    return SoundRegistry::reg.getIdInfo(id);
+    return SoundRegistry::reg.getInfo(id);
 }
 
 SoundBuffer *SoundRegistry::get(const char *name)
 {
-    return get(SoundRegistry::reg.getNameId(name));
+    return get(SoundRegistry::reg.getId(name));
 }

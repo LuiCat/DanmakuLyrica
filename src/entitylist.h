@@ -3,6 +3,7 @@
 
 #include "entity.h"
 
+#include <map>
 #include <list>
 using namespace std;
 
@@ -14,35 +15,38 @@ class EntityList
 public:
 
     EntityList()
-        :autoClear(true)
+        :nextEntityID(0)
+        ,autoClear(true)
     {
         clearAll();
     }
 
-    void pushEntity(const T& entity)
+    int pushEntity(const T& entity)
     {
-        entityList.push_back(entity);
+        entityList[nextEntityID]=entity;
+        return nextEntityID++;
     }
 
-    void pushEntities(list<T>& entities)
+    void pushEntities(const list<T>& entities)
     {
-        for(T& e : entities)
+        for(const T& e : entities)
         {
-            pushEntity(&e);
+            pushEntity(e);
         }
     }
 
     template <class... Args>
-    void newEntity(Args&&... args)
+    int newEntity(Args&&... args)
     {
-        entityList.emplace_back(args...);
+        entityList.emplace_hint(entityList.end(), piecewise_construct, make_tuple(nextEntityID), make_tuple(args...));
+        return nextEntityID++;
     }
 
     void updateAll(double deltaSec)
     {
-        for(T& x : entityList)
+        for(pair<const int, T>& x : entityList)
         {
-            x.update(deltaSec);
+            x.second.update(deltaSec);
         }
         if(autoClear)
             clearDead();
@@ -50,9 +54,9 @@ public:
 
     void renderAll()
     {
-        for(T& x : entityList)
+        for(pair<const int, T>& x : entityList)
         {
-            x.render();
+            x.second.render();
         }
     }
 
@@ -66,7 +70,7 @@ public:
         auto iter=entityList.begin();
         while(iter!=entityList.end())
         {
-            if(iter->dead())
+            if(iter->second.dead())
             {
                 iter=entityList.erase(iter);
             }
@@ -89,9 +93,11 @@ public:
 
 protected:
 
-    list<T> entityList;
+    map<int, T> entityList;
 
 private:
+
+    int nextEntityID;
 
     bool autoClear;
 

@@ -14,6 +14,8 @@ protected:
 
     static lua_State* luaState;
 
+    static char currentPath[256];
+
     static void initLuaFuncs();
 
 public:
@@ -29,6 +31,8 @@ public:
     static void cleanup();
 
     static lua_State* getLuaState();
+
+    static const char* getCurrentPath();
 
 };
 

@@ -4,8 +4,18 @@ function task(func)
 	pushTask(co)
 end
 
-now = getTime;
+-- function bullet(x,y,sp,rt[,type])
+bullet = pushBullet
+
 -- function now()
+now = getTime
+
+-- function registerBullet(name, pic, w, h, centerx, centery, facetype={'none','forward','spin'},
+--                         judgetype={'round','rect','oval'}, judgew, judgeh)
+
+-- function setCenter(x,y)
+-- function setAngle(rt)
+-- function setBulletType(typeid|typename)
 
 function sleep(t)
 	delay(t)

@@ -41,14 +41,20 @@ private:
     static int lua_taskDelayUntil(lua_State* L);
     static int lua_getTime(lua_State* L);
 
+    static int lua_registerBullet(lua_State* L);
+    static int lua_pushBullet(lua_State* L);
+    static int lua_setCenter(lua_State* L);
+    static int lua_setAngle(lua_State* L);
+    static int lua_setBulletType(lua_State* L);
+
     static int lua_testFunc(lua_State* L);
+
+    static LuaTaskTimeline* instance;
 
     double timeSec;
 
     BulletScene* scene;
-
-    static LuaTaskTimeline* instance;
-    static LuaTask* currentTask;
+    LuaTask* currentTask;
 
     class LTComp
     {

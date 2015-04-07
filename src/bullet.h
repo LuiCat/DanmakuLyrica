@@ -1,16 +1,15 @@
-class Bullet;
-
 #ifndef BULLET_H
 #define BULLET_H
 
-#include "entity.h"
+#include "bulletdef.h"
 
+#include "entity.h"
 #include "registry.h"
 
 #include <list>
 using namespace std;
 
-#define BULLET(x) (Bullet::reg.getNameId(x))
+#define BULLET(x) (Bullet::reg.getId(x))
 
 struct BulletType
 {
@@ -51,17 +50,22 @@ public:
 
     // constructors
     Bullet();
-    Bullet(double posX, double posY, double vel, double angle, int type);
+    Bullet(double posX, double posY, double vel, double angle, int type, BulletScene* scene=0);
 
     Bullet& setBulletType(int type);
 
 protected:
 
-    BulletType *typeInfo;
+    BulletType* typeInfo;
 
-    void onTick();
-    void onRender();
-    void destroy();
+    BulletScene* bulletScene;
+
+    bool checkOutsideScene();
+
+    virtual void onUpdateMotion(double deltaSec, double deltaTick);
+    virtual void onTick();
+    virtual void onRender();
+    virtual void onDestroy();
 
 };
 

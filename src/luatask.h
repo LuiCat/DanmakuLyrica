@@ -5,6 +5,7 @@
 
 #include "bullet.h"
 
+#include <set>
 #include <list>
 using namespace std;
 
@@ -18,8 +19,9 @@ public:
 
     double centerX, centerY;
     double angle;
+    int bulletType;
 
-    list<Bullet*> attachList;
+    set<int> attachList;
 
     /*
      * todo:
@@ -27,18 +29,25 @@ public:
      */
 
     LuaTask();
-    LuaTask(lua_State* thread, int ref, double beginTime);
+    LuaTask(lua_State* thread, int ref, double beginTime, const LuaTask* center=0);
 
-    inline void attachBullet(Bullet* b)
+    inline void attachBullet(int bulletID)
     {
-        attachList.push_back(b);
+        attachList.insert(bulletID);
+    }
+
+    inline void attachBullets(const list<int>& listID)
+    {
+        for(int bulletID : listID)
+        {
+            attachList.insert(bulletID);
+        }
     }
 
     inline void clearAttach()
     {
         attachList.clear();
     }
-
 
     friend class LuaTaskTimeline;
 

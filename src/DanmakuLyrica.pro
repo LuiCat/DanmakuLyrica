@@ -75,7 +75,8 @@ HEADERS += \
     luatask.h \
     sprite.h \
     beatticking.h \
-    luatasktimeline.h
+    luatasktimeline.h \
+    bulletdef.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \

@@ -47,6 +47,7 @@ void DanmakuLyrica::mainInit()
 
     taskList.setTime(mapState.beatOffset);
 
+    LuaScript::loadScriptFile("data/utils.lua");
     LuaScript::loadScriptFile("data/main.lua");
 
     Texture tex;

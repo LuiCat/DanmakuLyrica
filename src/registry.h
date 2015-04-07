@@ -20,32 +20,33 @@ private:
 public:
 
     Registry()
+        :lastRegisteredId(0)
     {
-        lastRegisteredId=0;
+
     }
 
-    T* registerName(const char *name, const T *info)
+    int registerName(const char *name, const T *info)
     {
         if(!info||strlen(name)<1)return 0;
         ++lastRegisteredId;
         typeNameMap[string(name)]=lastRegisteredId;
         typeInfoList[lastRegisteredId]=*info;
-        return &typeInfoList[lastRegisteredId];
+        return lastRegisteredId;
     }
 
-    T* operator()(const char *name, const T *info)
+    int operator()(const char *name, const T *info)
     {
         return registerName(name, info);
     }
 
-    int getNameId(const char *typeName)
+    int getId(const char *typeName)
     {
         string str(typeName);
         if(typeNameMap.find(str)==typeNameMap.end())return 0;
         return typeNameMap[str];
     }
 
-    T* getIdInfo(int id)
+    T* getInfo(int id)
     {
         if(typeInfoList.find(id)==typeInfoList.end())
             return 0;

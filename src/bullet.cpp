@@ -1,6 +1,7 @@
 #include "bullet.h"
-#include "mathhelper.h"
+#include "bulletscene.h"
 
+#include "mathhelper.h"
 #include "debug.h"
 
 #include <cstring>
@@ -27,18 +28,31 @@ Bullet::Bullet()
     setBulletType(0);
 }
 
-Bullet::Bullet(double posX, double posY, double vel, double angle, int type)
+Bullet::Bullet(double posX, double posY, double vel, double angle, int type, BulletScene* scene)
     :Entity(posX, posY, vel, angle)
 {
     setBulletType(type);
+    bulletScene=scene;
 }
 
 Bullet& Bullet::setBulletType(int type)
 {
-    typeInfo=reg.getIdInfo(type);
+    typeInfo=reg.getInfo(type);
     if(typeInfo==0)typeInfo=&defaultBullet;
     setForceFacing(typeInfo->facingType==BulletType::forward, true);
     return *this;
+}
+
+bool Bullet::checkOutsideScene()
+{
+    return bulletScene&&bulletScene->checkSceneBorder(this, 50.0);
+}
+
+void Bullet::onUpdateMotion(double deltaSec, double deltaTick)
+{
+    Entity::onUpdateMotion(deltaSec, deltaTick);
+    if(checkOutsideScene())
+        this->setDead();
 }
 
 void Bullet::onTick(){}
@@ -59,7 +73,7 @@ void Bullet::onRender()
     d3d.popMatrix();
 }
 
-void Bullet::destroy()
+void Bullet::onDestroy()
 {
     setDead();
 }
