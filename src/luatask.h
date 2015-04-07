@@ -3,35 +3,48 @@
 
 #include "lua/lua.hpp"
 
-struct LuaTask
+#include "bullet.h"
+
+#include <list>
+using namespace std;
+
+class LuaTask
 {
+public:
+
     lua_State* luaThread;
     int luaRef;
     double nextTime;
 
+    double centerX, centerY;
+    double angle;
+
+    list<Bullet*> attachList;
+
     /*
      * todo:
-     * bullet attach list
-     * center x/y/angle
      * bullet type, sound type, etc.
      */
 
-    LuaTask(lua_State* thread, int ref, double beginTime)
-        :luaThread(thread)
-        ,luaRef(ref)
-        ,nextTime(beginTime)
-    {
+    LuaTask();
+    LuaTask(lua_State* thread, int ref, double beginTime);
 
+    inline void attachBullet(Bullet* b)
+    {
+        attachList.push_back(b);
     }
 
-    LuaTask()
-        :luaThread(0)
-        ,luaRef(-1)
-        ,nextTime(0.0)
+    inline void clearAttach()
     {
-
+        attachList.clear();
     }
+
+
+    friend class LuaTaskTimeline;
 
 };
 
 #endif // LUATASK_H
+
+
+

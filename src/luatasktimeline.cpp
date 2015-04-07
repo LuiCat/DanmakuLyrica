@@ -5,7 +5,7 @@
 #include "debug.h"
 
 LuaTaskTimeline* LuaTaskTimeline::instance = 0;
-LuaTask LuaTaskTimeline::currentTask;
+LuaTask* LuaTaskTimeline::currentTask = 0;
 
 void LuaTaskTimeline::registerLuaFuncs()
 {
@@ -30,14 +30,14 @@ int LuaTaskTimeline::lua_pushTask(lua_State* L)
 int LuaTaskTimeline::lua_taskDelay(lua_State* L)
 {
     if(lua_isnumber(L, 1))
-        currentTask.nextTime+=lua_tonumber(L, 1);
+        currentTask->nextTime+=lua_tonumber(L, 1);
     return 0;
 }
 
 int LuaTaskTimeline::lua_taskDelayUntil(lua_State* L)
 {
     if(lua_isnumber(L, 1))
-        currentTask.nextTime=lua_tonumber(L, 1);
+        currentTask->nextTime=lua_tonumber(L, 1);
     return 0;
 }
 
@@ -79,7 +79,8 @@ void LuaTaskTimeline::setTime(double newTime)
 
 void LuaTaskTimeline::push(const LuaTask& task)
 {
-    taskList.push(task);
+    taskMap[task.luaRef]=task;
+    taskList.push(&taskMap[task.luaRef]);
 }
 
 void LuaTaskTimeline::update(double deltaSec)
@@ -92,20 +93,21 @@ void LuaTaskTimeline::update(double deltaSec)
     {
         currentTask=taskList.top();
 
-        if(currentTask.nextTime>newSec)
+        if(currentTask->nextTime>newSec)
             break;
 
         taskList.pop();
-        timeSec=currentTask.nextTime;
+        timeSec=currentTask->nextTime;
 
         result=LUA_OK;
 
-        if(currentTask.luaThread)
-            result=lua_resume(currentTask.luaThread, 0, 0);
+        if(currentTask->luaThread)
+            result=lua_resume(currentTask->luaThread, 0, 0);
 
         if(result!=LUA_YIELD)
         {
-            luaL_unref(_L, LUA_REGISTRYINDEX, currentTask.luaRef);
+            luaL_unref(_L, LUA_REGISTRYINDEX, currentTask->luaRef);
+            taskMap.erase(currentTask->luaRef);
             continue;
         }
 
@@ -125,15 +127,15 @@ double LuaTaskTimeline::seekNextTask(double limitDeltaSec)
     }
 
     double newSec=timeSec+limitDeltaSec;
-    const LuaTask& task=taskList.top();
+    LuaTask* task=taskList.top();
 
-    if(task.nextTime>newSec)
+    if(task->nextTime>newSec)
     {
         timeSec=newSec;
         return 0.0;
     }
 
-    timeSec=task.nextTime;
+    timeSec=task->nextTime;
     return newSec-timeSec;
 
 }
@@ -151,23 +153,24 @@ double LuaTaskTimeline::updateSingleTask(double limitDeltaSec)
 
     currentTask=taskList.top();
 
-    if(currentTask.nextTime>newSec)
+    if(currentTask->nextTime>newSec)
     {
         timeSec=newSec;
         return 0.0;
     }
 
     taskList.pop();
-    timeSec=currentTask.nextTime;
+    timeSec=currentTask->nextTime;
 
     result=LUA_OK;
 
-    if(currentTask.luaThread)
-        result=lua_resume(currentTask.luaThread, 0, 0);
+    if(currentTask->luaThread)
+        result=lua_resume(currentTask->luaThread, 0, 0);
 
     if(result!=LUA_YIELD)
     {
-        luaL_unref(_L, LUA_REGISTRYINDEX, currentTask.luaRef);
+        luaL_unref(_L, LUA_REGISTRYINDEX, currentTask->luaRef);
+        taskMap.erase(currentTask->luaRef);
     }
     else
     {
@@ -183,11 +186,12 @@ void LuaTaskTimeline::clear()
     {
         if(_L)
         {
-            const LuaTask& t=taskList.top();
-            luaL_unref(_L, LUA_REGISTRYINDEX, t.luaRef);
+            LuaTask* t=taskList.top();
+            luaL_unref(_L, LUA_REGISTRYINDEX, t->luaRef);
         }
         taskList.pop();
     }
+    taskMap.clear();
 }
 
 bool LuaTaskTimeline::empty()

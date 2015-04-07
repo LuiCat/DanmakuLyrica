@@ -9,6 +9,7 @@
 #include "mathhelper.h"
 
 #include <queue>
+#include <map>
 using namespace std;
 
 class LuaTaskTimeline
@@ -47,22 +48,21 @@ private:
     BulletScene* scene;
 
     static LuaTaskTimeline* instance;
-    static LuaTask currentTask;
+    static LuaTask* currentTask;
 
-    priority_queue<LuaTask> taskList;
+    class LTComp
+    {
+    public:
+        bool operator()(const LuaTask* a, const LuaTask* b)
+        {
+            return a->nextTime>b->nextTime;
+        }
+    };
 
+    map<int, LuaTask> taskMap;
+    priority_queue<LuaTask*, vector<LuaTask*>, LTComp> taskList;
 
 };
 
-
-inline bool operator<(const LuaTask& a, const LuaTask& b)
-{
-    return a.nextTime>b.nextTime;
-}
-
-inline bool operator>(const LuaTask& a, const LuaTask& b)
-{
-    return a.nextTime<b.nextTime;
-}
 
 #endif // LUATASKTIMELINE_H

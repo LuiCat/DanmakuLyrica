@@ -38,7 +38,8 @@ SOURCES += main.cpp \
     bulletscene.cpp \
     sprite.cpp \
     beatticking.cpp \
-    luatasktimeline.cpp
+    luatasktimeline.cpp \
+    luatask.cpp
 
 HEADERS += \
     debug.h \
