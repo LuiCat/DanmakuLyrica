@@ -9,10 +9,8 @@
 #include <list>
 using namespace std;
 
-class LuaTask
+struct LuaTask
 {
-public:
-
     lua_State* luaThread;
     int luaRef;
     double nextTime;

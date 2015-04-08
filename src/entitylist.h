@@ -4,7 +4,9 @@
 #include "entity.h"
 
 #include <map>
+#include <set>
 #include <list>
+#include <functional>
 using namespace std;
 
 template <typename T>
@@ -40,6 +42,48 @@ public:
     {
         entityList.emplace_hint(entityList.end(), piecewise_construct, make_tuple(nextEntityID), make_tuple(args...));
         return nextEntityID++;
+    }
+
+    T* getEntity(int id)
+    {
+        auto iter=entityList.find(id);
+        return iter==entityList.end()?0:&(iter->second);
+    }
+
+    bool hasEntity(int id)
+    {
+        return entityList.find(id)!=entityList.end();
+    }
+
+    template <typename Function>
+    void forEach(Function fn)
+    {
+        for(pair<const int, T>& x : entityList)
+        {
+            fn(x.second);
+        }
+    }
+
+    template <typename Function>
+    void forEach(const set<int>& listID, Function fn)
+    {
+        for(int id : listID)
+        {
+            auto iter=entityList.find(id);
+            if(iter!=entityList.end())
+                fn(iter->second);
+        }
+    }
+
+    template <typename Function>
+    void forEach(const list<int>& listID, Function fn)
+    {
+        for(int id : listID)
+        {
+            auto iter=entityList.find(id);
+            if(iter!=entityList.end())
+                fn(iter->second);
+        }
     }
 
     void updateAll(double deltaSec)

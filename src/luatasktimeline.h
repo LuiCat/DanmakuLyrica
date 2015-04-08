@@ -47,6 +47,18 @@ private:
     static int lua_setAngle(lua_State* L);
     static int lua_setBulletType(lua_State* L);
 
+    static int lua_attachBullet(lua_State* L);
+    static int lua_clearAttach(lua_State* L);
+
+    static int lua_setAttachedBulletPosition(lua_State* L);
+    static int lua_setAttachedBulletRotation(lua_State* L);
+    static int lua_setAttachedBulletSpeed(lua_State* L);
+    static int lua_setAttachedBulletAcceleration(lua_State* L);
+    static int lua_setAttachedBulletRotateSpeed(lua_State* L);
+    static int lua_setAttachedBulletPositionOffset(lua_State* L);
+    static int lua_setAttachedBulletRotationOffset(lua_State* L);
+    static int lua_setAttachedBulletSpeedOffset(lua_State* L);
+
     static int lua_testFunc(lua_State* L);
 
     static LuaTaskTimeline* instance;

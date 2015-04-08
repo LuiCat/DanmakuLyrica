@@ -19,12 +19,32 @@ void LuaTaskTimeline::registerLuaFuncs()
     lua_register(_L, "setCenter", lua_setCenter);
     lua_register(_L, "setAngle", lua_setAngle);
     lua_register(_L, "setBulletType", lua_setBulletType);
+
+    lua_register(_L, "attach", lua_attachBullet);
+    lua_register(_L, "clearAttach", lua_clearAttach);
+
+    lua_createtable(_L, 0, 8);
+    lua_tableregister(_L, "setPos", lua_setAttachedBulletPosition);
+    lua_tableregister(_L, "setRot", lua_setAttachedBulletRotation);
+    lua_tableregister(_L, "setSpeed", lua_setAttachedBulletSpeed);
+    lua_tableregister(_L, "setAcc", lua_setAttachedBulletAcceleration);
+    lua_tableregister(_L, "setRS", lua_setAttachedBulletRotateSpeed);
+    lua_tableregister(_L, "offsetPos", lua_setAttachedBulletPositionOffset);
+    lua_tableregister(_L, "offsetRot", lua_setAttachedBulletRotationOffset);
+    lua_tableregister(_L, "offsetSpeed", lua_setAttachedBulletSpeedOffset);
+    lua_setglobal(_L, "att");
+
     /*
-    static int lua_registerBullet(lua_State* L);
-    static int lua_pushBullet(lua_State* L);
-    static int lua_setCenter(lua_State* L);
-    static int lua_setAngle(lua_State* L);
-    static int lua_setBulletType(lua_State* L);
+    static int lua_attachBullet(lua_State* L);
+    static int lua_setAttachedBulletPosition(lua_State* L);
+    static int lua_setAttachedBulletRotation(lua_State* L);
+    static int lua_setAttachedBulletSpeed(lua_State* L);
+    static int lua_setAttachedBulletAcceleration(lua_State* L);
+    static int lua_setAttachedBulletRotateSpeed(lua_State* L);
+
+    static int lua_setAttachedBulletPositionOffset(lua_State* L);
+    static int lua_setAttachedBulletRotationOffset(lua_State* L);
+    static int lua_setAttachedBulletSpeedOffset(lua_State* L);
     */
 
     //lua_register(_L, "test", lua_testFunc);
@@ -171,6 +191,104 @@ int LuaTaskTimeline::lua_setBulletType(lua_State* L)
         instance->currentTask->bulletType=lua_tointeger(L, 1);
     else if(lua_isstring(L, 1))
         instance->currentTask->bulletType=BULLET(lua_tostring(L, 1));
+    return 0;
+}
+
+int LuaTaskTimeline::lua_attachBullet(lua_State* L)
+{
+    if(lua_gettop(L)==1&&lua_isnumber(L, 1))
+        instance->currentTask->attachBullet(lua_tointeger(L, 1));
+    else if(lua_isnumber(L, 1)&&lua_isnumber(L, 2))
+    {
+        int t=lua_tointeger(L, 1), b=lua_tointeger(L, 2);
+        if(instance->taskMap.find(t)!=instance->taskMap.end())
+            instance->taskMap[t].attachBullet(b);
+    }
+    return 0;
+}
+
+int LuaTaskTimeline::lua_clearAttach(lua_State* L)
+{
+    instance->currentTask->clearAttach();
+    return 0;
+}
+
+#define SETBULLETS(X) \
+{\
+    if(lua_isnumber(L, 1))\
+    {\
+        int t=lua_tonumber(L, 1);\
+        instance->scene->operateBullets(instance->currentTask->attachList, [t](Bullet& b){X;});\
+    }\
+}
+
+int LuaTaskTimeline::lua_setAttachedBulletPosition(lua_State* L)
+{
+    /*
+    int t;
+    if(lua_isnumber(L, 1))
+    {
+        t=lua_tonumber(L, 1);
+        instance->scene->operateBullets(instance->currentTask->attachList, [t](Bullet& b){b.setX(t);});
+    }
+    if(lua_isnumber(L, 2))
+    {
+        t=lua_tonumber(L, 2);
+        instance->scene->operateBullets(instance->currentTask->attachList, [t](Bullet& b){b.setY(t);});
+    }
+    */
+    SETBULLETS(b.setX(t));
+    SETBULLETS(b.setY(t));
+    return 0;
+}
+
+int LuaTaskTimeline::lua_setAttachedBulletRotation(lua_State* L)
+{
+    /*
+    if(lua_isnumber(L, 1))
+    {
+        int t=lua_tonumber(L, 1);
+        instance->scene->operateBullets(instance->currentTask->attachList, [t](Bullet& b){b.setRotation(t);});
+    }
+    */
+    SETBULLETS(b.setRotation(rad(t)));
+    return 0;
+}
+
+int LuaTaskTimeline::lua_setAttachedBulletSpeed(lua_State* L)
+{
+    SETBULLETS(b.setSpeed(t));
+    return 0;
+}
+
+int LuaTaskTimeline::lua_setAttachedBulletAcceleration(lua_State* L)
+{
+    SETBULLETS(b.setAcceleration(t));
+    return 0;
+}
+
+int LuaTaskTimeline::lua_setAttachedBulletRotateSpeed(lua_State* L)
+{
+    SETBULLETS(b.setRotateSpeed(rad(t)));
+    return 0;
+}
+
+int LuaTaskTimeline::lua_setAttachedBulletPositionOffset(lua_State* L)
+{
+    SETBULLETS(b.setX(b.getX()+t));
+    SETBULLETS(b.setY(b.getY()+t));
+    return 0;
+}
+
+int LuaTaskTimeline::lua_setAttachedBulletRotationOffset(lua_State* L)
+{
+    SETBULLETS(b.setRotationOffset(rad(t)));
+    return 0;
+}
+
+int LuaTaskTimeline::lua_setAttachedBulletSpeedOffset(lua_State* L)
+{
+    SETBULLETS(b.setSpeedOffset(t));
     return 0;
 }
 
