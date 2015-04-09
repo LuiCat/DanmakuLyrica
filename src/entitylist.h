@@ -23,34 +23,45 @@ public:
         clearAll();
     }
 
-    int pushEntity(const T& entity)
+    ~EntityList()
     {
-        entityList[nextEntityID]=entity;
+        clearAll();
+    }
+
+    template <typename _T>
+    int pushEntity(const _T& entity)
+    {
+        entityList[nextEntityID]=new _T(entity);
         return nextEntityID++;
     }
 
-    void pushEntities(const list<T>& entities)
+    template <typename _T>
+    void pushEntities(const list<_T>& entities)
     {
-        for(const T& e : entities)
+        for(const _T& e : entities)
         {
             pushEntity(e);
         }
     }
 
-    template <class... Args>
+    template <typename _T ,typename... Args>
     int newEntity(Args&&... args)
     {
-        entityList.emplace_hint(entityList.end(), piecewise_construct, make_tuple(nextEntityID), make_tuple(args...));
+        entityList.emplace_hint(entityList.end(), nextEntityID, new _T(args...));
         return nextEntityID++;
     }
 
-    T* getEntity(int id)
+    inline T* getEntity(int id)
     {
-        auto iter=entityList.find(id);
-        return iter==entityList.end()?0:&(iter->second);
+        return entityList[id];
     }
 
-    bool hasEntity(int id)
+    inline T* operator[](int id)
+    {
+        return entityList[id];
+    }
+
+    inline bool hasEntity(int id)
     {
         return entityList.find(id)!=entityList.end();
     }
@@ -58,9 +69,9 @@ public:
     template <typename Function>
     void forEach(Function fn)
     {
-        for(pair<const int, T>& x : entityList)
+        for(pair<const int, T*>& x : entityList)
         {
-            fn(x.second);
+            fn(*(x.second));
         }
     }
 
@@ -71,7 +82,7 @@ public:
         {
             auto iter=entityList.find(id);
             if(iter!=entityList.end())
-                fn(iter->second);
+                fn(*(iter->second));
         }
     }
 
@@ -82,15 +93,15 @@ public:
         {
             auto iter=entityList.find(id);
             if(iter!=entityList.end())
-                fn(iter->second);
+                fn(*(iter->second));
         }
     }
 
     void updateAll(double deltaSec)
     {
-        for(pair<const int, T>& x : entityList)
+        for(pair<const int, T*>& x : entityList)
         {
-            x.second.update(deltaSec);
+            x.second->update(deltaSec);
         }
         if(autoClear)
             clearDead();
@@ -98,14 +109,20 @@ public:
 
     void renderAll()
     {
-        for(pair<const int, T>& x : entityList)
+        for(pair<const int, T*>& x : entityList)
         {
-            x.second.render();
+            x.second->render();
         }
     }
 
     void clearAll()
     {
+        auto iter=entityList.begin();
+        while(iter!=entityList.end())
+        {
+            delete (iter->second);
+            iter=entityList.erase(iter);
+        }
         entityList.clear();
     }
 
@@ -114,8 +131,9 @@ public:
         auto iter=entityList.begin();
         while(iter!=entityList.end())
         {
-            if(iter->second.dead())
+            if(iter->second->dead())
             {
+                delete (iter->second);
                 iter=entityList.erase(iter);
             }
             else
@@ -137,7 +155,7 @@ public:
 
 protected:
 
-    map<int, T> entityList;
+    map<int, T*> entityList;
 
 private:
 

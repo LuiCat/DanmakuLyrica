@@ -1,5 +1,6 @@
 #include "luatasktimeline.h"
 
+#include "bulletbase.h"
 #include "bullet.h"
 
 #include "mathhelper.h"
@@ -218,7 +219,7 @@ int LuaTaskTimeline::lua_clearAttach(lua_State* L)
     if(lua_isnumber(L, 1))\
     {\
         int t=lua_tonumber(L, 1);\
-        instance->scene->operateBullets(instance->currentTask->attachList, [t](Bullet& b){X;});\
+        instance->scene->operateBullets(instance->currentTask->attachList, [t](BulletBase& b){X;});\
     }\
 }
 
@@ -299,7 +300,7 @@ int LuaTaskTimeline::lua_testFunc(lua_State* L)
     double w=M_PI*0.5;
     double a=3.2;
     //double r=a/w/w;
-    Bullet b(320, 240, 0, 0, BULLET("rice"), instance->scene);
+    Bullet b(320, 240, 0, 0, BULLET("rice"));
     b.setAcceleration(a).setRotateSpeed(w);
     instance->scene->pushBullet(b);
     t++;

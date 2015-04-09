@@ -23,7 +23,6 @@ SOURCES += main.cpp \
     luascript.cpp \
     entitylist.cpp \
     segment.cpp \
-    noteluafunc.cpp \
     noteentity.cpp \
     notescene.cpp \
     notelist.cpp \
@@ -34,12 +33,13 @@ SOURCES += main.cpp \
     texturestrip.cpp \
     notemap.cpp \
     bullet.cpp \
-    bulletlist.cpp \
     bulletscene.cpp \
     sprite.cpp \
     beatticking.cpp \
     luatasktimeline.cpp \
-    luatask.cpp
+    luatask.cpp \
+	bulletbase.cpp \
+    bulletlist.cpp
 
 HEADERS += \
     debug.h \
@@ -59,7 +59,6 @@ HEADERS += \
 	segment.h \
     notedef.h \
     commondef.h \
-    noteluafunc.h \
     noteentity.h \
     notescene.h \
     notelist.h \
@@ -70,13 +69,14 @@ HEADERS += \
     texturestrip.h \
     notemap.h \
     bullet.h \
-    bulletlist.h \
     bulletscene.h \
     luatask.h \
     sprite.h \
     beatticking.h \
     luatasktimeline.h \
-    bulletdef.h
+    bulletdef.h \
+    bulletbase.h \
+    bulletlist.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \

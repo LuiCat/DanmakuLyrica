@@ -23,16 +23,15 @@ void Bullet::registerBullet(const char *typeName, Texture texture, double sizeX,
 //===================================================
 
 Bullet::Bullet()
-    :Entity()
+    :BulletBase()
 {
     setBulletType(0);
 }
 
-Bullet::Bullet(double posX, double posY, double vel, double angle, int type, BulletScene* scene)
-    :Entity(posX, posY, vel, angle)
+Bullet::Bullet(double posX, double posY, double vel, double angle, int type)
+    :BulletBase(posX, posY, vel, angle)
 {
     setBulletType(type);
-    bulletScene=scene;
 }
 
 Bullet& Bullet::setBulletType(int type)
@@ -43,16 +42,9 @@ Bullet& Bullet::setBulletType(int type)
     return *this;
 }
 
-bool Bullet::checkOutsideScene()
+bool Bullet::isOutsideScene(double x1, double y1, double x2, double y2)
 {
-    return bulletScene&&bulletScene->checkSceneBorder(this, 50.0);
-}
-
-void Bullet::onUpdateMotion(double deltaSec, double deltaTick)
-{
-    Entity::onUpdateMotion(deltaSec, deltaTick);
-    if(checkOutsideScene())
-        this->setDead();
+    return (x<x1&&speedX<0)||(x>x2&&speedX>0)||(y<y1&&speedY<0)||(y>y2&&speedY>0);
 }
 
 void Bullet::onTick(){}

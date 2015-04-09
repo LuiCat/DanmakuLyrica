@@ -3,11 +3,9 @@
 
 #include "bulletdef.h"
 
-#include "entity.h"
+#include "bulletbase.h"
+#include "graphics.h"
 #include "registry.h"
-
-#include <list>
-using namespace std;
 
 #define BULLET(x) (Bullet::reg.getId(x))
 
@@ -30,7 +28,7 @@ struct BulletType
     double judgeSizeX, judgeSizeY;
 };
 
-class Bullet : public Entity
+class Bullet : public BulletBase
 {
 private:
 
@@ -50,7 +48,7 @@ public:
 
     // constructors
     Bullet();
-    Bullet(double posX, double posY, double vel, double angle, int type, BulletScene* scene=0);
+    Bullet(double posX, double posY, double vel, double angle, int type);
 
     Bullet& setBulletType(int type);
 
@@ -58,11 +56,8 @@ protected:
 
     BulletType* typeInfo;
 
-    BulletScene* bulletScene;
+    bool isOutsideScene(double x1, double y1, double x2, double y2);
 
-    bool checkOutsideScene();
-
-    virtual void onUpdateMotion(double deltaSec, double deltaTick);
     virtual void onTick();
     virtual void onRender();
     virtual void onDestroy();

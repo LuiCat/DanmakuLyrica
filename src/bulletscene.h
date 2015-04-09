@@ -4,7 +4,6 @@
 #include "bulletdef.h"
 #include "bullet.h"
 #include "bulletlist.h"
-//#include "bullettask.h"
 
 #include <list>
 #include <set>
@@ -23,6 +22,7 @@ public:
 
     double sceneCenterX, sceneCenterY;
     double sceneWidth, sceneHeight;
+    double offsetBorderWidth;
 
     mt19937 random;
 
@@ -34,7 +34,7 @@ public:
     int pushBullet(const Bullet& bullet);
     int pushBullet(double x, double y, double speed, double angle, int type);
 
-    bool checkSceneBorder(Entity* entity, double offsetLength);
+    bool checkSceneBorder(Entity* entity);
 
     template <typename Function>
     void operateBullet(int id, Function func)

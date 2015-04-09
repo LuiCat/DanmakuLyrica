@@ -10,6 +10,7 @@ BulletScene::BulletScene()
     ,sceneCenterY(HEIGHT/2)
     ,sceneWidth(WIDTH)
     ,sceneHeight(HEIGHT)
+    ,offsetBorderWidth(50.0)
 {
     useDefaultTicking=false;
 }
@@ -26,15 +27,15 @@ int BulletScene::pushBullet(const Bullet& bullet)
 
 int BulletScene::pushBullet(double x, double y, double speed, double angle, int type)
 {
-    return bulletList.newEntity(x, y, speed, angle, type, this);
+    return bulletList.newEntity<Bullet>(x, y, speed, angle, type);
 }
 
-bool BulletScene::checkSceneBorder(Entity *entity, double offsetLength)
+bool BulletScene::checkSceneBorder(Entity *entity)
 {
     double px=entity->getX(), py=entity->getY();
     double sx=entity->getSpeedX(), sy=entity->getSpeedY();
-    return (sx*px*2>abs(sx)*(sceneWidth+offsetLength)||
-            sy*py*2>abs(sy)*(sceneHeight+offsetLength));
+    return (sx*px*2>abs(sx)*(sceneWidth+offsetBorderWidth)||
+            sy*py*2>abs(sy)*(sceneHeight+offsetBorderWidth));
 }
 
 int BulletScene::getBulletSize() const
@@ -44,11 +45,12 @@ int BulletScene::getBulletSize() const
 
 void BulletScene::onUpdateMotion(double deltaSec, double)
 {
-    //double d=deltaSec*1.1+(sin(timeSec+deltaSec)-sin(timeSec));
-
-
     bulletList.updateAll(deltaSec);
 
+    bulletList.checkOutsideScene(sceneCenterX-sceneWidth-offsetBorderWidth,
+                                 sceneCenterY-sceneHeight-offsetBorderWidth,
+                                 sceneCenterX+sceneWidth+offsetBorderWidth,
+                                 sceneCenterY+sceneHeight+offsetBorderWidth);
 }
 
 void BulletScene::onRender()

@@ -43,6 +43,6 @@ void NoteScene::reloadNotes()
     double forward=noteMap->getBeginState().calcBeatOffset(noteMap->getBeginState().timeOffset);
     for(NoteInfo& x : tempList)
     {
-        noteList.newEntity(x, forward);
+        noteList.newEntity<Note>(x, forward);
     }
 }

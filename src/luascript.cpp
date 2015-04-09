@@ -13,6 +13,20 @@ char LuaScript::currentPath[256] = "/";
 
 //===========================================================================
 
+void LuaScript::registerLuaFuncs()
+{
+    lua_register(_L, "setCurrentPath", lua_setCurrentPath);
+}
+
+int LuaScript::lua_setCurrentPath(lua_State* L)
+{
+    if(lua_isstring(L, 1))
+        strcpy(currentPath, lua_tostring(L, 1));
+    return 0;
+}
+
+//===========================================================================
+
 int LuaScript::lua_excall(int narg, int nres)
 {
     int res=lua_pcall(luaState, narg, nres, 0);
@@ -50,19 +64,10 @@ bool LuaScript::loadScriptFile(const char* filename){
 
 //===========================================================================
 
-
-void LuaScript::initLuaFuncs()
-{
-
-}
-
 void LuaScript::init()
 {
     luaState=luaL_newstate();
-
     luaL_openlibs(luaState);
-
-    initLuaFuncs();
 }
 
 void LuaScript::cleanup()

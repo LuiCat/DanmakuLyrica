@@ -16,9 +16,11 @@ protected:
 
     static char currentPath[256];
 
-    static void initLuaFuncs();
+    static int lua_setCurrentPath(lua_State* L);
 
 public:
+
+    static void registerLuaFuncs();
 
     static int lua_excall(int narg, int nres);
     static int lua_exload(const char* cstr);

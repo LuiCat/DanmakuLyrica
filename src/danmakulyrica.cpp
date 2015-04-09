@@ -21,9 +21,9 @@ DanmakuLyrica::DanmakuLyrica()
 
 void DanmakuLyrica::mainInit()
 {
-    char filename[200]="data/";
+    char filename[200]="data/stage/test/";
 
-    noteMap.loadTjaFile("data/test.lrc");
+    noteMap.loadTjaFile("data/stage/test/test.lrc");
 
     bgm.loadWav(strcat(filename, noteMap.getWavFilename()));
     bgm.setVolume(0.5f);
@@ -34,8 +34,8 @@ void DanmakuLyrica::mainInit()
 
     mapState=noteMap.getBgmBeginState();
 
-    SoundRegistry::registerSoundFile("hit0", false, "data/lyrica_notehit0.wav", 1.0f);
-    SoundRegistry::registerSoundFile("hit1", false, "data/lyrica_notehit1.wav", 1.0f);
+    SoundRegistry::registerSoundFile("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
+    SoundRegistry::registerSoundFile("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
 
     createTexture("data/tex.png", &tex);
     strip.setTexture(tex);
@@ -43,16 +43,15 @@ void DanmakuLyrica::mainInit()
     strip.setMaxIndex(2, 2);
 
     LuaScript::init();
+    LuaScript::registerLuaFuncs();
     LuaTaskTimeline::registerLuaFuncs();
 
     taskList.setTime(mapState.beatOffset);
 
-    LuaScript::loadScriptFile("data/utils.lua");
-    LuaScript::loadScriptFile("data/main.lua");
+    LuaScript::loadScriptFile("data/script/utils.lua");
+    LuaScript::loadScriptFile("data/script/reg_bullet.lua");
 
-    Texture tex;
-    createTexture("data/etama2.png", &tex);
-    Bullet::registerBullet("rice", tex, 16, 16, 8, 8, BulletType::forward, BulletType::round, 4, 4);
+    LuaScript::loadScriptFile("data/stage/test/main.lua");
 
     //taskList.resetBeat(noteScene.getBeginBeatOffset());
 
