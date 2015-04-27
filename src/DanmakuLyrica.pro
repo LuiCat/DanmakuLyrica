@@ -39,7 +39,9 @@ SOURCES += main.cpp \
     luatasktimeline.cpp \
     luatask.cpp \
 	bulletbase.cpp \
-    bulletlist.cpp
+    bulletlist.cpp \
+    entityattachlist.cpp \
+    bulletattachlist.cpp
 
 HEADERS += \
     debug.h \
@@ -76,7 +78,9 @@ HEADERS += \
     luatasktimeline.h \
     bulletdef.h \
     bulletbase.h \
-    bulletlist.h
+    bulletlist.h \
+    entityattachlist.h \
+    bulletattachlist.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \

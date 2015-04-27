@@ -97,6 +97,28 @@ public:
         }
     }
 
+    template <typename MemberFunction, typename... Args>
+    void forEach(const set<int>& listID, MemberFunction T::*fn, Args... args)
+    {
+        for(int id : listID)
+        {
+            auto iter=entityList.find(id);
+            if(iter!=entityList.end())
+                iter->second->*fn(args...);
+        }
+    }
+
+    template <typename MemberFunction, typename... Args>
+    void forEach(const list<int>& listID, MemberFunction T::*fn, Args... args)
+    {
+        for(int id : listID)
+        {
+            auto iter=entityList.find(id);
+            if(iter!=entityList.end())
+                iter->second->*fn(args...);
+        }
+    }
+
     void updateAll(double deltaSec)
     {
         for(pair<const int, T*>& x : entityList)
