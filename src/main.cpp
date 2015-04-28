@@ -17,19 +17,17 @@
 HWND       hWnd       = 0;
 HINSTANCE  hInstance  = 0;
 
-DanmakuLyrica game;
+DanmakuLyrica *game;
 
 void Main_Init()
 {
     if(FAILED(D3D_Init(hWnd)))throw "Can't init d3d";
     if(FAILED(Sound_Init(hWnd)))throw "Can't init sound";
     if(FAILED(DInput_Init(hWnd, hInstance)))throw "Can't init dinput";
-    LuaScript::init();
 }
 
 void Main_Cleanup()
 {
-    LuaScript::cleanup();
     SoundRegistry::releaseAllSounds();
     DInput_Cleanup();
     Sound_Cleanup();
@@ -41,7 +39,11 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
     {
     case WM_CLOSE:
-        game.exit();
+        if(game)
+            game->exit();
+        else
+            PostQuitMessage(0);
+        game=0;
         return 0;
     case WM_DESTROY:
         PostQuitMessage(0);
@@ -49,7 +51,9 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KEYDOWN:
         if(wParam==VK_ESCAPE)
         {
-            game.exit();
+            if(game)
+                game->exit();
+            game=0;
         }
         return 0;
     case WM_RESETDEVICE:
@@ -102,7 +106,8 @@ WINAPI INT WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     {
         Main_Init();
 
-        game.start(hWnd);
+        game=new DanmakuLyrica();
+        game->start(hWnd);
 
         ShowWindow(hWnd, SW_SHOWDEFAULT);
         UpdateWindow(hWnd);

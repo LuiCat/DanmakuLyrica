@@ -43,6 +43,10 @@ void DInput_Cleanup()
 }
 
 KeyBinding::KeyBinding(DWORD _keyKeyboard, DWORD _keyJoystick)
+    :pushed(false)
+    ,down(false)
+    ,value(0)
+    ,callbackFunc(0)
 {
     bindingList.push_back(this);
     setKey(_keyKeyboard, true);

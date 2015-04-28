@@ -10,7 +10,7 @@
 DanmakuLyrica* DanmakuLyrica::instance = 0;
 
 DanmakuLyrica::DanmakuLyrica()
-    :taskList(&bulletScene)
+    :script(&bulletScene)
     ,buttonA(DIK_Z, 0)
     ,buttonB(DIK_X, 0)
     ,buttonPause(DIK_SPACE, 0)
@@ -42,24 +42,14 @@ void DanmakuLyrica::mainInit()
     strip.setStripPos(0, 0, 0.5, 0.5);
     strip.setMaxIndex(2, 2);
 
-    LuaScript::init();
-    LuaScript::registerLuaFuncs();
-    LuaTaskTimeline::registerLuaFuncs();
+    script.setTime(mapState.beatOffset);
 
-    taskList.setTime(mapState.beatOffset);
-
-    LuaScript::loadScriptFile("data/script/utils.lua");
-    LuaScript::loadScriptFile("data/script/reg_bullet.lua");
-
-    LuaScript::loadScriptFile("data/stage/test/main.lua");
-
-    //taskList.resetBeat(noteScene.getBeginBeatOffset());
+    script.loadScriptFile("data/stage/test/main.lua");
 
 }
 
 void DanmakuLyrica::mainCleanup()
 {
-    LuaScript::cleanup();
     bgm.release();
     noteScene.cleanup();
 }
@@ -90,17 +80,14 @@ void DanmakuLyrica::mainUpdate()
 
         while(deltaBeat>0)
         {
-            if(taskList.empty())
-                newDelta=0.0;
-            else
-                newDelta=taskList.seekNextTask(deltaBeat);
+            newDelta=script.seekNextTask(deltaBeat);
             deltaBeat-=newDelta;
             noteScene.update(deltaBeat);
             bulletScene.update(deltaBeat);
             deltaBeat=newDelta;
             if(deltaBeat<=0.0)
                 break;
-            taskList.updateSingleTask(deltaBeat);
+            script.updateSingleTask(deltaBeat);
         }
 
     }

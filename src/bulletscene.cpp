@@ -38,6 +38,11 @@ bool BulletScene::checkSceneBorder(Entity *entity)
             sy*py*2>abs(sy)*(sceneHeight+offsetBorderWidth));
 }
 
+BulletList* BulletScene::getBulletList()
+{
+    return &bulletList;
+}
+
 int BulletScene::getBulletSize() const
 {
     return bulletList.size();

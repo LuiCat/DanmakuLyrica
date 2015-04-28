@@ -8,6 +8,8 @@ class BulletAttachList : public EntityAttachList<BulletBase>
 {
 public:
 
+    BulletAttachList(BulletList* list);
+
     // more functions to do ...
 
 };

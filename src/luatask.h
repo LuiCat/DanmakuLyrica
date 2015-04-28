@@ -47,6 +47,16 @@ struct LuaTask
         attachList.clear();
     }
 
+    inline void delay(double timeSec)
+    {
+        nextTime+=timeSec;
+    }
+
+    inline void delayUntil(double timeSec)
+    {
+        nextTime=timeSec;
+    }
+
     friend class LuaTaskTimeline;
 
 };

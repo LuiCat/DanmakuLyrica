@@ -36,12 +36,13 @@ SOURCES += main.cpp \
     bulletscene.cpp \
     sprite.cpp \
     beatticking.cpp \
-    luatasktimeline.cpp \
     luatask.cpp \
 	bulletbase.cpp \
     bulletlist.cpp \
     entityattachlist.cpp \
-    bulletattachlist.cpp
+    bulletattachlist.cpp \
+    luatimeline.cpp \
+    bulletscript.cpp
 
 HEADERS += \
     debug.h \
@@ -75,12 +76,13 @@ HEADERS += \
     luatask.h \
     sprite.h \
     beatticking.h \
-    luatasktimeline.h \
     bulletdef.h \
     bulletbase.h \
     bulletlist.h \
     entityattachlist.h \
-    bulletattachlist.h
+    bulletattachlist.h \
+    luatimeline.h \
+    bulletscript.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
@@ -90,3 +92,6 @@ LIBS += -ld3d9 \
 		-ldxguid
 
 LIBS += $$PWD/lua/lua.a
+
+DISTFILES += \
+    todo.txt

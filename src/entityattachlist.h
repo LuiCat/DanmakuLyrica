@@ -49,8 +49,8 @@ public:
         container->forEach(attachList, func);
     }
 
-    template <typename MemberFunction, typename... Args>
-    void forEach(MemberFunction T::*func, Args... args)
+    template <typename MemberFunction, typename _T, typename... Args>
+    void forEach(MemberFunction _T::*func, Args... args)
     {
         container->forEach(attachList, func, args...);
     }

@@ -36,24 +36,7 @@ public:
 
     bool checkSceneBorder(Entity* entity);
 
-    template <typename Function>
-    void operateBullet(int id, Function func)
-    {
-        Bullet* p=bulletList.getEntity(id);
-        if(p)func(p);
-    }
-
-    template <typename Function>
-    void operateBullets(const set<int>& listID, Function func)
-    {
-        bulletList.forEach(listID, func);
-    }
-
-    template <typename Function>
-    void operateBullets(const list<int>& listID, Function func)
-    {
-        bulletList.forEach(listID, func);
-    }
+    BulletList* getBulletList();
 
 protected:
 

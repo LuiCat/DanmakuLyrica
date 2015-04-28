@@ -6,35 +6,61 @@ class LuaScript;
 #include "lua/lua.hpp"
 
 #define lua_tableregister(L,n,f) (lua_pushstring(L,n),lua_pushcfunction(L,f),lua_settable(L,-3))
-#define _L (LuaScript::getLuaState())
+
+typedef int (*LuaFunc)(lua_State*);
 
 class LuaScript
 {
-protected:
-
-    static lua_State* luaState;
-
-    static char currentPath[256];
+private:
 
     static int lua_setCurrentPath(lua_State* L);
 
+protected:
+
+    static LuaScript* currentInstance;
+
+    lua_State* luaState;
+    char currentPath[256];
+
+    void beginScript()
+    {
+        currentInstance=this;
+    }
+
+    void endScript()
+    {
+        currentInstance=0;
+    }
+
 public:
 
-    static void registerLuaFuncs();
+    LuaScript();
+    ~LuaScript();
 
-    static int lua_excall(int narg, int nres);
-    static int lua_exload(const char* cstr);
+    int lua_excall(int narg, int nres);
+    int lua_exload(const char* cstr);
 
-    static lua_State* lua_createthread(int idx);
+    lua_State* lua_createthread(int idx);
 
-    static bool loadScriptFile(const char* filename);
+    bool loadScriptFile(const char* filename);
 
-    static void init();
-    static void cleanup();
+    void registerFunc(const char* name, LuaFunc func);
+    void registerTableFunc(const char* name, LuaFunc func);
 
-    static lua_State* getLuaState();
+    inline lua_State* L() const
+    {
+        return luaState;
+    }
 
-    static const char* getCurrentPath();
+    inline operator lua_State* () const
+    {
+        return luaState;
+    }
+
+    inline const char* getCurrentPath()
+    {
+        return currentPath;
+    }
 
 };
 

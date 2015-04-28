@@ -8,20 +8,12 @@
 
 //===========================================================================
 
-lua_State* LuaScript::luaState = 0;
-char LuaScript::currentPath[256] = "/";
-
-//===========================================================================
-
-void LuaScript::registerLuaFuncs()
-{
-    lua_register(_L, "setCurrentPath", lua_setCurrentPath);
-}
+LuaScript* LuaScript::currentInstance = 0;
 
 int LuaScript::lua_setCurrentPath(lua_State* L)
 {
     if(lua_isstring(L, 1))
-        strcpy(currentPath, lua_tostring(L, 1));
+        strcpy(currentInstance->currentPath, lua_tostring(L, 1));
     return 0;
 }
 
@@ -29,14 +21,18 @@ int LuaScript::lua_setCurrentPath(lua_State* L)
 
 int LuaScript::lua_excall(int narg, int nres)
 {
+    beginScript();
     int res=lua_pcall(luaState, narg, nres, 0);
+    endScript();
     if(res!=0)cout<<"[CALL ERROR]"<<lua_tostring(luaState, -1)<<", error code : "<<res<<endl;
 	return res;
 }
 
 int LuaScript::lua_exload(const char* cstr)
 {
+    beginScript();
     int res=luaL_loadfile(luaState, cstr);
+    endScript();
     if(res!=0)cout<<"[LOAD ERROR]"<<lua_tostring(luaState, -1)<<", error code : "<<res<<endl;
     return res;
 }
@@ -51,7 +47,8 @@ lua_State* LuaScript::lua_createthread(int idx)
     return T;
 }
 
-bool LuaScript::loadScriptFile(const char* filename){
+bool LuaScript::loadScriptFile(const char* filename)
+{
     if(lua_exload(filename)==0)
     {
         strcpy(currentPath, filename);
@@ -64,25 +61,28 @@ bool LuaScript::loadScriptFile(const char* filename){
 
 //===========================================================================
 
-void LuaScript::init()
+LuaScript::LuaScript()
 {
     luaState=luaL_newstate();
     luaL_openlibs(luaState);
+    registerFunc("setCurrentPath", lua_setCurrentPath);
 }
 
-void LuaScript::cleanup()
+LuaScript::~LuaScript()
 {
     if(luaState)
         lua_close(luaState);
     luaState=0;
 }
 
-lua_State* LuaScript::getLuaState()
+void LuaScript::registerFunc(const char* name, LuaFunc func)
 {
-    return luaState;
+    lua_register(luaState, name, func);
 }
 
-const char* LuaScript::getCurrentPath()
+void LuaScript::registerTableFunc(const char* name, LuaFunc func)
 {
-    return currentPath;
+    lua_tableregister(luaState, name, func);
 }
+
+

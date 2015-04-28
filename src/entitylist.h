@@ -97,25 +97,25 @@ public:
         }
     }
 
-    template <typename MemberFunction, typename... Args>
-    void forEach(const set<int>& listID, MemberFunction T::*fn, Args... args)
+    template <typename MemberFunction, typename _T, typename... Args>
+    void forEach(const set<int>& listID, MemberFunction _T::*fn, Args... args)
     {
         for(int id : listID)
         {
             auto iter=entityList.find(id);
             if(iter!=entityList.end())
-                iter->second->*fn(args...);
+                (iter->second->*fn)(args...);
         }
     }
 
-    template <typename MemberFunction, typename... Args>
-    void forEach(const list<int>& listID, MemberFunction T::*fn, Args... args)
+    template <typename MemberFunction, typename _T, typename... Args>
+    void forEach(const list<int>& listID, MemberFunction _T::*fn, Args... args)
     {
         for(int id : listID)
         {
             auto iter=entityList.find(id);
             if(iter!=entityList.end())
-                iter->second->*fn(args...);
+                (iter->second->*fn)(args...);
         }
     }
 

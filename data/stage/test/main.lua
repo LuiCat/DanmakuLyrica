@@ -15,49 +15,38 @@ function main()
 			x=x+1
 			t=t+1
 		end)
-		--test()
-		--sleep(1)
 	end
 end
 
-function main2()
+function main3()
 	local i
 	local c=0
 	local di=67
 	setCenter(0,-80)
 	setBulletType('BlueRing')
 	sleepUntil(0)
-	local tf=function()
-		sleep(8)
-		att.setRS(di)
-		att.setAcc(-10)
-		sleep(1)
-		att.setAcc(16)
-		sleep(1)
-		att.setRS(0)
-		att.setAcc(-6)
-		sleep(2)
-		att.setAcc(0)
-	end
-	local t=task(tf)
+	att1=Attach.new()
 	while true do
-		for i=0,47 do
-			attach(t,bullet(0,0,27,i*7.5))
+		for i=0,36 do
+			att1:bullet(0,0,50.0,i*10)
 		end
+		for i=0,12 do
+			att1:bullet(0,0,10.0,i*30)
+		end
+		att1:setRS(5.0)
+		att1:clear()
 		sleep(2)
-		c=c+1
-		if c>=4 then
-			c=0
-			di=-di
-			t=task(tf)
+		for i=0,36 do
+			att1:bullet(0,0,50.0,i*10)
 		end
+		for i=0,12 do
+			att1:bullet(0,0,10.0,i*30)
+		end
+		att1:setRS(-5.0)
+		att1:clear()
+		sleep(2)
 	end
-end
-
-print(#att)
-for i=1,#att do
-	print(att[i])
 end
 
 task(main);
-task(main2);
+task(main3);

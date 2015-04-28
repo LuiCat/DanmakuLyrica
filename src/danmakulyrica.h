@@ -12,8 +12,7 @@
 #include "texturestrip.h"
 
 #include "bulletscene.h"
-#include "luascript.h"
-#include "luatasktimeline.h"
+#include "bulletscript.h"
 
 class DanmakuLyrica : public MainGame
 {
@@ -41,7 +40,7 @@ private:
 
     BulletScene bulletScene;
 
-    LuaTaskTimeline taskList;
+    BulletScript script;
 
     TimeLine timeLine;
 
