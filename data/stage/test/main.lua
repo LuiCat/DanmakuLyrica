@@ -25,25 +25,28 @@ function main3()
 	setCenter(0,-80)
 	setBulletType('BlueRing')
 	sleepUntil(0)
-	att1=Attach.new()
 	while true do
-		for i=0,36 do
-			att1:bullet(0,0,50.0,i*10)
-		end
-		for i=0,12 do
-			att1:bullet(0,0,10.0,i*30)
-		end
-		att1:setRS(5.0)
-		att1:clear()
+		task(function()
+			att=Attach.new()
+			for i=0,36 do
+				att:bullet(0,0,75.0+math.random()*30.0,math.random()*360)
+			end
+			att:setAcc(-60.0)
+			att:setRS(3.0)
+			sleep(1)
+			att:setAcc(0.0)
+		end)
 		sleep(2)
-		for i=0,36 do
-			att1:bullet(0,0,50.0,i*10)
-		end
-		for i=0,12 do
-			att1:bullet(0,0,10.0,i*30)
-		end
-		att1:setRS(-5.0)
-		att1:clear()
+		task(function()
+			att=Attach.new()
+			for i=0,36 do
+				att:bullet(0,0,75.0+math.random()*30.0,math.random()*360)
+			end
+			att:setAcc(-60.0)
+			att:setRS(-3.0)
+			sleep(1)
+			att:setAcc(0.0)
+		end)
 		sleep(2)
 	end
 end

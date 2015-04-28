@@ -44,7 +44,11 @@ Bullet& Bullet::setBulletType(int type)
 
 bool Bullet::isOutsideScene(double x1, double y1, double x2, double y2)
 {
-    return (x<x1&&speedX<0)||(x>x2&&speedX>0)||(y<y1&&speedY<0)||(y>y2&&speedY>0);
+    double tx=getX();
+    double ty=getY();
+    double sx=getSpeedX();
+    double sy=getSpeedY();
+    return (tx<x1&&sx<0)||(tx>x2&&sx>0)||(ty<y1&&sy<0)||(ty>y2&&sy>0);
 }
 
 void Bullet::onTick(){}

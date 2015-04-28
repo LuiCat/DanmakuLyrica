@@ -25,6 +25,8 @@ LuaTask::LuaTask(lua_State* thread, int ref, double beginTime, const LuaTask* ce
     {
         centerX=center->centerX;
         centerY=center->centerY;
+        angle=center->angle;
+        bulletType=center->bulletType;
     }
 }
 

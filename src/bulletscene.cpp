@@ -52,10 +52,10 @@ void BulletScene::onUpdateMotion(double deltaSec, double)
 {
     bulletList.updateAll(deltaSec);
 
-    bulletList.checkOutsideScene(sceneCenterX-sceneWidth-offsetBorderWidth,
-                                 sceneCenterY-sceneHeight-offsetBorderWidth,
-                                 sceneCenterX+sceneWidth+offsetBorderWidth,
-                                 sceneCenterY+sceneHeight+offsetBorderWidth);
+    bulletList.checkOutsideScene(-sceneWidth*0.5-offsetBorderWidth,
+                                 -sceneHeight*0.5-offsetBorderWidth,
+                                 sceneWidth*0.5+offsetBorderWidth,
+                                 sceneHeight*0.5+offsetBorderWidth);
 }
 
 void BulletScene::onRender()
