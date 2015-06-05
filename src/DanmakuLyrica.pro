@@ -42,7 +42,9 @@ SOURCES += main.cpp \
     entityattachlist.cpp \
     bulletattachlist.cpp \
     luatimeline.cpp \
-    bulletscript.cpp
+    bulletscript.cpp \
+    animation.cpp \
+    textureregistry.cpp
 
 HEADERS += \
     debug.h \
@@ -82,7 +84,9 @@ HEADERS += \
     entityattachlist.h \
     bulletattachlist.h \
     luatimeline.h \
-    bulletscript.h
+    bulletscript.h \
+    animation.h \
+    textureregistry.h
 
 LIBS += -ld3d9 \
 		-ld3dx9 \
