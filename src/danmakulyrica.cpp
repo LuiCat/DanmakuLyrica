@@ -34,8 +34,8 @@ void DanmakuLyrica::mainInit()
 
     mapState=noteMap.getBgmBeginState();
 
-    SoundRegistry::registerSoundFile("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
-    SoundRegistry::registerSoundFile("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
+    SoundRegistry::newSound("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
+    SoundRegistry::newSound("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
 
     createTexture("data/tex.png", &tex);
     strip.setTexture(tex);

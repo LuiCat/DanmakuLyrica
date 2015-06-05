@@ -7,7 +7,7 @@ void releaseFunc(SoundBuffer* p)
 
 Registry<SoundBuffer> SoundRegistry::reg;
 
-void SoundRegistry::registerSoundFile(const char *name, bool isStream, const char *filename, float volume)
+void SoundRegistry::newSound(const char *name, bool isStream, const char *filename, float volume)
 {
     if(isStream)
     {
@@ -23,7 +23,7 @@ void SoundRegistry::registerSoundFile(const char *name, bool isStream, const cha
     }
 }
 
-void SoundRegistry::releaseAllSounds()
+void SoundRegistry::releaseAll()
 {
     reg.releaseAll(releaseFunc);
 }
