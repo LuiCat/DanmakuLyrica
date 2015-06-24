@@ -1,0 +1,5 @@
+重写Scene类型，增加SceneManager类型
+
+图形库相关
+    将现有VertexBuffer内容移至gfxcore.h/.cpp中，并将类改名为D3DDevice
+    增加RenderSurface类

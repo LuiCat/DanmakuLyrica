@@ -1,93 +1,65 @@
+/*!
+  \file graphics.h
+  \brief Contains important functions for graphics initialization
+  */
+
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <d3d9.h>
-#include <d3dx9.h>
+#include "graphics/gfxdef.h"
+#include "graphics/gfxcore.h"
+#include "graphics/vertexbuffer.h"
+#include "graphics/textrenderer.h"
 
-#include <vector>
-using namespace std;
-
-#define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1)
-
-typedef  D3DXMATRIX          Matrix  ;
-typedef  LPDIRECT3DTEXTURE9  Texture ;
-typedef  D3DXVECTOR3         Vector  ;
-
-struct Vertex
+inline HRESULT D3D_Init(HWND hWnd)
 {
-    float x, y, z, rhw;
-    DWORD color;
-    float u, v;
-};
+    if(FAILED(D3D_InitDevice(hWnd)))
+        return E_FAIL;
+    if(FAILED(d3d.init(hWnd)))
+        return E_FAIL;
+    return S_OK;
+}
 
-struct VertexInfo
+inline void D3D_Cleanup()
 {
-    Vertex vertex;
-    Texture texture;
-    bool isAddBlend;
-};
+    d3d.cleanup();
+    D3D_CleanupDevice();
+}
 
-struct MatrixInfo
+inline HRESULT D3D_Reset()
 {
-    Matrix matrix;
-    Texture texture;
-    DWORD defaultColor;
-    bool isAddBlend;
-};
+    try
+    {
+        d3d.beginScene();
 
-class VertexBuffer
-{
-private:
+        if(FAILED(D3D_RestoreDevice()))
+            throw 0;
 
-    HWND hWnd;
+        D3DResource::lostAll();
 
-    vector<VertexInfo> pendingVertex;
-    vector<MatrixInfo> stackMatrix;
+        d3d.cleanup();
 
-    MatrixInfo currentMatrix;
+        if(FAILED(D3D_ResetDevice()))
+            throw 1;
 
-	LPDIRECT3DVERTEXBUFFER9 pD3DVertexBuffer;
+        if(FAILED(d3d.init()))
+            throw 2;
 
-    HANDLE mutex;
+        D3DResource::resetAll();
 
-public:
+        d3d.endScene();
 
-    VertexBuffer();
-    ~VertexBuffer();
+        return S_OK;
+    }
+    catch(int)
+    {
 
-    HRESULT init(HWND hWnd);
-    HRESULT reset();
-    void cleanup();
+    }
 
-    void drawMatrix();
-    void present();
+    d3d.endScene();
 
-    void beginScene();
-    void endScene();
+    return E_FAIL;
 
-    void resetMatrix();
-
-    void pushMatrix();
-    void popMatrix();
-	
-    void pushVertex(double x, double y, double u, double v);
-
-    void translate2D(double x, double y);
-    void rotate2D(double rotation);
-    void scale2D(double scaleX, double scaleY);
-
-    void setBlend(bool add);
-    void setTexture(Texture tex);
-    void setAlpha(double alpha);
-    void setColor(DWORD color);
-
-};
-
-DWORD createTexture(const char *filename, Texture* tex, DWORD w=D3DX_DEFAULT, DWORD h=D3DX_DEFAULT);
-
-HRESULT D3D_Init(HWND hWnd);
-void D3D_Cleanup();
-
-extern VertexBuffer d3d;
+}
 
 #endif

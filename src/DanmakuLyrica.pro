@@ -10,9 +10,8 @@ QMAKE_CFLAGS_RELEASE += -O2
 DEFINES -= UNICODE
 
 SOURCES += main.cpp \
-    graphics.cpp \
     entity.cpp \
-	object.cpp \
+    object.cpp \
     position.cpp \
     registry.cpp \
     soundregistry.cpp \
@@ -37,12 +36,16 @@ SOURCES += main.cpp \
     sprite.cpp \
     beatticking.cpp \
     luatask.cpp \
-	bulletbase.cpp \
+    bulletbase.cpp \
     bulletlist.cpp \
     entityattachlist.cpp \
     bulletattachlist.cpp \
     luatimeline.cpp \
-    bulletscript.cpp
+    bulletscript.cpp \
+    graphics/gfxcore.cpp \
+    graphics/rendertarget.cpp \
+    graphics/textrenderer.cpp \
+    graphics/vertexbuffer.cpp
 
 HEADERS += \
     debug.h \
@@ -59,7 +62,7 @@ HEADERS += \
     danmakulyrica.h \
     luascript.h \
     entitylist.h \
-	segment.h \
+    segment.h \
     notedef.h \
     commondef.h \
     noteentity.h \
@@ -82,14 +85,20 @@ HEADERS += \
     entityattachlist.h \
     bulletattachlist.h \
     luatimeline.h \
-    bulletscript.h
+    bulletscript.h \
+    graphics/gfxcore.h \
+    graphics/gfxdef.h \
+    graphics/gfxprivate.h \
+    graphics/rendertarget.h \
+    graphics/textrenderer.h \
+    graphics/vertexbuffer.h
 
 LIBS += -ld3d9 \
-		-ld3dx9 \
-		-lwinmm \
-		-ldsound \
-		-ldinput8 \
-		-ldxguid
+        -ld3dx9 \
+        -lwinmm \
+        -ldsound \
+        -ldinput8 \
+        -ldxguid
 
 LIBS += $$PWD/lua/lua.a
 

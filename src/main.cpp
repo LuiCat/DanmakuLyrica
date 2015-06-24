@@ -57,12 +57,10 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         return 0;
     case WM_RESETDEVICE:
-        d3d.beginScene();
-        if(FAILED(d3d.reset()))
+        if(FAILED(D3D_Reset()))
         {
             throw "Can't reset d3d device, device has lost";
         }
-        d3d.endScene();
         return 0;
     }
 
