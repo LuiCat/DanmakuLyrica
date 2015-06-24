@@ -43,9 +43,9 @@ SOURCES += main.cpp \
     luatimeline.cpp \
     bulletscript.cpp \
     graphics/gfxcore.cpp \
-    graphics/rendertarget.cpp \
     graphics/textrenderer.cpp \
-    graphics/vertexbuffer.cpp
+    graphics/vertexbuffer.cpp \
+    graphics/gfxresource.cpp
 
 HEADERS += \
     debug.h \
@@ -89,9 +89,9 @@ HEADERS += \
     graphics/gfxcore.h \
     graphics/gfxdef.h \
     graphics/gfxprivate.h \
-    graphics/rendertarget.h \
     graphics/textrenderer.h \
-    graphics/vertexbuffer.h
+    graphics/vertexbuffer.h \
+    graphics/gfxresource.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

@@ -61,10 +61,10 @@ void Bullet::onRender()
     d3d.scale2D(typeInfo->sizeX, typeInfo->sizeY);
     d3d.setTexture(typeInfo->texture);
 
-    d3d.pushVertex(0.0, 0.0, 0.0, 0.0);
-    d3d.pushVertex(1.0, 0.0, 1.0, 0.0);
-    d3d.pushVertex(1.0, 1.0, 1.0, 1.0);
-    d3d.pushVertex(0.0, 1.0, 0.0, 1.0);
+    d3d.vertex(0.0, 0.0, 0.0, 0.0);
+    d3d.vertex(1.0, 0.0, 1.0, 0.0);
+    d3d.vertex(1.0, 1.0, 1.0, 1.0);
+    d3d.vertex(0.0, 1.0, 0.0, 1.0);
 
     d3d.popMatrix();
 }

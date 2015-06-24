@@ -41,8 +41,8 @@ void TextureStrip::pushVertices(int i, int j)
 
     d3d.setTexture(texture);
 
-    d3d.pushVertex(0.0, 0.0, umin, vmin);
-    d3d.pushVertex(1.0, 0.0, umax, vmin);
-    d3d.pushVertex(1.0, 1.0, umax, vmax);
-    d3d.pushVertex(0.0, 1.0, umin, vmax);
+    d3d.vertex(0.0, 0.0, umin, vmin);
+    d3d.vertex(1.0, 0.0, umax, vmin);
+    d3d.vertex(1.0, 1.0, umax, vmax);
+    d3d.vertex(0.0, 1.0, umin, vmax);
 }

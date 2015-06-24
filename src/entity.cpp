@@ -256,10 +256,10 @@ void Entity::onTick(){}
 
 void Entity::onRender()
 {
-    d3d.pushVertex(0.0, 0.0, 0.0, 0.0);
-    d3d.pushVertex(1.0, 0.0, 1.0, 0.0);
-    d3d.pushVertex(1.0, 1.0, 1.0, 1.0);
-    d3d.pushVertex(0.0, 1.0, 0.0, 1.0);
+    d3d.vertex(0.0, 0.0, 0.0, 0.0);
+    d3d.vertex(1.0, 0.0, 1.0, 0.0);
+    d3d.vertex(1.0, 1.0, 1.0, 1.0);
+    d3d.vertex(0.0, 1.0, 0.0, 1.0);
 }
 
 void Entity::onDestory()

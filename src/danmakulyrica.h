@@ -42,6 +42,7 @@ private:
 
     BulletScript script;
 
+    double bgmTimeStamp;
     TimeLine timeLine;
 
     KeyBinding buttonA;

@@ -1,7 +1,7 @@
 #ifndef VERTEXBUFFER_H
 #define VERTEXBUFFER_H
 
-#include "gfxcore.h"
+#include "gfxresource.h"
 #include "gfxdef.h"
 
 #include <vector>
@@ -9,7 +9,10 @@ using namespace std;
 
 #define D3D_VERTEXBUFFERSIZE 120000
 
-class VertexBuffer
+#define INITSIZE_STACK_MATRIX 64
+#define INITSIZE_PENDING_VERTEX 1024
+
+class VertexBuffer : public GFXCore
 {
 private:
 
@@ -43,13 +46,14 @@ private:
     MatrixInfo currentMatrix;
 
     LPDIRECT3DVERTEXBUFFER9 pD3DVertexBuffer;
+    LPDIRECT3DINDEXBUFFER9  pD3DIndexBuffer;
 
     HANDLE mutex;
 
 protected:
 
-    HRESULT onLost();
-    HRESULT onReset();
+    HRESULT lost();
+    HRESULT reset();
 
 public:
 
@@ -70,11 +74,16 @@ public:
     void pushMatrix();
     void popMatrix();
 
-    void pushVertex(double x, double y, double u, double v);
+    void vertex(double x, double y, double u, double v);
+    void vertex(double x, double y, double z, double u, double v);
 
     void translate2D(double x, double y);
-    void rotate2D(double rotation);
+    void rotate2D(double angle);
     void scale2D(double scaleX, double scaleY);
+
+    void translate3D(double x, double y, double z);
+    void rotate3D(double axisX, double axisY, double axisZ, double angle);
+    void scale3D(double scaleX, double scaleY, double scaleZ);
 
     void setBlend(bool add);
     void setTexture(Texture tex);

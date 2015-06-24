@@ -3,12 +3,12 @@
 
 #include "gfxcore.h"
 #include "gfxdef.h"
-#include "rendertarget.h"
+#include "gfxresource.h"
 
 #include <sstream>
 using namespace std;
 
-class TextRenderer : public D3DResource
+class TextRenderer : public GFXResource
 {
 private:
 
@@ -24,8 +24,8 @@ private:
 
 protected:
 
-    HRESULT onLost();
-    HRESULT onReset();
+    HRESULT lost();
+    HRESULT reset();
 
 public:
 
@@ -39,7 +39,7 @@ public:
         return *this;
     }
 
-    void reset();
+    void clear();
 
     /// Render the text
     void present(UINT format, D3DCOLOR color=0x000000);

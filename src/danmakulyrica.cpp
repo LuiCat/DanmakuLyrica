@@ -11,6 +11,7 @@ DanmakuLyrica* DanmakuLyrica::instance = 0;
 
 DanmakuLyrica::DanmakuLyrica()
     :script(&bulletScene)
+    ,bgmTimeStamp(0.0)
     ,buttonA(DIK_Z, 0)
     ,buttonB(DIK_X, 0)
     ,buttonPause(DIK_SPACE, 0)
@@ -56,7 +57,6 @@ void DanmakuLyrica::mainCleanup()
 
 void DanmakuLyrica::mainUpdate()
 {
-    static double timeStamp=0;
     static bool isPaused=true;
     static double timeTwigger=0;
 
@@ -72,11 +72,11 @@ void DanmakuLyrica::mainUpdate()
     if(!isPaused)
     {
         double newTime=bgm.getTime()+timeTwigger;
-        double deltaTime=timeLine.getDeltaTimeFixed(newTime-timeStamp);
+        double deltaTime=timeLine.getDeltaTimeFixed(newTime-bgmTimeStamp);
         double deltaBeat=noteMap.offsetMapState(mapState, deltaTime);
         double newDelta;
 
-        timeStamp=newTime;
+        bgmTimeStamp=newTime;
 
         while(deltaBeat>0)
         {
@@ -115,7 +115,7 @@ void DanmakuLyrica::mainUpdate()
 
     if(buttonA.isPushed() || buttonB.isPushed())
     {
-        judgeResult=noteScene.judgeSingleNote(timeStamp-0.015);
+        judgeResult=noteScene.judgeSingleNote(bgmTimeStamp-0.015);
         if(judgeResult==miss || judgeResult== bad)
             SOUND("hit0")->play(true);
         else
@@ -156,10 +156,10 @@ void DanmakuLyrica::mainRender()
 
     d3d.pushMatrix();
     d3d.setColor(0x00FF00);
-    d3d.pushVertex( 0.5,  20, 0.0, 0.0);
-    d3d.pushVertex(-0.5,  20, 1.0, 0.0);
-    d3d.pushVertex(-0.5, -20, 1.0, 1.0);
-    d3d.pushVertex( 0.5, -20, 0.0, 1.0);
+    d3d.vertex( 0.5,  20, 0.0, 0.0);
+    d3d.vertex(-0.5,  20, 1.0, 0.0);
+    d3d.vertex(-0.5, -20, 1.0, 1.0);
+    d3d.vertex( 0.5, -20, 0.0, 1.0);
     d3d.popMatrix();
 
     d3d.pushMatrix();

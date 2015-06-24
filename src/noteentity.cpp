@@ -67,8 +67,8 @@ void Note::onTick()
 void Note::onRender()
 {
     d3d.setColor(judgeResult==miss?0xffffff:judgeResult==bad?0xff0000:judgeResult==good?0xffff00:0x00ff00);
-    d3d.pushVertex( 0.5,  10, 0.0, 0.0);
-    d3d.pushVertex(-0.5,  10, 1.0, 0.0);
-    d3d.pushVertex(-0.5, -10, 1.0, 1.0);
-    d3d.pushVertex( 0.5, -10, 0.0, 1.0);
+    d3d.vertex( 0.5,  10, 0.0, 0.0);
+    d3d.vertex(-0.5,  10, 1.0, 0.0);
+    d3d.vertex(-0.5, -10, 1.0, 1.0);
+    d3d.vertex( 0.5, -10, 0.0, 1.0);
 }

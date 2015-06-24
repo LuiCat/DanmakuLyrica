@@ -12,10 +12,10 @@ TextRenderer::TextRenderer(int height, int width, int weight, bool italic, const
 {
     D3DXCreateFont(g_pd3dDevice, height, width, weight, D3DX_DEFAULT, false,
                    DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, ANTIALIASED_QUALITY, DEFAULT_PITCH, font, &lpfont);
-    reset();
+    clear();
 }
 
-void TextRenderer::reset()
+void TextRenderer::clear()
 {
     ss.str("");
 }
@@ -30,15 +30,15 @@ void TextRenderer::present(UINT format, D3DCOLOR color)
             res=1;
         g_pd3dDevice->EndScene();
     }
-    reset();
+    clear();
 }
 
-HRESULT TextRenderer::onLost()
+HRESULT TextRenderer::lost()
 {
     return lpfont->OnLostDevice();
 }
 
-HRESULT TextRenderer::onReset()
+HRESULT TextRenderer::reset()
 {
     return lpfont->OnResetDevice();
 }

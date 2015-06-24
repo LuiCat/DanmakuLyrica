@@ -3,18 +3,18 @@
 #include "gfxprivate.h"
 #include "commondef.h"
 
-
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1)
 
 VertexBuffer d3d;
 
 VertexBuffer::VertexBuffer()
-    :pendingVertex(1024)
-    ,stackMatrix(64)
+    :hWnd(0)
+    ,pendingVertex(INITSIZE_PENDING_VERTEX)
+    ,stackMatrix(INITSIZE_STACK_MATRIX)
+    ,pD3DVertexBuffer(0)
+    ,mutex(0)
 {
-    pD3DVertexBuffer=0;
-    hWnd=0;
-    mutex=0;
+
 }
 
 VertexBuffer::~VertexBuffer()
@@ -53,13 +53,13 @@ void VertexBuffer::cleanup()
     pD3DVertexBuffer=0;
 }
 
-HRESULT VertexBuffer::onLost()
+HRESULT VertexBuffer::lost()
 {
     cleanup();
     return S_OK;
 }
 
-HRESULT VertexBuffer::onReset()
+HRESULT VertexBuffer::reset()
 {
     return init();
 }
@@ -70,15 +70,16 @@ void VertexBuffer::present()
 
     beginScene();
 
-    void* pVertices;
+    int vsize=pendingVertex.size()/4*4;
 
-    if(FAILED(pD3DVertexBuffer->Lock(0, (UINT)pendingVertex.size()*sizeof(Vertex), ( void** )&pVertices, 0)))
+    Vertex* pVertices;
+
+    if(FAILED(pD3DVertexBuffer->Lock(0, vsize*sizeof(Vertex), (LPVOID*)&pVertices, 0)))
         return;
 
-    //cout<<pendingVertex.size()<<endl;
-    for(unsigned int i=0;i<pendingVertex.size();++i)
+    for(int i=0;i<vsize;++i)
     {
-        ((Vertex*)pVertices)[i]=pendingVertex[i].vertex;
+        pVertices[i]=pendingVertex[i].vertex;
     }
 
     pD3DVertexBuffer->Unlock();
@@ -160,9 +161,16 @@ void VertexBuffer::popMatrix()
     }
 }
 
-void VertexBuffer::pushVertex(double x, double y, double u, double v)
+void VertexBuffer::vertex(double x, double y, double u, double v)
 {
     VertexInfo tmp={(float)x, (float)y, 0.0f, 1.0f, currentMatrix.defaultColor, (float)u, (float)v, currentMatrix.texture, currentMatrix.isAddBlend};
+    D3DXVec3TransformCoord((Vector*)&tmp.vertex, (Vector*)&tmp.vertex, &currentMatrix.matrix);
+    pendingVertex.push_back(tmp);
+}
+
+void VertexBuffer::vertex(double x, double y, double z, double u, double v)
+{
+    VertexInfo tmp={(float)x, (float)y, (float)z, 1.0f, currentMatrix.defaultColor, (float)u, (float)v, currentMatrix.texture, currentMatrix.isAddBlend};
     D3DXVec3TransformCoord((Vector*)&tmp.vertex, (Vector*)&tmp.vertex, &currentMatrix.matrix);
     pendingVertex.push_back(tmp);
 }
@@ -176,10 +184,10 @@ void VertexBuffer::translate2D(double x, double y)
     currentMatrix.matrix=t*currentMatrix.matrix;
 }
 
-void VertexBuffer::rotate2D(double rotation)
+void VertexBuffer::rotate2D(double angle)
 {
     Matrix t;
-    D3DXMatrixRotationZ(&t, rotation);
+    D3DXMatrixRotationZ(&t, angle);
     currentMatrix.matrix=t*currentMatrix.matrix;
 }
 
@@ -187,6 +195,28 @@ void VertexBuffer::scale2D(double scaleX, double scaleY)
 {
     Matrix t;
     D3DXMatrixScaling(&t, scaleX, scaleY, 1.0);
+    currentMatrix.matrix=t*currentMatrix.matrix;
+}
+
+void VertexBuffer::translate3D(double x, double y, double z)
+{
+    Matrix t;
+    D3DXMatrixTranslation(&t, x, y, z);
+    currentMatrix.matrix=t*currentMatrix.matrix;
+}
+
+void VertexBuffer::rotate3D(double axisX, double axisY, double axisZ, double angle)
+{
+    Matrix t;
+    D3DXVECTOR3 v(axisX, axisY, axisZ);
+    D3DXMatrixRotationAxis(&t, &v, angle);
+    currentMatrix.matrix=t*currentMatrix.matrix;
+}
+
+void VertexBuffer::scale3D(double scaleX, double scaleY, double scaleZ)
+{
+    Matrix t;
+    D3DXMatrixScaling(&t, scaleX, scaleY, scaleZ);
     currentMatrix.matrix=t*currentMatrix.matrix;
 }
 

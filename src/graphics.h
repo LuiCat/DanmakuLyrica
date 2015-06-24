@@ -35,7 +35,7 @@ inline HRESULT D3D_Reset()
         if(FAILED(D3D_RestoreDevice()))
             throw 0;
 
-        D3DResource::lostAll();
+        GFXResource::lostAll();
 
         d3d.cleanup();
 
@@ -45,7 +45,7 @@ inline HRESULT D3D_Reset()
         if(FAILED(d3d.init()))
             throw 2;
 
-        D3DResource::resetAll();
+        GFXResource::resetAll();
 
         d3d.endScene();
 
