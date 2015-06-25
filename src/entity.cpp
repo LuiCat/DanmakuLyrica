@@ -278,7 +278,10 @@ void Entity::render()
 {
     if(isDead)return;
     d3d.pushMatrix();
-    d3d.translate2D(x, y);
+    if(fabs(facingAngle)<M_DINFS)
+        d3d.translate2D(round(x), round(y));
+    else
+        d3d.translate2D(x, y);
     d3d.rotate2D(-facingAngle);
     onRender();
     d3d.popMatrix();
