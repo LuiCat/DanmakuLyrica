@@ -45,7 +45,10 @@ SOURCES += main.cpp \
     graphics/gfxcore.cpp \
     graphics/textrenderer.cpp \
     graphics/vertexbuffer.cpp \
-    graphics/gfxresource.cpp
+    graphics/gfxresource.cpp \
+    graphics/rendersurface.cpp \
+    graphics/rendertarget.cpp \
+    graphics/rendertexture.cpp
 
 HEADERS += \
     debug.h \
@@ -88,10 +91,12 @@ HEADERS += \
     bulletscript.h \
     graphics/gfxcore.h \
     graphics/gfxdef.h \
-    graphics/gfxprivate.h \
     graphics/textrenderer.h \
     graphics/vertexbuffer.h \
-    graphics/gfxresource.h
+    graphics/gfxresource.h \
+    graphics/rendersurface.h \
+    graphics/rendertarget.h \
+    graphics/rendertexture.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

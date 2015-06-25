@@ -6,6 +6,7 @@
 
 typedef  D3DXMATRIX          Matrix  ;
 typedef  LPDIRECT3DTEXTURE9  Texture ;
+typedef  LPDIRECT3DSURFACE9  Surface ;
 typedef  D3DXVECTOR3         Vector  ;
 
 inline DWORD ColorBlend(DWORD col1, DWORD col2, double weight)

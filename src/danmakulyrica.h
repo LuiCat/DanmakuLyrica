@@ -53,6 +53,9 @@ private:
     Texture tex;
     TextureStrip strip;
 
+    RenderTexture bulletSurface;
+    RenderTexture noteSurface;
+
 };
 
 #endif // DANMAKULYRICA_H

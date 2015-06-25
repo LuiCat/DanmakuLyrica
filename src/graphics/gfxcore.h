@@ -11,8 +11,8 @@ private:
 
 protected:
 
-    static LPDIRECT3D9 g_pd3d;
-    static LPDIRECT3DDEVICE9 g_pd3dDevice;
+    static LPDIRECT3D9             pD3D;
+    static LPDIRECT3DDEVICE9       pD3DDevice;
     static D3DPRESENT_PARAMETERS   d3dpp;
 
 public:

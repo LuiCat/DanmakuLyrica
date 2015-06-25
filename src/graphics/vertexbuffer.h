@@ -3,6 +3,7 @@
 
 #include "gfxresource.h"
 #include "gfxdef.h"
+#include "rendertarget.h"
 
 #include <vector>
 using namespace std;
@@ -46,14 +47,14 @@ private:
     MatrixInfo currentMatrix;
 
     LPDIRECT3DVERTEXBUFFER9 pD3DVertexBuffer;
-    LPDIRECT3DINDEXBUFFER9  pD3DIndexBuffer;
 
     HANDLE mutex;
 
+    RenderTarget* currentTarget;
+
 protected:
 
-    HRESULT lost();
-    HRESULT reset();
+    void drawScene(RenderTarget* target=0);
 
 public:
 
@@ -63,10 +64,9 @@ public:
     HRESULT init(HWND hWnd=0);
     void cleanup();
 
-    void drawMatrix();
     void present();
 
-    void beginScene();
+    void beginScene(RenderTarget* target=0);
     void endScene();
 
     void resetMatrix();

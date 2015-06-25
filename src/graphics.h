@@ -9,6 +9,8 @@
 #include "graphics/gfxdef.h"
 #include "graphics/gfxcore.h"
 #include "graphics/vertexbuffer.h"
+#include "graphics/rendersurface.h"
+#include "graphics/rendertexture.h"
 #include "graphics/textrenderer.h"
 
 inline HRESULT D3D_Init(HWND hWnd)

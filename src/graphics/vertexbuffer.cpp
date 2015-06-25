@@ -1,6 +1,5 @@
 #include "vertexbuffer.h"
 
-#include "gfxprivate.h"
 #include "commondef.h"
 
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZRHW|D3DFVF_DIFFUSE|D3DFVF_TEX1)
@@ -13,15 +12,14 @@ VertexBuffer::VertexBuffer()
     ,stackMatrix(INITSIZE_STACK_MATRIX)
     ,pD3DVertexBuffer(0)
     ,mutex(0)
+    ,currentTarget(0)
 {
 
 }
 
 VertexBuffer::~VertexBuffer()
 {
-    if(pD3DVertexBuffer!=0)
-        pD3DVertexBuffer->Release();
-    pD3DVertexBuffer=0;
+
 }
 
 HRESULT VertexBuffer::init(HWND hWnd)
@@ -31,7 +29,7 @@ HRESULT VertexBuffer::init(HWND hWnd)
     if(hWnd)
         this->hWnd=hWnd;
 
-    if(FAILED(hr=g_pd3dDevice->CreateVertexBuffer(D3D_VERTEXBUFFERSIZE*sizeof(Vertex),
+    if(FAILED(hr=pD3DDevice->CreateVertexBuffer(D3D_VERTEXBUFFERSIZE*sizeof(Vertex),
                                                   D3DUSAGE_DYNAMIC, D3DFVF_CUSTOMVERTEX,
                                                   D3DPOOL_DEFAULT, &pD3DVertexBuffer, NULL)))
     {
@@ -53,25 +51,9 @@ void VertexBuffer::cleanup()
     pD3DVertexBuffer=0;
 }
 
-HRESULT VertexBuffer::lost()
+void VertexBuffer::drawScene(RenderTarget* target)
 {
-    cleanup();
-    return S_OK;
-}
-
-HRESULT VertexBuffer::reset()
-{
-    return init();
-}
-
-void VertexBuffer::present()
-{
-    HRESULT hr;
-
-    beginScene();
-
     int vsize=pendingVertex.size()/4*4;
-
     Vertex* pVertices;
 
     if(FAILED(pD3DVertexBuffer->Lock(0, vsize*sizeof(Vertex), (LPVOID*)&pVertices, 0)))
@@ -84,34 +66,40 @@ void VertexBuffer::present()
 
     pD3DVertexBuffer->Unlock();
 
-    if(SUCCEEDED(g_pd3dDevice->BeginScene()))
+    if(SUCCEEDED(pD3DDevice->BeginScene()))
     {
-        //g_pd3dDevice->SetRenderTarget(0, g_pd3dSurface);
+        if(target)
+            target->setTarget();
 
-        g_pd3dDevice->SetStreamSource(0, pD3DVertexBuffer, 0, sizeof(Vertex));
-        g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
+        pD3DDevice->SetStreamSource(0, pD3DVertexBuffer, 0, sizeof(Vertex));
+        pD3DDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
 
         for(unsigned int i=0;i<pendingVertex.size();i+=4)
         {
             if(pendingVertex[i].isAddBlend)
-                g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+                pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
             else
-                g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-            g_pd3dDevice->SetTexture(0, pendingVertex[i].texture);
-            g_pd3dDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, i, 2);
+                pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+            pD3DDevice->SetTexture(0, pendingVertex[i].texture);
+            pD3DDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, i, 2);
         }
 
-        //g_pd3dDevice->SetRenderTarget(0, 0);
+        if(target)
+            target->unsetTarget();
 
         //g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &Backbuffer);
         //hr=g_pd3dDevice->StretchRect(g_pd3dSurface, 0, Backbuffer, 0, D3DTEXF_NONE);
 
-        g_pd3dDevice->EndScene();
+        pD3DDevice->EndScene();
     }
 
-    endScene();
+}
 
-    hr=g_pd3dDevice->Present( NULL, NULL, NULL, NULL );
+void VertexBuffer::present()
+{
+    HRESULT hr;
+
+    hr=pD3DDevice->Present( NULL, NULL, NULL, NULL );
 
     if(FAILED(hr))
     {
@@ -121,17 +109,21 @@ void VertexBuffer::present()
             PostQuitMessage(hr);
     }
 
-    g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);
+    pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0,0,0), 1.0f, 0);
 
 }
 
-void VertexBuffer::beginScene()
+void VertexBuffer::beginScene(RenderTarget* target)
 {
     WaitForSingleObject(mutex, INFINITE);
+    currentTarget=target;
+    resetMatrix();
 }
 
 void VertexBuffer::endScene()
 {
+    drawScene(currentTarget);
+    currentTarget=0;
     ReleaseMutex(mutex);
 }
 

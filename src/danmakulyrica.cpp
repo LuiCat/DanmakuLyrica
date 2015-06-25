@@ -126,31 +126,9 @@ void DanmakuLyrica::mainUpdate()
 
 void DanmakuLyrica::mainRender()
 {
-    d3d.beginScene();
-
-    d3d.resetMatrix();
-
-    /*
-    d3d.pushMatrix();
-    d3d.scale2D(100.0, 100.0);
-    strip.pushVertices(0, 0);
-    d3d.translate2D(1.0, 0.0);
-    strip.pushVertices(0, 1);
-    d3d.translate2D(1.0, 0.0);
-    strip.pushVertices(1, 0);
-    d3d.translate2D(1.0, 0.0);
-    strip.pushVertices(1, 1);
-    d3d.translate2D(1.0, 0.0);
-    strip.pushVertices(0, 0);
-    d3d.translate2D(1.0, 0.0);
-    strip.pushVertices(1, 0);
-    d3d.translate2D(1.0, 0.0);
-    strip.pushVertices(0, 1);
-    d3d.translate2D(1.0, 0.0);
-    strip.pushVertices(1, 1);
-    d3d.popMatrix();
-    */
-
+    // render notes
+    d3d.beginScene(&noteSurface);
+    //d3d.beginScene();
     d3d.pushMatrix();
     d3d.translate2D(100, 300.0);    
 
@@ -160,19 +138,27 @@ void DanmakuLyrica::mainRender()
     d3d.vertex(-0.5,  20, 1.0, 0.0);
     d3d.vertex(-0.5, -20, 1.0, 1.0);
     d3d.vertex( 0.5, -20, 0.0, 1.0);
-    d3d.popMatrix();
+    d3d.popMatrix();    
 
     d3d.pushMatrix();
     noteScene.render();
     d3d.popMatrix();
 
     d3d.popMatrix();
+    d3d.endScene();
 
+    // render bullets
+    d3d.beginScene(&bulletSurface);
+    //d3d.beginScene();
     d3d.pushMatrix();
     bulletScene.render();
     d3d.popMatrix();
-
     d3d.endScene();
 
+    // render surfaces
+    noteSurface.present(0, 0);
+    bulletSurface.draw(0, 0);
+
     d3d.present();
+
 }
