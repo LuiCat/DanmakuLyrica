@@ -8,10 +8,11 @@
 
 class SoundRegistry
 {
-public:
+private:
     static Registry<SoundBuffer> reg;
-    static void registerSoundFile(const char* name, bool isStream, const char* filename, float volume);
-    static void releaseAllSounds();
+public:
+    static void newSound(const char* name, bool isStream, const char* filename, float volume);
+    static void releaseAll();
     static SoundBuffer* get(int id);
     static SoundBuffer* get(const char* name);
 };

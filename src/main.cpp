@@ -28,7 +28,7 @@ void Main_Init()
 
 void Main_Cleanup()
 {
-    SoundRegistry::releaseAllSounds();
+    SoundRegistry::releaseAll();
     DInput_Cleanup();
     Sound_Cleanup();
     D3D_Cleanup();

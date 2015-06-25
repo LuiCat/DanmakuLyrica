@@ -22,20 +22,6 @@ angle = setAngle
 -- function setBulletType(typeid|typename)
 bulletType = setBulletType
 
--- function attach(bulletid)
--- function attach(taskid,bulletid)
--- function clearAttach()
-
--- functions for attached bullet
--- function att.setPos(x,y)
--- function att.setRot(angle)
--- function att.setSpeed(v)
--- function att.setAcc(a)
--- function att.setRS(omega)
--- function att.offsetPos(deltax,deltay)
--- function att.offsetRot(deltaangle)
--- function att.offsetSpeed(deltav)
-
 function sleep(t)
 	delay(t)
 	coroutine.yield()

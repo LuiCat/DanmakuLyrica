@@ -48,7 +48,9 @@ SOURCES += main.cpp \
     graphics/gfxresource.cpp \
     graphics/rendersurface.cpp \
     graphics/rendertarget.cpp \
-    graphics/rendertexture.cpp
+    graphics/rendertexture.cpp\
+    animation.cpp \
+    textureregistry.cpp
 
 HEADERS += \
     debug.h \
@@ -96,7 +98,9 @@ HEADERS += \
     graphics/gfxresource.h \
     graphics/rendersurface.h \
     graphics/rendertarget.h \
-    graphics/rendertexture.h
+    graphics/rendertexture.h\
+    animation.h \
+    textureregistry.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \
