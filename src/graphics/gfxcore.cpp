@@ -15,6 +15,8 @@ void GFXCore::setDeviceStates()
     pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
     //g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);D3DTADDRESS_CLAMP
 
+    pD3DDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE);
+
     pD3DDevice->SetSamplerState(0,   D3DSAMP_MAGFILTER,   D3DTEXF_LINEAR );//D3DTEXF_LINEAR
     pD3DDevice->SetSamplerState(0,   D3DSAMP_MINFILTER,   D3DTEXF_LINEAR );//
     //pD3DDevice->SetSamplerState(0,   D3DSAMP_MIPFILTER,   D3DTEXF_LINEAR);
@@ -33,7 +35,7 @@ void GFXCore::setDeviceStates()
 DWORD GFXCore::createTexture(const char* filename, Texture* tex, DWORD w, DWORD h)
 {
     return D3DXCreateTextureFromFileEx(pD3DDevice, filename, w, h, 0, 0,
-                                       D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, D3DX_DEFAULT,
+                                       D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT,
                                        0, NULL, NULL, tex);
 }
 

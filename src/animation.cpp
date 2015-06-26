@@ -37,10 +37,10 @@ void Animation::pushVertices(int i)
     if(c<=0)
     {
         d3d.setTexture(0);
-        d3d.pushVertex(0.0, 0.0, 0.0, 0.0);
-        d3d.pushVertex(1.0, 0.0, 1.0, 0.0);
-        d3d.pushVertex(1.0, 1.0, 1.0, 1.0);
-        d3d.pushVertex(0.0, 1.0, 0.0, 1.0);
+        d3d.vertex(0.0, 0.0, 0.0, 0.0);
+        d3d.vertex(1.0, 0.0, 1.0, 0.0);
+        d3d.vertex(1.0, 1.0, 1.0, 1.0);
+        d3d.vertex(0.0, 1.0, 0.0, 1.0);
     }
     else
     {
@@ -53,10 +53,10 @@ void Animation::pushVertices(int i)
         double umax=f.x+f.w;
         double vmax=f.y+f.h;
 
-        d3d.pushVertex(0.0, 0.0, f.x,  f.y );
-        d3d.pushVertex(1.0, 0.0, umax, f.y );
-        d3d.pushVertex(1.0, 1.0, umax, vmax);
-        d3d.pushVertex(0.0, 1.0, f.x,  vmax);
+        d3d.vertex(0.0, 0.0, f.x,  f.y );
+        d3d.vertex(1.0, 0.0, umax, f.y );
+        d3d.vertex(1.0, 1.0, umax, vmax);
+        d3d.vertex(0.0, 1.0, f.x,  vmax);
     }
 }
 
