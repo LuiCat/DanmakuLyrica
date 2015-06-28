@@ -112,6 +112,7 @@ Entity& Entity::setAxisSpeedOffset(double offsetVelX, double offsetVelY)
     correctAxisSpeed();
     speedX+=offsetVelX;
     speedY+=offsetVelY;
+    isAxisVelocityCorrect=false;
     correctVelocityAngle();
     return *this;
 }
