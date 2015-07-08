@@ -4,7 +4,7 @@
 #include "graphics.h"
 #include "sounds.h"
 #include "keybinding.h"
-
+#include "resource.h"
 #include "soundregistry.h"
 #include "luascript.h"
 
@@ -28,6 +28,7 @@ void Main_Init()
 
 void Main_Cleanup()
 {
+    Resource::releaseAll();
     SoundRegistry::releaseAll();
     DInput_Cleanup();
     Sound_Cleanup();

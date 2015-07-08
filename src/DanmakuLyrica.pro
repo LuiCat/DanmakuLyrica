@@ -50,7 +50,10 @@ SOURCES += main.cpp \
     graphics/rendertarget.cpp \
     graphics/rendertexture.cpp\
     animation.cpp \
-    textureregistry.cpp
+    textureregistry.cpp \
+    resource.cpp \
+    ressound.cpp \
+    resimage.cpp
 
 HEADERS += \
     debug.h \
@@ -100,7 +103,10 @@ HEADERS += \
     graphics/rendertarget.h \
     graphics/rendertexture.h\
     animation.h \
-    textureregistry.h
+    textureregistry.h \
+    resource.h \
+    ressound.h \
+    resimage.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

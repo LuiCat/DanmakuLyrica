@@ -1,7 +1,5 @@
 #include "noteentity.h"
 
-#include "soundregistry.h"
-
 #include "mathhelper.h"
 
 Note::Note(double _hitTime, double _hitBeat)
