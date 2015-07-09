@@ -30,7 +30,7 @@ HRESULT VertexBuffer::init(HWND hWnd)
         this->hWnd=hWnd;
 
     if(FAILED(hr=pD3DDevice->CreateVertexBuffer(D3D_VERTEXBUFFERSIZE*sizeof(Vertex),
-                                                  D3DUSAGE_DYNAMIC, D3DFVF_CUSTOMVERTEX,
+                                                  D3DUSAGE_DYNAMIC|D3DUSAGE_WRITEONLY, D3DFVF_CUSTOMVERTEX,
                                                   D3DPOOL_DEFAULT, &pD3DVertexBuffer, NULL)))
     {
         return hr;
