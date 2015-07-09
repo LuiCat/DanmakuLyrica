@@ -109,7 +109,10 @@ LIBS += -ld3d9 \
         -ldinput8 \
         -ldxguid
 
-LIBS += $$PWD/lua/lua.a
+LIBS += $$PWD/lua/lua.a \
+        $$PWD/libVorbisFile.a \
+        $$PWD/libVorbis.a \
+        $$PWD/libOgg.a
 
 DISTFILES += \
     todo.txt

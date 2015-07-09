@@ -3,6 +3,10 @@
 #include <mmsystem.h>
 #include <cmath>
 
+#include "ogg/ogg.h"
+#include "vorbis/codec.h"
+#include "vorbis/vorbisfile.h"
+
 #include "debug.h"
 
 //=============Globals============================
@@ -27,9 +31,9 @@ void Sound_Cleanup()
 
 //=============SoundBuffer Members============================
 
-bool SoundBuffer::loadWavFile(const char *filename, char **mem, DWORD *memsize, WAVEFORMATEX* format)
+bool SoundBuffer::loadWavFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format)
 {
-    if(!mem)
+    if(!memout)
         return false;
 
     HMMIO           hwav;    // handle to wave file
@@ -96,30 +100,104 @@ bool SoundBuffer::loadWavFile(const char *filename, char **mem, DWORD *memsize, 
     // finally!!!! now all we have to do is read the data in and
     // set up the directsound buffer
 
+    if(*memout)
+        delete[] *memout;
+
     *memsize=child.cksize-4;
-    *mem=new char[child.cksize-4];
+    *memout=new char[child.cksize-4];
     *format=wfmtx;
 
     mmioSeek(hwav, 4, SEEK_CUR);
-    mmioRead(hwav, (char*)*mem, child.cksize-4);
+    mmioRead(hwav, (char*)*memout, child.cksize-4);
     mmioClose(hwav, 0);
+
+    return true;
+}
+
+bool SoundBuffer::loadOggFile(const char* filename, char** memout, DWORD* memsize, WAVEFORMATEX* format)
+{
+    if(!memout)
+        return false;
+
+    FILE* f=fopen(filename, "rb");
+    if(!f)return false;
+
+    OggVorbis_File vorbisFile;
+    memset(&vorbisFile, 0, sizeof(vorbisFile));
+    ov_clear(&vorbisFile);
+
+    if(ov_open_callbacks(f, &vorbisFile, 0, 0, OV_CALLBACKS_DEFAULT))
+    {
+        ov_clear(&vorbisFile);
+        return false;
+    }
+
+    vorbis_info *vi=ov_info(&vorbisFile, -1);
+
+    WAVEFORMATEX wfmtx;
+    memset(&wfmtx, 0, sizeof(wfmtx));
+
+    wfmtx.wFormatTag=WAVE_FORMAT_PCM;
+    wfmtx.nChannels=vi->channels;
+    wfmtx.nSamplesPerSec=vi->rate;
+    wfmtx.nAvgBytesPerSec=vi->channels*vi->rate*2;
+    wfmtx.wBitsPerSample=16;
+    wfmtx.nBlockAlign=vi->channels*2;
+    wfmtx.cbSize=0;
+
+    int current_section;
+    int remainSize=2*vi->rate*(int)ov_pcm_total(&vorbisFile, -1);
+    int readSize;
+    char* p=new char[remainSize];
+
+    if(*memout)
+        delete[] *memout;
+    *memout=p;
+    *memsize=remainSize;
+    *format=wfmtx;
+
+    while(true)
+    {
+        readSize=ov_read(&vorbisFile, p, remainSize, 0, 2, 1, &current_section);
+        if(readSize<=0)
+            break;
+        p+=readSize;
+        remainSize-=readSize;
+    }
+
+    ov_clear(&vorbisFile);
 
     return true;
 }
 
 bool SoundBuffer::loadWav(const char *filename)
 {
-    if(m_buffer || buffer)
+    if(isAvailable())
         release();
 
-    if(!loadWavFile(filename, &m_buffer, &m_size, &waveFormat))
+    int dpos=strlen(filename)-1;
+    while(dpos>=0&&filename[dpos]!='.')
+        --dpos;
+    if(dpos>0&&stricmp(filename+dpos, ".wav")==0)
+    {
+        if(!loadWavFile(filename, &m_buffer, &m_size, &waveFormat))
+            return false;
+    }
+    else if(dpos>0&&stricmp(filename+dpos, ".ogg")==0)
+    {
+        if(!loadOggFile(filename, &m_buffer, &m_size, &waveFormat))
+            return false;
+    }
+    else
+    {
         return false;
+    }
 
     DSBUFFERDESC dsbdesc;
     memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));
     dsbdesc.dwSize = sizeof(DSBUFFERDESC);
-    dsbdesc.dwFlags = DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME;//DSBCAPS_CTRLFREQUENCY;
-    dsbdesc.dwBufferBytes = m_size;
+    dsbdesc.dwFlags = loadFlag;
+    dsbdesc.dwBufferBytes = (bufferSize==0?m_size:bufferSize);
     dsbdesc.lpwfxFormat = &waveFormat;
 
     LPDIRECTSOUNDBUFFER primaryBuffer;
@@ -129,17 +207,17 @@ bool SoundBuffer::loadWav(const char *filename)
     if(FAILED(primaryBuffer->QueryInterface(IID_IDirectSoundBuffer8, (LPVOID*)&buffer)))
         return false;
 
+    if(!onLoad(primaryBuffer))
+        return false;
+
     primaryBuffer->Release();
 
-    void* buffer1;
-    DWORD bufferSize1;
+    return true;
+}
 
-    if (buffer->Lock(0, 0, &buffer1, &bufferSize1, 0, 0, DSBLOCK_ENTIREBUFFER)==S_OK)
-    {
-        memcpy(buffer1, m_buffer, bufferSize1);
-        buffer->Unlock(buffer1, bufferSize1, NULL, 0);
-    }
-
+bool SoundBuffer::onLoad(LPDIRECTSOUNDBUFFER)
+{
+    prepareBuffer();
     return true;
 }
 
@@ -159,7 +237,9 @@ SoundBuffer::SoundBuffer()
     :m_buffer(0)
     ,m_size(0)
     ,buffer(0)
+    ,bufferSize(0)
     ,playFlag(0)
+    ,loadFlag(DSBCAPS_GLOBALFOCUS|DSBCAPS_CTRLPAN|DSBCAPS_CTRLVOLUME)//DSBCAPS_CTRLFREQUENCY
 {
     memset(&waveFormat, 0, sizeof(waveFormat));
 }
@@ -270,6 +350,8 @@ StreamBuffer::StreamBuffer()
 {
     setLoop(true);
     memset(event, 0, sizeof(event));
+    bufferSize=streamBufSize;
+    loadFlag|=DSBCAPS_CTRLPOSITIONNOTIFY;
 }
 
 StreamBuffer::~StreamBuffer()
@@ -289,51 +371,6 @@ void StreamBuffer::release()
         event[i]=0;
     }
     SoundBuffer::release();
-}
-
-bool StreamBuffer::loadWav(const char *filename)
-{
-    if(isAvailable())
-        release();
-
-    if(!loadWavFile(filename, &m_buffer, &m_size, &waveFormat))
-        return false;
-
-    DSBUFFERDESC dsbdesc;
-    memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));
-    dsbdesc.dwSize = sizeof(DSBUFFERDESC);
-    dsbdesc.dwFlags = DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLPOSITIONNOTIFY;//DSBCAPS_CTRLFREQUENCY;
-    dsbdesc.dwBufferBytes = streamBufSize;
-    dsbdesc.lpwfxFormat = &waveFormat;
-
-    LPDIRECTSOUNDBUFFER primaryBuffer;
-
-    if(FAILED(lpDirectSound->CreateSoundBuffer(&dsbdesc, &primaryBuffer, NULL)))
-        return false;
-
-    if(FAILED(primaryBuffer->QueryInterface(IID_IDirectSoundBuffer8, (LPVOID*)&buffer)))
-        return false;
-
-    DSBPOSITIONNOTIFY     posNotify[MAX_NOTIFY_NUM];
-    LPDIRECTSOUNDNOTIFY   notify = 0;
-
-    for(int i=0; i<MAX_NOTIFY_NUM; ++i)
-    {
-        posNotify[i].dwOffset=i*streamBufSize/MAX_NOTIFY_NUM;
-        posNotify[i].hEventNotify=event[i]=CreateEvent(0, false, false, 0);
-    }
-
-    HRESULT hr;
-
-    if(FAILED(hr=primaryBuffer->QueryInterface(IID_IDirectSoundNotify8, (LPVOID*)&notify)))
-        return false;
-
-    hr=notify->SetNotificationPositions(MAX_NOTIFY_NUM, posNotify);
-    notify->Release();
-
-    primaryBuffer->Release();
-
-    return true;
 }
 
 void StreamBuffer::setLoopPos(DWORD posA, DWORD posB)
@@ -356,6 +393,28 @@ DWORD WINAPI StreamBuffer::PlayThread(LPVOID lpParam)
     }
 
     return 0;
+}
+
+bool StreamBuffer::onLoad(LPDIRECTSOUNDBUFFER primaryBuffer)
+{
+    DSBPOSITIONNOTIFY     posNotify[MAX_NOTIFY_NUM];
+    LPDIRECTSOUNDNOTIFY   notify = 0;
+
+    for(int i=0; i<MAX_NOTIFY_NUM; ++i)
+    {
+        posNotify[i].dwOffset=i*streamBufSize/MAX_NOTIFY_NUM;
+        posNotify[i].hEventNotify=event[i]=CreateEvent(0, false, false, 0);
+    }
+
+    HRESULT hr;
+
+    if(FAILED(hr=primaryBuffer->QueryInterface(IID_IDirectSoundNotify8, (LPVOID*)&notify)))
+        return false;
+
+    hr=notify->SetNotificationPositions(MAX_NOTIFY_NUM, posNotify);
+    notify->Release();
+
+    return true;
 }
 
 void StreamBuffer::prepareBuffer()

@@ -20,7 +20,7 @@ public:
 
     static DanmakuLyrica* instance;
 
-    DanmakuLyrica();
+    explicit DanmakuLyrica();
 
 protected:
 

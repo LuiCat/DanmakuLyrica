@@ -21,17 +21,22 @@ protected:
 
     WAVEFORMATEX waveFormat;
     LPDIRECTSOUNDBUFFER8 buffer;
+    DWORD bufferSize;
 
     DWORD playFlag;
+    DWORD loadFlag;
 
-    static bool loadWavFile(const char *filename, char **mem, DWORD *memsize, WAVEFORMATEX* format);
+    static bool loadWavFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format);
+    static bool loadOggFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format);
+
+    virtual bool onLoad(LPDIRECTSOUNDBUFFER primaryBuffer);
 
     // Prepare (copy, reset, etc.) wav data to buffer
     virtual void prepareBuffer();
 
 public:
 
-    SoundBuffer();
+    explicit SoundBuffer();
     virtual ~SoundBuffer();
 
     virtual void release();
@@ -80,10 +85,12 @@ protected:
     DWORD lastWrittenPos; // the position in buffer to continue copying at
     //DWORD processedMemLen;
 
-    bool isPlaying;
-    bool paused;
+    volatile bool isPlaying;
+    volatile bool paused;
 
     DWORD loopPosA, loopPosB;
+
+    bool onLoad(LPDIRECTSOUNDBUFFER primaryBuffer);
 
     // Prepare (copy, reset, etc.) wav data to buffer
     void prepareBuffer();
@@ -93,12 +100,10 @@ protected:
 
 public:
 
-    StreamBuffer();
-    virtual ~StreamBuffer();
+    explicit StreamBuffer();
+    ~StreamBuffer();
 
     void release();
-
-    bool loadWav(const char *filename);
 
     void setLoopPos(DWORD posA, DWORD posB);
 

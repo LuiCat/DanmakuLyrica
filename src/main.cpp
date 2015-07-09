@@ -39,11 +39,10 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
     {
     case WM_CLOSE:
-        if(game)
+        if(game&&!(game->exiting()))
             game->exit();
         else
             PostQuitMessage(0);
-        game=0;
         return 0;
     case WM_DESTROY:
         PostQuitMessage(0);
@@ -53,7 +52,6 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             if(game)
                 game->exit();
-            game=0;
         }
         return 0;
     case WM_RESETDEVICE:
@@ -104,8 +102,9 @@ WINAPI INT WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
     {
         Main_Init();
 
-        game=new DanmakuLyrica();
-        game->start(hWnd);
+        DanmakuLyrica instance;
+        game=&instance;
+        instance.start(hWnd);
 
         ShowWindow(hWnd, SW_SHOWDEFAULT);
         UpdateWindow(hWnd);

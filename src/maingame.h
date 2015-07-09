@@ -35,7 +35,7 @@ protected:
 
 public:
 
-    MainGame();
+    explicit MainGame();
 
     static DWORD WINAPI mainThreadFunc(LPVOID);
 
@@ -43,6 +43,11 @@ public:
 
     void start(HWND hWnd);
     void exit();
+
+    inline bool exiting() const
+    {
+        return isExiting;
+    }
 
     void updateTick();
     void process();
