@@ -1,37 +1,37 @@
-#include "animation.h"
+#include "animatedtexture.h"
 
-Animation::Animation()
+AnimatedTexture::AnimatedTexture()
 {
 
 }
 
-Animation::~Animation()
+AnimatedTexture::~AnimatedTexture()
 {
 
 }
 
-void Animation::clear()
+void AnimatedTexture::clear()
 {
     frames.clear();
 }
 
-bool Animation::fromFile(const char*)
+bool AnimatedTexture::fromFile(const char*)
 {
     // to do: animation file format
     return false;
 }
 
-void Animation::setLoop(bool doLoop)
+void AnimatedTexture::setLoop(bool doLoop)
 {
     loop=doLoop;
 }
 
-void Animation::pushFrame(Texture texture, double x, double y, double width, double height)
+void AnimatedTexture::pushFrame(Texture texture, double x, double y, double width, double height)
 {
     frames.emplace_back(texture, x, y, width, height);
 }
 
-void Animation::pushVertices(int i)
+void AnimatedTexture::pushVertices(int i)
 {
     int c=frames.size();
     if(c<=0)

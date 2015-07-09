@@ -49,8 +49,8 @@ SOURCES += main.cpp \
     graphics/rendersurface.cpp \
     graphics/rendertarget.cpp \
     graphics/rendertexture.cpp\
-    animation.cpp \
-    textureregistry.cpp
+    textureregistry.cpp \
+    animatedtexture.cpp
 
 HEADERS += \
     debug.h \
@@ -99,8 +99,8 @@ HEADERS += \
     graphics/rendersurface.h \
     graphics/rendertarget.h \
     graphics/rendertexture.h\
-    animation.h \
-    textureregistry.h
+    textureregistry.h \
+    animatedtexture.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \
