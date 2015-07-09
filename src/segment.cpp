@@ -57,11 +57,9 @@ double Segment::offsetMapState(MapState &state, double deltaSec) const
     auto iter=events.cbegin();
     double deltaOffset;
 
-    for(; iter!=events.cend(); ++iter)
+    for(; iter!=events.cend()&&tempState.timeOffset<=state.timeOffset; ++iter)
     {
         tempState.processEvent(&*iter, iter->num-prevNum, segmentDiv);
-        if(tempState.timeOffset>state.timeOffset)
-            break;
         prevNum=iter->num;
     }
 
@@ -71,7 +69,8 @@ double Segment::offsetMapState(MapState &state, double deltaSec) const
         state.processEvent(0, deltaSec);
         return 0.0;
     }
-    state.processEvent(0, deltaOffset);
+    state=tempState;
+    //state.processEvent(0, deltaOffset);
     deltaSec-=deltaOffset;
 
     for(; iter!=events.cend(); ++iter)

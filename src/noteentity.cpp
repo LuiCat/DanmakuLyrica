@@ -28,8 +28,8 @@ void Note::setJudgeTime(double _hitTime, double _hitBeat)
 {
     hitTime=_hitTime;
     hitBeat=_hitBeat;
-    setPosition(_hitBeat*120, 0);
-    setSpeedRotation(120.0, rad(-90));
+    setPosition(_hitBeat*90, 0);
+    setSpeedRotation(90.0, rad(-90));
 }
 
 void Note::setScrollSpeed(double hs)

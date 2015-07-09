@@ -24,7 +24,7 @@ bool NoteMap::loadTjaFile(const char *filename)
 }
 
 double NoteMap::offsetMapState(MapState &state, double deltaSec) const
-{    
+{
     double originBeat=state.beatOffset;
 
     if(state.currentSegment<(int)segments.size())
@@ -32,7 +32,7 @@ double NoteMap::offsetMapState(MapState &state, double deltaSec) const
         auto iter=segments.cbegin();
         for(int i=0; i<state.currentSegment; ++i)
             ++iter;
-        for(; iter!=segments.cend()&&deltaSec<M_DINFS; ++iter)
+        for(; iter!=segments.cend()&&deltaSec>=M_DINFS; ++iter)
         {
             deltaSec=iter->offsetMapState(state, deltaSec);
         }
@@ -170,29 +170,29 @@ bool NoteMap::reloadTjaFile()
 
                 flag=true;
 
-                if(strcmp(line, "#END")==0)
+                if(strncmp(line, "#END", 4)==0)
                 {
                     flag=false;
                     readingNotes=false;
                     readingEnded=true;
                 }
-                else if(strcmp(line, "#BPMCHANGE")==0)
+                else if(strncmp(line, "#BPMCHANGE", 10)==0)
                 {
                     tempEvent.type=bpmchange;
-                    sscanf(p, "%lf", &x);
+                    sscanf(line+11, "%lf", &x);
                     tempEvent.parameter_d=x;
                 }
-                else if(strcmp(line, "#MEASURE")==0)
+                else if(strncmp(line, "#MEASURE", 8)==0)
                 {
                     tempEvent.type=measure;
-                    sscanf(p, "%d/%d", &j, &k);
+                    sscanf(line+9, "%d/%d", &j, &k);
                     tempEvent.parameter_i_1=j;
                     tempEvent.parameter_i_2=k;
                 }
-                else if(strcmp(line, "#SCROLL")==0)
+                else if(strncmp(line, "#SCROLL", 7)==0)
                 {
                     tempEvent.type=scroll;
-                    sscanf(p, "%lf", &x);
+                    sscanf(line+8, "%lf", &x);
                     tempEvent.parameter_d=x;
                 }
                 else
