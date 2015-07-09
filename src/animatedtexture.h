@@ -1,12 +1,12 @@
-#ifndef ANIMATION_H
-#define ANIMATION_H
+#ifndef ANIMATEDTEXTURE_H
+#define ANIMATEDTEXTURE_H
 
 #include "graphics.h"
 
 #include <vector>
 using namespace std;
 
-class Animation
+class AnimatedTexture
 {
 private:
 
@@ -33,8 +33,8 @@ protected:
 
 public:
 
-    Animation();
-    ~Animation();
+    AnimatedTexture();
+    ~AnimatedTexture();
 
     void clear();
     bool fromFile(const char* url);
@@ -48,4 +48,4 @@ public:
 
 };
 
-#endif // ANIMATION_H
+#endif // ANIMATEDTEXTURE_H
