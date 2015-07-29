@@ -50,7 +50,9 @@ SOURCES += main.cpp \
     graphics/rendertarget.cpp \
     graphics/rendertexture.cpp\
     textureregistry.cpp \
-    animatedtexture.cpp
+    animatedtexture.cpp \
+    entityevent.cpp \
+    movement.cpp
 
 HEADERS += \
     debug.h \
@@ -100,7 +102,9 @@ HEADERS += \
     graphics/rendertarget.h \
     graphics/rendertexture.h\
     textureregistry.h \
-    animatedtexture.h
+    animatedtexture.h \
+    entityevent.h \
+    movement.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

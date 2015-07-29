@@ -206,7 +206,7 @@ int BulletScript::lua_setAttachedBulletAcceleration(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
     if(lua_isnumber(L, 2))
-        p->forEach(BulletBase::setAcceleration, lua_tonumber(L, 2));
+        p->forEach(BulletBase::setAccelerateSpeed, lua_tonumber(L, 2));
     return 0;
 }
 

@@ -63,6 +63,28 @@ Entity& Entity::setSpeedRotation(double vel, double angle)
     return *this;
 }
 
+Entity& Entity::setSpeedX(double velX)
+{
+    speedX=velX;
+    correctVelocityAngle();
+    return *this;
+}
+
+Entity& Entity::setSpeedY(double velY)
+{
+    speedY=velY;
+    correctVelocityAngle();
+    return *this;
+}
+
+Entity& Entity::setAxisSpeed(double velX, double velY)
+{
+    speedX=velX;
+    speedY=velY;
+    correctVelocityAngle();
+    return *this;
+}
+
 Entity& Entity::setFacingAngle(double value)
 {
     facingAngle=value;
@@ -127,7 +149,7 @@ double Entity::getRotateSpeed() const
     return rotateSpeed;
 }
 
-Entity& Entity::setAcceleration(double accVel)
+Entity& Entity::setAccelerateSpeed(double accVel)
 {
     accelerateSpeed=accVel;
     return *this;

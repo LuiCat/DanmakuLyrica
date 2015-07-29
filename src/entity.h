@@ -4,6 +4,12 @@
 #include "graphics.h"
 
 #include "sprite.h"
+#include "entityevent.h"
+
+#include <queue>
+using namespace std;
+
+class EntityEvent;
 
 class Entity : public Sprite
 {
@@ -24,6 +30,9 @@ public:
     Entity& setSpeed(double value);
     Entity& setRotation(double value);
     Entity& setSpeedRotation(double vel, double angle);
+    Entity& setSpeedX(double velX);
+    Entity& setSpeedY(double velY);
+    Entity& setAxisSpeed(double velX, double velY);
 
     void correctAxisSpeed();
     void correctVelocityAngle();
@@ -41,8 +50,16 @@ public:
 
     double getAccelerateSpeed() const;
     double getRotateSpeed() const;
-    Entity& setAcceleration(double accVel);
+    Entity& setAccelerateSpeed(double accVel);
     Entity& setRotateSpeed(double rotateVel);
+
+    template <typename Event>
+    inline void pushEvent(const Event& event)
+    {
+        static_assert(std::is_base_of<EntityEvent, Event>::value,
+                      "Parameter of pushEvent(const Event&) is not of subclass of EntityEvent");
+        eventList.push(new Event(event));
+    }
 
     // main method making motions
     Entity& offsetMotion(double secs);
@@ -63,6 +80,8 @@ protected:
     bool forceFacing;    
 
     bool useDefaultMotion;
+
+    priority_queue<EntityEvent*> eventList;
 
     virtual void onUpdateMotion(double deltaSec, double deltaTick);
     virtual void onTick();
