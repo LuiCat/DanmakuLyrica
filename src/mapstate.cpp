@@ -1,13 +1,14 @@
 #include "mapstate.h"
 
 
-MapState::MapState(double _offset, double _bpm) :
-    timeOffset(_offset),
-    beatOffset(0),
-    bpm(_bpm),
-    hs(1.0),
-    measureDiv(4),
-    measureNum(4)
+MapState::MapState(double _offset, double _bpm)
+    :timeOffset(_offset)
+    ,beatOffset(0)
+    ,bpm(_bpm)
+    ,hs(1.0)
+    ,measureDiv(4)
+    ,measureNum(4)
+    ,currentSegment(0)
 {
 
 }
