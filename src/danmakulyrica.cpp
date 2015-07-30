@@ -22,18 +22,6 @@ DanmakuLyrica::DanmakuLyrica()
 
 void DanmakuLyrica::mainInit()
 {
-    char filename[200]="data/stage/test/";
-
-    noteMap.loadTjaFile("data/stage/test/oggtest.lrc");
-
-    bgm.loadWav(strcat(filename, noteMap.getWavFilename()));
-    bgm.setVolume(0.5f);
-
-    noteScene.init();
-    noteScene.setNoteMap(&noteMap);
-    noteScene.reloadNotes();
-
-    mapState=noteMap.getBgmBeginState();
 
     SoundRegistry::newSound("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
     SoundRegistry::newSound("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
@@ -43,16 +31,28 @@ void DanmakuLyrica::mainInit()
     strip.setStripPos(0, 0, 0.5, 0.5);
     strip.setMaxIndex(2, 2);
 
-    script.setTime(mapState.beatOffset);
+    noteMap.loadTjaFile("data/stage/test/oggtest.lrc");
 
+    char stageDir[200]="data/stage/test/";
+    bgm.loadWav(strcat(stageDir, noteMap.getWavFilename()));
+    bgm.setVolume(0.5f);
+
+    mapState=noteMap.getBgmBeginState();
+
+    script.setTime(mapState.beatOffset);
     script.loadScriptFile("data/stage/test/main.lua");
+
+    noteScene.setNoteMap(&noteMap);
+
+    sceneManager.pushScene(&bulletScene);
+    sceneManager.pushScene(&noteScene);
 
 }
 
 void DanmakuLyrica::mainCleanup()
 {
+    sceneManager.clearAllScene();
     bgm.release();
-    noteScene.cleanup();
 }
 
 void DanmakuLyrica::mainUpdate()
@@ -82,8 +82,7 @@ void DanmakuLyrica::mainUpdate()
         {
             newDelta=script.seekNextTask(deltaBeat);
             deltaBeat-=newDelta;
-            noteScene.update(deltaBeat);
-            bulletScene.update(deltaBeat);
+            sceneManager.updateScene(deltaBeat);
             deltaBeat=newDelta;
             if(deltaBeat<=0.0)
                 break;
@@ -126,38 +125,14 @@ void DanmakuLyrica::mainUpdate()
 
 void DanmakuLyrica::mainRender()
 {
-    // render notes
-    d3d.beginScene(&noteSurface);
-    //d3d.beginScene();
-    d3d.pushMatrix();
-    d3d.translate2D(100, 300.0);    
+    // render scenes
+    d3d.beginScene();
 
     d3d.pushMatrix();
-    d3d.setColor(0x00FF00);
-    d3d.vertex( 0.5,  20, 0.0, 0.0);
-    d3d.vertex(-0.5,  20, 1.0, 0.0);
-    d3d.vertex(-0.5, -20, 1.0, 1.0);
-    d3d.vertex( 0.5, -20, 0.0, 1.0);
-    d3d.popMatrix();    
-
-    d3d.pushMatrix();
-    noteScene.render();
+    sceneManager.renderScene();
     d3d.popMatrix();
 
-    d3d.popMatrix();
     d3d.endScene();
-
-    // render bullets
-    d3d.beginScene(&bulletSurface);
-    //d3d.beginScene();
-    d3d.pushMatrix();
-    bulletScene.render();
-    d3d.popMatrix();
-    d3d.endScene();
-
-    // render surfaces
-    noteSurface.present(0, 0);
-    bulletSurface.draw(0, 0);
 
     d3d.present();
 

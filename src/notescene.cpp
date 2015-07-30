@@ -4,12 +4,12 @@ NoteScene::NoteScene()
 {
 }
 
-void NoteScene::init()
+void NoteScene::load()
 {
-
+    reloadNotes();
 }
 
-void NoteScene::cleanup()
+void NoteScene::unload()
 {
     noteList.clearAll();
 }
@@ -21,7 +21,20 @@ void NoteScene::update(double deltaSec)
 
 void NoteScene::render()
 {
+    d3d.pushMatrix();
+    d3d.translate2D(100, 300.0);
+
+    d3d.pushMatrix();
+    d3d.setColor(0x00FF00);
+    d3d.vertex( 0.5,  20, 0.0, 0.0);
+    d3d.vertex(-0.5,  20, 1.0, 0.0);
+    d3d.vertex(-0.5, -20, 1.0, 1.0);
+    d3d.vertex( 0.5, -20, 0.0, 1.0);
+    d3d.popMatrix();
+
     noteList.renderAll();
+
+    d3d.popMatrix();
 }
 
 void NoteScene::setNoteMap(NoteMap* m)

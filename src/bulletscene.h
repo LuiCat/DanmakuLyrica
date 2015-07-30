@@ -4,6 +4,7 @@
 #include "bulletdef.h"
 #include "bullet.h"
 #include "bulletlist.h"
+#include "scene.h"
 
 #include <list>
 #include <set>
@@ -11,7 +12,7 @@
 
 using namespace std;
 
-class BulletScene : public Entity
+class BulletScene : public Scene
 {
 private:
 
@@ -38,10 +39,11 @@ public:
 
     BulletList* getBulletList();
 
-protected:
+    void load();
+    void unload();
 
-    void onUpdateMotion(double deltaSec, double deltaTick);
-    void onRender();
+    void update(double deltaSec);
+    void render();
 
 };
 

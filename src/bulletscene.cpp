@@ -5,19 +5,19 @@
 #include "debug.h"
 
 BulletScene::BulletScene()
-    :Entity()
+    :Scene()
     ,sceneCenterX(WIDTH/2)
     ,sceneCenterY(HEIGHT/2)
     ,sceneWidth(WIDTH)
     ,sceneHeight(HEIGHT)
     ,offsetBorderWidth(50.0)
 {
-    useDefaultTicking=false;
+
 }
 
 BulletScene::~BulletScene()
 {
-    bulletList.clearAll();
+
 }
 
 int BulletScene::pushBullet(const Bullet& bullet)
@@ -48,20 +48,31 @@ int BulletScene::getBulletSize() const
     return bulletList.size();
 }
 
-void BulletScene::onUpdateMotion(double deltaSec, double)
+void BulletScene::load()
+{
+    random.seed();
+    bulletList.clearAll();
+}
+
+void BulletScene::unload()
+{
+    bulletList.clearAll();
+}
+
+void BulletScene::update(double deltaSec)
 {
     bulletList.updateAll(deltaSec);
-
     bulletList.checkOutsideScene(-sceneWidth*0.5-offsetBorderWidth,
                                  -sceneHeight*0.5-offsetBorderWidth,
                                  sceneWidth*0.5+offsetBorderWidth,
                                  sceneHeight*0.5+offsetBorderWidth);
 }
 
-void BulletScene::onRender()
+void BulletScene::render()
 {
     d3d.pushMatrix();
     d3d.translate2D(sceneCenterX, sceneCenterY);
     bulletList.renderAll();
     d3d.popMatrix();
 }
+

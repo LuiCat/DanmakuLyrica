@@ -52,7 +52,9 @@ SOURCES += main.cpp \
     textureregistry.cpp \
     animatedtexture.cpp \
     entityevent.cpp \
-    movement.cpp
+    movement.cpp \
+    scene.cpp \
+    scenemanager.cpp
 
 HEADERS += \
     debug.h \
@@ -104,7 +106,9 @@ HEADERS += \
     textureregistry.h \
     animatedtexture.h \
     entityevent.h \
-    movement.h
+    movement.h \
+    scene.h \
+    scenemanager.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

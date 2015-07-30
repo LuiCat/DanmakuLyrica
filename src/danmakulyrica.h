@@ -13,6 +13,7 @@
 
 #include "bulletscene.h"
 #include "bulletscript.h"
+#include "scenemanager.h"
 
 class DanmakuLyrica : public MainGame
 {
@@ -39,6 +40,8 @@ private:
     StreamBuffer bgm;
 
     BulletScene bulletScene;
+
+    SceneManager sceneManager;
 
     BulletScript script;
 

@@ -3,15 +3,16 @@
 
 #include "notelist.h"
 #include "notemap.h"
+#include "scene.h"
 
-class NoteScene
+class NoteScene : public Scene
 {
 public:
 
     NoteScene();
 
-    void init();
-    void cleanup();
+    void load();
+    void unload();
 
     void update(double deltaSec);
     void render();
