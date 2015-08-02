@@ -14,8 +14,15 @@ public:
     void setTickRate(double ticksPerSec);
     void setTickSec(double secsPerTick);
 
-    int getTick() const;
-    double getTimeSec() const;
+    inline int getTick() const
+    {
+        return tick;
+    }
+
+    inline double getTimeSec() const
+    {
+        return timeSec;
+    }
 
     // update and do ticks
     void update(double deltaSec);

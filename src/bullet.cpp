@@ -1,5 +1,6 @@
 #include "bullet.h"
 #include "bulletscene.h"
+#include "movement.h"
 
 #include "mathhelper.h"
 #include "debug.h"

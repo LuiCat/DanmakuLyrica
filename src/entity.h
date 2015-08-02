@@ -61,6 +61,14 @@ public:
         eventList.push(new Event(event));
     }
 
+    template <typename Event, typename ...Args>
+    void pushEvent(Args ...args)
+    {
+        static_assert(std::is_base_of<EntityEvent, Event>::value,
+                      "Parameter of pushEvent(Args ...args) is not of subclass of EntityEvent");
+        eventList.push(new Event(args...));
+    }
+
     // main method making motions
     Entity& offsetMotion(double secs);
 

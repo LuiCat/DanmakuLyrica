@@ -272,6 +272,15 @@ Entity::~Entity()
 
 void Entity::onUpdateMotion(double deltaSec, double)
 {
+    EntityEvent* p;
+    while(!eventList.empty())
+    {
+        p=eventList.top();
+        deltaSec=p->process(this, deltaSec);
+        if(!p->isProcessed())
+            break;
+        eventList.pop();
+    }
     offsetMotion(deltaSec);
 }
 

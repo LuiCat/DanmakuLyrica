@@ -13,7 +13,7 @@ public:
         axisspeed, xspeed, yspeed, acceleration, rotatespeed, facing
     };
 
-    Movement(double time, MoveType type=none, bool relative=false, double param1=0, double param2=0);
+    Movement(double time, MoveType type=none, bool relative=false, double param1=0.0, double param2=0.0);
 
 protected:
 

@@ -130,16 +130,6 @@ void Ticking::setTickSec(double secsPerTick)
     tickRate=1.0/tickSec;
 }
 
-int Ticking::getTick() const
-{
-    return tick;
-}
-
-double Ticking::getTimeSec() const
-{
-    return timeSec;
-}
-
 void Ticking::onTick() {}
 
 void Ticking::onUpdateMotion(double, double) {}

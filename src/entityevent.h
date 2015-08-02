@@ -19,6 +19,16 @@ public:
 
     EntityEvent(double processTime);
 
+    inline operator double() const
+    {
+        return processTime;
+    }
+
+    inline bool operator <(const EntityEvent& e) const
+    {
+        return e.processTime<processTime;
+    }
+
     double process(Entity* entity, double deltaTime=M_DINF);
 
     inline bool isProcessed() const
