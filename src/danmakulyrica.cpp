@@ -23,8 +23,8 @@ DanmakuLyrica::DanmakuLyrica()
 void DanmakuLyrica::mainInit()
 {
 
-    SoundRegistry::newSound("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
-    SoundRegistry::newSound("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
+    SoundRegistry::createSound("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
+    SoundRegistry::createSound("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
 
     createTexture("data/tex.png", &tex);
     strip.setTexture(tex);

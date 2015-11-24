@@ -9,6 +9,8 @@
 #include <list>
 using namespace std;
 
+class SoundBuffer;
+
 struct LuaTask
 {
     lua_State* luaThread;
@@ -19,11 +21,13 @@ struct LuaTask
     double angle;
     int bulletType;
 
+    SoundBuffer* sound;
+
     set<int> attachList;
 
     /*
      * todo:
-     * bullet type, sound type, etc.
+     * no more todos yet.
      */
 
     LuaTask();

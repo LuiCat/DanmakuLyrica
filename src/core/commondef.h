@@ -2,6 +2,7 @@
 #define COMMONDEF_H
 
 #include <windows.h>
+#include <cassert>
 
 #define WINDOWED
 
@@ -16,5 +17,7 @@
 #define MAX_UNUPDATED_FRAME 5
 
 #define UNUSED(x) (void)(x)
+
+#define LYRICA_ASSERT(x) assert(x)
 
 #endif // COMMONDEF_H

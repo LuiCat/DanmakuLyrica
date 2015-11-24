@@ -15,11 +15,17 @@ private:
 
     void registerLuaFuncs();
 
+    static int lua_loadStream(lua_State* L);
+    static int lua_loadSound(lua_State* L);
+    static int lua_playSound(lua_State* L);
+    static int lua_playSoundPitch(lua_State* L);
+
     static int lua_registerBullet(lua_State* L);
     static int lua_pushBullet(lua_State* L);
     static int lua_setCenter(lua_State* L);
     static int lua_setAngle(lua_State* L);
     static int lua_setBulletType(lua_State* L);
+    static int lua_setSound(lua_State* L);
 
     static int lua_attachAlloc(lua_State* L);
     static int lua_attachBullet(lua_State* L);

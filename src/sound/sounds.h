@@ -26,6 +26,8 @@ protected:
     DWORD playFlag;
     DWORD loadFlag;
 
+    bool pitchChanged;
+
     static bool loadWavFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format);
     static bool loadOggFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format);
 
@@ -57,6 +59,9 @@ public:
 
     virtual void setTime(double timeSec);
     virtual double getTime() const;
+
+    virtual void setPitch(double pitch);
+    void resetPitch();
 
     void setVolume(long volume);
     void setVolume(float volume);

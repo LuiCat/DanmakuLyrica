@@ -17,7 +17,7 @@ HRESULT Sound_Init(HWND hWnd)
 {
     HRESULT hr;
     DirectSoundCreate8(NULL, &lpDirectSound, NULL);
-    hr = lpDirectSound->SetCooperativeLevel(hWnd, DSSCL_PRIORITY);
+    hr = lpDirectSound->SetCooperativeLevel(hWnd, DSSCL_EXCLUSIVE /*DSSCL_PRIORITY*/);
     if(FAILED(hr))
         return hr;
     return S_OK;
@@ -239,7 +239,8 @@ SoundBuffer::SoundBuffer()
     ,buffer(0)
     ,bufferSize(0)
     ,playFlag(0)
-    ,loadFlag(DSBCAPS_GLOBALFOCUS|DSBCAPS_CTRLPAN|DSBCAPS_CTRLVOLUME)//DSBCAPS_CTRLFREQUENCY
+    ,loadFlag(DSBCAPS_GLOBALFOCUS|DSBCAPS_CTRLPAN|DSBCAPS_CTRLVOLUME|DSBCAPS_CTRLFREQUENCY)//DSBCAPS_CTRLFREQUENCY
+    ,pitchChanged(false)
 {
     memset(&waveFormat, 0, sizeof(waveFormat));
 }
@@ -315,6 +316,22 @@ void SoundBuffer::setTime(double timeSec)
 double SoundBuffer::getTime() const
 {
     return (double)getPos() / waveFormat.nAvgBytesPerSec;
+}
+
+void SoundBuffer::setPitch(double pitch)
+{
+    if(!isAvailable())return;
+    buffer->SetFrequency(waveFormat.nSamplesPerSec * pitch);
+    pitchChanged = true;
+}
+
+void SoundBuffer::resetPitch()
+{
+    if(pitchChanged)
+    {
+        setPitch(1.0);
+        pitchChanged = false;
+    }
 }
 
 void SoundBuffer::setVolume(long volume)
@@ -419,11 +436,14 @@ bool StreamBuffer::onLoad(LPDIRECTSOUNDBUFFER primaryBuffer)
 
 void StreamBuffer::prepareBuffer()
 {
+    // This has moved into StreamBuffer::copyBuffer
+    /*
     if(currentMemPos>=m_size)
     {
         stop();
         return;
     }
+    */
 
     HRESULT hr;
 
@@ -470,6 +490,9 @@ void StreamBuffer::prepareBuffer()
 void StreamBuffer::copyBuffer(void* buffer, DWORD size)
 {
     ZeroMemory(buffer, size);
+
+    if(currentMemPos >= m_size)
+        return;
 
     DWORD tempBufferSize;
     char* cBuffer=(char*)buffer;

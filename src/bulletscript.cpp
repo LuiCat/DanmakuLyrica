@@ -5,14 +5,21 @@
 #include "debug.h"
 #include "functionevent.h"
 #include "movement.h"
+#include "soundregistry.h"
 
 void BulletScript::registerLuaFuncs()
 {
-    registerFunc("registerBullet", lua_registerBullet);
-    registerFunc("pushBullet", lua_pushBullet);
-    registerFunc("setCenter", lua_setCenter);
-    registerFunc("setAngle", lua_setAngle);
-    registerFunc("setBulletType", lua_setBulletType);
+    registerFuncName(loadStream);
+    registerFuncName(loadSound);
+    registerFuncName(playSound);
+    registerFuncName(playSoundPitch);
+
+    registerFuncName(registerBullet);
+    registerFuncName(pushBullet);
+    registerFuncName(setCenter);
+    registerFuncName(setAngle);
+    registerFuncName(setBulletType);
+    registerFuncName(setSound);
 
     lua_createtable(luaState, 0, 8);
     registerTableFunc("alloc", lua_attachAlloc);
@@ -29,6 +36,99 @@ void BulletScript::registerLuaFuncs()
     lua_setglobal(luaState, "Attach");
 }
 
+int BulletScript::lua_loadStream(lua_State* L)
+{
+    if(!lua_isstring(L, 1))
+        return 0;
+
+    int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 1));
+    char* buffer = new char[buflen+1];
+    strcpy(buffer, inst()->getCurrentPath());
+    strcat(buffer, lua_tostring(L, 1));
+
+    double vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0);
+    const char* name=(lua_isstring(L, 2) ? lua_tostring(L, 2) : 0);
+
+    int id=SoundRegistry::createSound<StreamBuffer>(name, buffer, vol);
+    lua_pushinteger(L, id);
+
+    return 1;
+}
+
+int BulletScript::lua_loadSound(lua_State* L)
+{
+    if(!lua_isstring(L, 1))
+        return 0;
+
+    int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 1));
+    char* buffer = new char[buflen+1];
+    strcpy(buffer, inst()->getCurrentPath());
+    strcat(buffer, lua_tostring(L, 1));
+
+    double vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0);
+    const char* name=(lua_isstring(L, 2) ? lua_tostring(L, 2) : 0);
+
+    int id=SoundRegistry::createSound<SoundBuffer>(name, buffer, vol);
+    lua_pushinteger(L, id);
+
+    return 1;
+}
+
+int BulletScript::lua_playSound(lua_State* L)
+{
+    SoundBuffer* sound=0;
+    if(lua_gettop(L)==0)
+    {
+        sound=inst()->currentTask->sound;
+    }
+    else if(lua_isstring(L, 1))
+    {
+        sound=SoundRegistry::get(lua_tostring(L, 1));
+    }
+    else if(lua_isnumber(L, 1))
+    {
+        sound=SoundRegistry::get(lua_tonumber(L, 1));
+    }
+
+    if(sound)
+    {
+        sound->resetPitch();
+        sound->play(true);
+    }
+    return 0;
+}
+
+int BulletScript::lua_playSoundPitch(lua_State* L)
+{
+    if(!lua_isnumber(L, -1))
+        return 0;
+
+    SoundBuffer* sound=0;
+    int top = lua_gettop(L);
+    if(top==1)
+    {
+        sound=inst()->currentTask->sound;
+    }
+    else if(top==2)
+    {
+        if(lua_isstring(L, 1))
+        {
+            sound=SoundRegistry::get(lua_tostring(L, 1));
+        }
+        else if(lua_isnumber(L, 1))
+        {
+            sound=SoundRegistry::get(lua_tonumber(L, 1));
+        }
+    }
+
+    if(sound)
+    {
+        sound->setPitch(lua_tonumber(L, -1));
+        sound->play(true);
+    }
+    return 0;
+}
+
 int BulletScript::lua_registerBullet(lua_State* L)
 {
     if(lua_gettop(L)!=10)return 0;
@@ -36,11 +136,13 @@ int BulletScript::lua_registerBullet(lua_State* L)
     if(!lua_isstring(L, 1))return 0;
 
     BulletType type;
-    char buffer[256];
     const char *str;
 
+    int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 2));
+    char* buffer = new char[buflen+1];
     strcpy(buffer, inst()->getCurrentPath());
     strcat(buffer, lua_tostring(L, 2));
+
     type.texture=0;
     DWORD r;
     if((r=createTexture(buffer, &type.texture))!=D3D_OK)
@@ -117,6 +219,9 @@ int BulletScript::lua_pushBullet(lua_State* L)
 
     lua_pushinteger(L, inst()->scene->pushBullet(x, y, sp, rt, type));
 
+    if(task->sound)
+        task->sound->play(true);
+
     return 1;
 }
 
@@ -145,6 +250,30 @@ int BulletScript::lua_setBulletType(lua_State* L)
         task->bulletType=lua_tointeger(L, 1);
     else if(lua_isstring(L, 1))
         task->bulletType=BULLET(lua_tostring(L, 1));
+    return 0;
+}
+
+int BulletScript::lua_setSound(lua_State* L)
+{
+    LuaTask* task=inst()->currentTask;
+    if(lua_gettop(L) == 0)
+    {
+        task->sound=0;
+        return 0;
+    }
+    SoundBuffer* sound=0;
+    if(lua_isnumber(L, 1))
+    {
+        sound=SoundRegistry::get(lua_tointeger(L, 1));
+    }
+    else if(lua_isstring(L, 1))
+    {
+        sound=SoundRegistry::get(lua_tostring(L, 1));
+    }
+    if(sound)
+    {
+        task->sound=sound;
+    }
     return 0;
 }
 

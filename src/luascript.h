@@ -7,6 +7,8 @@ class LuaScript;
 
 #define lua_tableregister(L,n,f) (lua_pushstring(L,n),lua_pushcfunction(L,f),lua_settable(L,-3))
 
+#define registerFuncName(n) LuaScript::registerFunc(#n,lua_##n)
+
 typedef int (*LuaFunc)(lua_State*);
 
 class LuaScript

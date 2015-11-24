@@ -27,9 +27,10 @@ public:
 
     int registerName(const char *name, const T *info)
     {
-        if(!info||strlen(name)<1)return 0;
+        if(!info)return 0;
         ++lastRegisteredId;
-        typeNameMap[string(name)]=lastRegisteredId;
+        if(name && strlen(name)>0)
+            typeNameMap[string(name)]=lastRegisteredId;
         typeInfoList[lastRegisteredId]=*info;
         return lastRegisteredId;
     }

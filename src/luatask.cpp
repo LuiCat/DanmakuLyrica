@@ -8,6 +8,7 @@ LuaTask::LuaTask()
     ,centerY(0.0)
     ,angle(0.0)
     ,bulletType(0)
+    ,sound(0)
 {
 
 }
@@ -20,6 +21,7 @@ LuaTask::LuaTask(lua_State* thread, int ref, double beginTime, const LuaTask* ce
     ,centerY(0.0)
     ,angle(0.0)
     ,bulletType(0)
+    ,sound(0)
 {
     if(center)
     {
