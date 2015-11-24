@@ -54,7 +54,8 @@ SOURCES += main.cpp \
     entityevent.cpp \
     movement.cpp \
     scene.cpp \
-    scenemanager.cpp
+    scenemanager.cpp \
+    functionevent.cpp
 
 HEADERS += \
     debug.h \
@@ -108,7 +109,8 @@ HEADERS += \
     entityevent.h \
     movement.h \
     scene.h \
-    scenemanager.h
+    scenemanager.h \
+    functionevent.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \
