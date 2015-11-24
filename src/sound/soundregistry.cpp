@@ -12,13 +12,13 @@ void SoundRegistry::newSound(const char *name, bool isStream, const char *filena
     if(isStream)
     {
         StreamBuffer b;
-        b.loadWavVol(filename, volume);
+        b.loadVol(filename, volume);
         reg(name, &b);
     }
     else
     {
         SoundBuffer b;
-        b.loadWavVol(filename, volume);
+        b.loadVol(filename, volume);
         reg(name, &b);
     }
 }

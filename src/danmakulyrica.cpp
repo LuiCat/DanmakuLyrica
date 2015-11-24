@@ -34,7 +34,7 @@ void DanmakuLyrica::mainInit()
     noteMap.loadTjaFile("data/stage/test/oggtest.lrc");
 
     char stageDir[200]="data/stage/test/";
-    bgm.loadWav(strcat(stageDir, noteMap.getWavFilename()));
+    bgm.load(strcat(stageDir, noteMap.getWavFilename()));
     bgm.setVolume(0.5f);
 
     mapState=noteMap.getBgmBeginState();

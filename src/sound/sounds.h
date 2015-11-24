@@ -62,11 +62,11 @@ public:
     void setVolume(float volume);
     void setPan(long pan);
 
-    virtual bool loadWav(const char *filename);
+    virtual bool load(const char *filename);
 
-    inline bool loadWavVol(const char *filename, float volume)
+    inline bool loadVol(const char *filename, float volume)
 	{
-        if (!loadWav(filename))return false;
+        if (!load(filename))return false;
         setVolume(volume);
         return true;
 	}

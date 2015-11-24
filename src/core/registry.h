@@ -34,19 +34,19 @@ public:
         return lastRegisteredId;
     }
 
-    int operator()(const char *name, const T *info)
+    inline int operator()(const char *name, const T *info)
     {
         return registerName(name, info);
     }
 
-    int getId(const char *typeName)
+    inline int getId(const char *typeName)
     {
         string str(typeName);
         if(typeNameMap.find(str)==typeNameMap.end())return 0;
         return typeNameMap[str];
     }
 
-    T* getInfo(int id)
+    inline T* getInfo(int id)
     {
         if(typeInfoList.find(id)==typeInfoList.end())
             return 0;

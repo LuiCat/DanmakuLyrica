@@ -129,8 +129,9 @@ DISTFILES += \
 
 INCLUDEPATH += \
     graphics \
+    sound \
+    keybinding \
     core \
     entity \
     scene \
-    script \
-    keybinding
+    script

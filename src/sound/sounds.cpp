@@ -170,7 +170,7 @@ bool SoundBuffer::loadOggFile(const char* filename, char** memout, DWORD* memsiz
     return true;
 }
 
-bool SoundBuffer::loadWav(const char *filename)
+bool SoundBuffer::load(const char *filename)
 {
     if(isAvailable())
         release();
