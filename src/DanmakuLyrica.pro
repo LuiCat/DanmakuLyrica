@@ -16,7 +16,10 @@ SOURCES += main.cpp \
     graphics/gfxresource.cpp \
     graphics/rendersurface.cpp \
     graphics/rendertarget.cpp \
-    graphics/rendertexture.cpp\
+    graphics/rendertexture.cpp \
+    sound/soundregistry.cpp \
+    sound/sounds.cpp \
+    keybinding/keybinding.cpp \
     core/registry.cpp \
     core/timeline.cpp \
     core/ticking.cpp \
@@ -33,8 +36,6 @@ SOURCES += main.cpp \
     scene/scene.cpp \
     scene/scenemanager.cpp \
     animatedtexture.cpp \
-    soundregistry.cpp \
-    sounds.cpp \
     maingame.cpp \
     danmakulyrica.cpp \
     luascript.cpp \
@@ -44,7 +45,6 @@ SOURCES += main.cpp \
     notelist.cpp \
     notejudge.cpp \
     mapstate.cpp \
-    keybinding.cpp \
     texturestrip.cpp \
     notemap.cpp \
     bullet.cpp \
@@ -66,7 +66,10 @@ HEADERS += \
     graphics/gfxresource.h \
     graphics/rendersurface.h \
     graphics/rendertarget.h \
-    graphics/rendertexture.h\
+    graphics/rendertexture.h \
+    sound/soundregistry.h \
+    sound/sounds.h \
+    keybinding/keybinding.h \
     core/debug.h \
     core/commondef.h \
     core/mathhelper.h \
@@ -84,8 +87,6 @@ HEADERS += \
     entity/functionevent.h \
     scene/scene.h \
     scene/scenemanager.h \
-    soundregistry.h \
-    sounds.h \
     maingame.h \
     danmakulyrica.h \
     luascript.h \
@@ -97,7 +98,6 @@ HEADERS += \
     notejudge.h \
     mapstate.h \
     timeline.h \
-    keybinding.h \
     texturestrip.h \
     notemap.h \
     bullet.h \
@@ -132,4 +132,5 @@ INCLUDEPATH += \
     core \
     entity \
     scene \
-    script
+    script \
+    keybinding
