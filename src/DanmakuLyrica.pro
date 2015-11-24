@@ -10,38 +10,6 @@ QMAKE_CFLAGS_RELEASE += -O2
 DEFINES -= UNICODE
 
 SOURCES += main.cpp \
-    entity.cpp \
-    object.cpp \
-    position.cpp \
-    registry.cpp \
-    soundregistry.cpp \
-    sounds.cpp \
-    ticking.cpp \
-    maingame.cpp \
-    danmakulyrica.cpp \
-    luascript.cpp \
-    entitylist.cpp \
-    segment.cpp \
-    noteentity.cpp \
-    notescene.cpp \
-    notelist.cpp \
-    notejudge.cpp \
-    mapstate.cpp \
-    timeline.cpp \
-    keybinding.cpp \
-    texturestrip.cpp \
-    notemap.cpp \
-    bullet.cpp \
-    bulletscene.cpp \
-    sprite.cpp \
-    beatticking.cpp \
-    luatask.cpp \
-    bulletbase.cpp \
-    bulletlist.cpp \
-    entityattachlist.cpp \
-    bulletattachlist.cpp \
-    luatimeline.cpp \
-    bulletscript.cpp \
     graphics/gfxcore.cpp \
     graphics/textrenderer.cpp \
     graphics/vertexbuffer.cpp \
@@ -49,32 +17,80 @@ SOURCES += main.cpp \
     graphics/rendersurface.cpp \
     graphics/rendertarget.cpp \
     graphics/rendertexture.cpp\
-    textureregistry.cpp \
+    core/registry.cpp \
+    core/timeline.cpp \
+    core/ticking.cpp \
+    core/beatticking.cpp \
+    entity/entity.cpp \
+    entity/object.cpp \
+    entity/position.cpp \
+    entity/entitylist.cpp \
+    entity/sprite.cpp \
+    entity/entityattachlist.cpp \
+    entity/entityevent.cpp \
+    entity/movement.cpp \
+    entity/functionevent.cpp \
+    scene/scene.cpp \
+    scene/scenemanager.cpp \
     animatedtexture.cpp \
-    entityevent.cpp \
-    movement.cpp \
-    scene.cpp \
-    scenemanager.cpp \
-    functionevent.cpp
+    soundregistry.cpp \
+    sounds.cpp \
+    maingame.cpp \
+    danmakulyrica.cpp \
+    luascript.cpp \
+    segment.cpp \
+    noteentity.cpp \
+    notescene.cpp \
+    notelist.cpp \
+    notejudge.cpp \
+    mapstate.cpp \
+    keybinding.cpp \
+    texturestrip.cpp \
+    notemap.cpp \
+    bullet.cpp \
+    bulletscene.cpp \
+    luatask.cpp \
+    bulletbase.cpp \
+    bulletlist.cpp \
+    bulletattachlist.cpp \
+    luatimeline.cpp \
+    bulletscript.cpp \
+    textureregistry.cpp
 
 HEADERS += \
-    debug.h \
-    graphics.h \
-    entity.h \
-    mathhelper.h \
-    position.h \
-    registry.h \
+    graphics/graphics.h \
+    graphics/gfxcore.h \
+    graphics/gfxdef.h \
+    graphics/textrenderer.h \
+    graphics/vertexbuffer.h \
+    graphics/gfxresource.h \
+    graphics/rendersurface.h \
+    graphics/rendertarget.h \
+    graphics/rendertexture.h\
+    core/debug.h \
+    core/commondef.h \
+    core/mathhelper.h \
+    core/registry.h \
+    core/ticking.h \
+    core/beatticking.h \
+    entity/object.h \
+    entity/entity.h \
+    entity/position.h \
+    entity/entitylist.h \
+    entity/sprite.h \
+    entity/entityattachlist.h \
+    entity/entityevent.h \
+    entity/movement.h \
+    entity/functionevent.h \
+    scene/scene.h \
+    scene/scenemanager.h \
     soundregistry.h \
     sounds.h \
-    ticking.h \
-    object.h \
     maingame.h \
     danmakulyrica.h \
     luascript.h \
-    entitylist.h \
     segment.h \
     notedef.h \
-    commondef.h \
     noteentity.h \
     notescene.h \
     notelist.h \
@@ -87,30 +103,14 @@ HEADERS += \
     bullet.h \
     bulletscene.h \
     luatask.h \
-    sprite.h \
-    beatticking.h \
     bulletdef.h \
     bulletbase.h \
     bulletlist.h \
-    entityattachlist.h \
     bulletattachlist.h \
     luatimeline.h \
     bulletscript.h \
-    graphics/gfxcore.h \
-    graphics/gfxdef.h \
-    graphics/textrenderer.h \
-    graphics/vertexbuffer.h \
-    graphics/gfxresource.h \
-    graphics/rendersurface.h \
-    graphics/rendertarget.h \
-    graphics/rendertexture.h\
     textureregistry.h \
-    animatedtexture.h \
-    entityevent.h \
-    movement.h \
-    scene.h \
-    scenemanager.h \
-    functionevent.h
+    animatedtexture.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \
@@ -126,3 +126,10 @@ LIBS += $$PWD/lua/lua.a \
 
 DISTFILES += \
     todo.txt
+
+INCLUDEPATH += \
+    graphics \
+    core \
+    entity \
+    scene \
+    script
