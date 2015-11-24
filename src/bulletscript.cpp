@@ -3,6 +3,8 @@
 #include "luatask.h"
 
 #include "debug.h"
+#include "functionevent.h"
+#include "movement.h"
 
 void BulletScript::registerLuaFuncs()
 {
@@ -179,58 +181,133 @@ int BulletScript::lua_clearAttach(lua_State* L)
 int BulletScript::lua_setAttachedBulletPosition(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
-    if(lua_isnumber(L, 2))
-        p->forEach(BulletBase::setX, lua_tonumber(L, 2));
-    if(lua_isnumber(L, 3))
-        p->forEach(BulletBase::setY, lua_tonumber(L, 3));
+    if(lua_isnumber(L, 4))
+    {
+        double delay=lua_tonumber(L, 4);
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::posx, false, lua_tonumber(L, 2));
+            });
+        if(lua_isnumber(L, 3))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::posy, false, lua_tonumber(L, 2));
+            });
+    }
+    else
+    {
+        if(lua_isnumber(L, 2))
+            p->forEach(BulletBase::setX, lua_tonumber(L, 2));
+        if(lua_isnumber(L, 3))
+            p->forEach(BulletBase::setY, lua_tonumber(L, 3));
+    }
     return 0;
 }
 
 int BulletScript::lua_setAttachedBulletRotation(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
-    if(lua_isnumber(L, 2))
-        p->forEach(BulletBase::setRotation, rad(lua_tonumber(L, 2)));
+    if(lua_isnumber(L, 3))
+    {
+        double delay=lua_tonumber(L, 3);
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::angle, false, rad(lua_tonumber(L, 2)));
+            });
+    }
+    else
+    {
+        if(lua_isnumber(L, 2))
+            p->forEach(BulletBase::setRotation, rad(lua_tonumber(L, 2)));
+    }
     return 0;
 }
 
 int BulletScript::lua_setAttachedBulletSpeed(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
-    if(lua_isnumber(L, 2))
-        p->forEach(BulletBase::setSpeed, lua_tonumber(L, 2));
+    if(lua_isnumber(L, 3))
+    {
+        double delay=lua_tonumber(L, 3);
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::speed, false, rad(lua_tonumber(L, 2)));
+            });
+    }
+    else
+    {
+        if(lua_isnumber(L, 2))
+            p->forEach(BulletBase::setSpeed, lua_tonumber(L, 2));
+    }
     return 0;
 }
 
 int BulletScript::lua_setAttachedBulletAcceleration(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
-    if(lua_isnumber(L, 2))
-        p->forEach(BulletBase::setAccelerateSpeed, lua_tonumber(L, 2));
+    if(lua_isnumber(L, 3))
+    {
+        double delay=lua_tonumber(L, 3);
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::acceleration, false, lua_tonumber(L, 2));
+            });
+    }
+    else
+    {
+        if(lua_isnumber(L, 2))
+            p->forEach(BulletBase::setAccelerateSpeed, lua_tonumber(L, 2));
+    }
     return 0;
 }
 
 int BulletScript::lua_setAttachedBulletRotateSpeed(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
-    if(lua_isnumber(L, 2))
-        p->forEach(BulletBase::setRotateSpeed, rad(lua_tonumber(L, 2)));
+    if(lua_isnumber(L, 3))
+    {
+        double delay=lua_tonumber(L, 3);
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::rotatespeed, false, rad(lua_tonumber(L, 2)));
+            });
+    }
+    else
+    {
+        if(lua_isnumber(L, 2))
+            p->forEach(BulletBase::setRotateSpeed, rad(lua_tonumber(L, 2)));
+    }
     return 0;
 }
 
 int BulletScript::lua_setAttachedBulletPositionOffset(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
-    int t;
-    if(lua_isnumber(L, 2))
+    if(lua_isnumber(L, 4))
     {
-        t=lua_tonumber(L, 2);
-        p->forEach([t](BulletBase& b){b.setX(b.getX()+t);});
+        double delay=lua_tonumber(L, 4);
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::posx, true, lua_tonumber(L, 2));
+            });
+        if(lua_isnumber(L, 3))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::posy, true, lua_tonumber(L, 2));
+            });
     }
-    if(lua_isnumber(L, 3))
+    else
     {
-        t=lua_tonumber(L, 3);
-        p->forEach([t](BulletBase& b){b.setY(b.getY()+t);});
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b){b.setX(b.getX()+lua_tonumber(L, 2));});
+        if(lua_isnumber(L, 3))
+            p->forEach([&](BulletBase& b){b.setY(b.getY()+lua_tonumber(L, 3));});
     }
     return 0;
 }
@@ -238,16 +315,40 @@ int BulletScript::lua_setAttachedBulletPositionOffset(lua_State* L)
 int BulletScript::lua_setAttachedBulletRotationOffset(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
-    if(lua_isnumber(L, 2))
-        p->forEach(BulletBase::setRotationOffset, rad(lua_tonumber(L, 2)));
+    if(lua_isnumber(L, 3))
+    {
+        double delay=lua_tonumber(L, 3);
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::angle, true, rad(lua_tonumber(L, 2)));
+            });
+    }
+    else
+    {
+        if(lua_isnumber(L, 2))
+            p->forEach(BulletBase::setRotationOffset, rad(lua_tonumber(L, 2)));
+    }
     return 0;
 }
 
 int BulletScript::lua_setAttachedBulletSpeedOffset(lua_State* L)
 {
     BulletAttachList* p=READYLIST;
-    if(lua_isnumber(L, 2))
-        p->forEach(BulletBase::setSpeedOffset, lua_tonumber(L, 2));
+    if(lua_isnumber(L, 3))
+    {
+        double delay=lua_tonumber(L, 3);
+        if(lua_isnumber(L, 2))
+            p->forEach([&](BulletBase& b)
+            {
+                b.pushEvent<Movement>(delay, Movement::speed, true, lua_tonumber(L, 2));
+            });
+    }
+    else
+    {
+        if(lua_isnumber(L, 2))
+            p->forEach(BulletBase::setSpeedOffset, lua_tonumber(L, 2));
+    }
     return 0;
 }
 
