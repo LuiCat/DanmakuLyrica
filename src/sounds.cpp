@@ -146,7 +146,7 @@ bool SoundBuffer::loadOggFile(const char* filename, char** memout, DWORD* memsiz
     wfmtx.cbSize=0;
 
     int current_section;
-    int remainSize=2*vi->rate*(int)ov_pcm_total(&vorbisFile, -1);
+    int remainSize=2*vi->channels*(int)ov_pcm_total(&vorbisFile, -1);
     int readSize;
     char* p=new char[remainSize];
 
