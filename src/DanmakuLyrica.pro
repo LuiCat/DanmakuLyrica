@@ -110,7 +110,8 @@ HEADERS += \
     luatimeline.h \
     bulletscript.h \
     textureregistry.h \
-    animatedtexture.h
+    animatedtexture.h \
+    bullettype.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

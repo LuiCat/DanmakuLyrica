@@ -4,29 +4,11 @@
 #include "bulletdef.h"
 
 #include "bulletbase.h"
+#include "bullettype.h"
 #include "graphics.h"
 #include "registry.h"
 
 #define BULLET(x) (Bullet::reg.getId(x))
-
-struct BulletType
-{
-    Texture texture;
-    double sizeX, sizeY;
-    double centerX, centerY;
-
-    enum FacingType
-    {
-        none, forward, spin
-    }facingType;
-
-    enum JudgeType
-    {
-        round, rect, oval
-    }judgeType;
-
-    double judgeSizeX, judgeSizeY;
-};
 
 class Bullet : public BulletBase
 {
