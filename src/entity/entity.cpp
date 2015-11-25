@@ -280,6 +280,7 @@ void Entity::onUpdateMotion(double deltaSec, double)
         if(!p->isProcessed())
             break;
         eventList.pop();
+        delete p;
     }
     offsetMotion(deltaSec);
 }
