@@ -1,7 +1,7 @@
 #ifndef ENTITYEVENT_H
 #define ENTITYEVENT_H
 
-#include "entity.h"
+//#include "entity.h"
 #include "mathhelper.h"
 
 class Entity;
@@ -35,6 +35,17 @@ public:
     {
         return processed;
     }
+
+    class PointerLess
+    {
+    public:
+        inline bool operator()(const EntityEvent* x, const EntityEvent* y) const
+        {
+            if(x && y)
+                return *x < *y;
+            return !x;
+        }
+    };
 
 };
 

@@ -89,7 +89,9 @@ protected:
 
     bool useDefaultMotion;
 
-    priority_queue<EntityEvent*> eventList;
+    typedef priority_queue<EntityEvent*, vector<EntityEvent*>, EntityEvent::PointerLess> EventQueue;
+
+    EventQueue eventList;
 
     virtual void onUpdateMotion(double deltaSec, double deltaTick);
     virtual void onTick();

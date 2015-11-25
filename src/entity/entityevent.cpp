@@ -1,5 +1,5 @@
 #include "entityevent.h"
-
+#include "entity.h"
 
 EntityEvent::EntityEvent(double processTime)
     :processTime(processTime)

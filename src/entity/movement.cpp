@@ -1,5 +1,5 @@
 #include "movement.h"
-
+#include "entity.h"
 
 Movement::Movement(double time, Movement::MoveType type, bool relative, double param1, double param2)
     :EntityEvent(time)
