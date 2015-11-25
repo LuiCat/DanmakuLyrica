@@ -25,10 +25,8 @@ SOURCES += main.cpp \
     core/ticking.cpp \
     core/beatticking.cpp \
     entity/entity.cpp \
-    entity/object.cpp \
     entity/position.cpp \
     entity/entitylist.cpp \
-    entity/sprite.cpp \
     entity/entityattachlist.cpp \
     entity/entityevent.cpp \
     entity/movement.cpp \
@@ -55,7 +53,9 @@ SOURCES += main.cpp \
     bulletattachlist.cpp \
     luatimeline.cpp \
     bulletscript.cpp \
-    textureregistry.cpp
+    textureregistry.cpp \
+    entity/renderobject.cpp \
+    entity/sprite.cpp
 
 HEADERS += \
     graphics/graphics.h \
@@ -76,11 +76,9 @@ HEADERS += \
     core/registry.h \
     core/ticking.h \
     core/beatticking.h \
-    entity/object.h \
     entity/entity.h \
     entity/position.h \
     entity/entitylist.h \
-    entity/sprite.h \
     entity/entityattachlist.h \
     entity/entityevent.h \
     entity/movement.h \
@@ -111,7 +109,9 @@ HEADERS += \
     bulletscript.h \
     textureregistry.h \
     animatedtexture.h \
-    bullettype.h
+    bullettype.h \
+    entity/renderobject.h \
+    entity/sprite.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

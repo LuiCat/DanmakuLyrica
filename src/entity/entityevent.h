@@ -18,6 +18,7 @@ protected:
 public:
 
     EntityEvent(double processTime);
+    virtual ~EntityEvent();
 
     inline operator double() const
     {

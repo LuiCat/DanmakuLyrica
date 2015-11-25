@@ -3,7 +3,7 @@
 
 #include "graphics.h"
 
-#include "sprite.h"
+#include "renderobject.h"
 #include "entityevent.h"
 
 #include <queue>
@@ -11,7 +11,7 @@ using namespace std;
 
 class EntityEvent;
 
-class Entity : public Sprite
+class Entity : public RenderObject
 {
 public:
 

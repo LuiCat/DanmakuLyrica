@@ -1,23 +1,35 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include "graphics.h"
+#include "entity.h"
+#include "texturestrip.h"
 
-#include "position.h"
-#include "beatticking.h"
-
-class Sprite : public Ticking, public Position
+class Sprite : public Entity
 {
-public:
-
-    Sprite();
-    Sprite(double posX, double posY);
-
-    virtual void render();
-
 protected:
 
-    virtual void onRender();
+    TextureStrip textureStrip;
+    double renderSizeX, renderSizeY;
+    double renderCenterX, renderCenterY;
+
+    bool useAlpha;
+    double alpha;
+
+    void onTick();
+    void onRender();
+
+public:
+
+    Sprite& setTexture(Texture tex);
+    Sprite& setRenderSize(double x, double y);
+    Sprite& setRenderCenter(double x, double y);
+    Sprite& setTextureSize(double posX, double posY, double sizeX, double sizeY);
+
+    double getAlpha() const;
+    Sprite& setAlpha(double x);
+
+    Sprite();
+    Sprite(double x, double y);
 
 };
 

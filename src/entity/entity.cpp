@@ -227,7 +227,7 @@ Entity& Entity::offsetMotion(double secs)
 //===================================================
 
 Entity::Entity()
-    :Sprite()
+    :RenderObject()
     ,speed(0.0)
     ,rotation(0.0)
     ,speedX(0.0)
@@ -243,7 +243,7 @@ Entity::Entity()
 }
 
 Entity::Entity(double posX, double posY)
-    :Sprite(posX, posY)
+    :RenderObject(posX, posY)
     ,speed(0.0)
     ,rotation(0.0)
     ,speedX(0.0)

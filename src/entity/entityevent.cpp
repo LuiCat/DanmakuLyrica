@@ -8,6 +8,11 @@ EntityEvent::EntityEvent(double processTime)
 
 }
 
+EntityEvent::~EntityEvent()
+{
+
+}
+
 double EntityEvent::process(Entity* entity, double deltaTime)
 {
     if(entity==0||processed)
