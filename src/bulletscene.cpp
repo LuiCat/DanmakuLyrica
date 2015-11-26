@@ -6,6 +6,7 @@
 
 BulletScene::BulletScene()
     :Scene()
+    ,player(0)
     ,sceneCenterX(WIDTH/2)
     ,sceneCenterY(HEIGHT/2)
     ,sceneWidth(WIDTH)
@@ -17,7 +18,7 @@ BulletScene::BulletScene()
 
 BulletScene::~BulletScene()
 {
-
+    SAFE_RELEASE(player);
 }
 
 int BulletScene::pushBullet(const Bullet& bullet)
@@ -52,16 +53,19 @@ void BulletScene::load()
 {
     random.seed();
     bulletList.clearAll();
+    SAFE_RELEASE(player);
+    player = new Player();
 }
 
 void BulletScene::unload()
 {
     bulletList.clearAll();
+    SAFE_RELEASE(player);
 }
 
-void BulletScene::update(double deltaSec)
+void BulletScene::update(rtime_t deltaTime)
 {
-    bulletList.updateAll(deltaSec);
+    bulletList.updateAll(deltaTime.beat);
     bulletList.checkOutsideScene(-sceneWidth*0.5-offsetBorderWidth,
                                  -sceneHeight*0.5-offsetBorderWidth,
                                  sceneWidth*0.5+offsetBorderWidth,

@@ -23,28 +23,45 @@ bool NoteMap::loadTjaFile(const char *filename)
     return true;
 }
 
-double NoteMap::offsetMapState(MapState &state, double deltaSec) const
+BeatTime NoteMap::offsetMapState(MapState &state, double deltaSec) const
 {
     double originBeat=state.beatOffset;
+    double originDeltaSec=deltaSec;
 
     if(state.currentSegment<(int)segments.size())
     {
-        auto iter=segments.cbegin();
-        for(int i=0; i<state.currentSegment; ++i)
-            ++iter;
-        for(; iter!=segments.cend()&&deltaSec>=M_DINFS; ++iter)
+        auto iter=segments.cbegin()+state.currentSegment;
+        for(; iter!=segments.cend()&&deltaSec>0/*deltaSec>=M_DINFS*/; ++iter)
         {
             deltaSec=iter->offsetMapState(state, deltaSec);
         }
     }
 
-    if(deltaSec>=M_DINFS)
+//    if(deltaSec>=M_DINFS)
+    if(deltaSec>0)
     {
         state.timeOffset+=deltaSec;
         state.beatOffset+=state.calcBeatOffset(deltaSec);
     }
 
-    return state.beatOffset-originBeat;
+    return std::move(BeatTime(originDeltaSec, state.beatOffset-originBeat));
+}
+
+BeatTime NoteMap::offsetMapStateSingle(MapState& state, double deltaSec) const
+{
+    BeatTime originTime=state.toBeatTime();
+
+    if(state.currentSegment<(int)segments.size())
+    {
+        deltaSec=segments[state.currentSegment].offsetMapStateSingleEvent(state, deltaSec);
+    }
+    else if(deltaSec>0)
+    {
+        state.timeOffset+=deltaSec;
+        state.beatOffset+=state.calcBeatOffset(deltaSec);
+    }
+
+    return std::move(BeatTime(state.timeOffset-originTime.sec, state.beatOffset-originTime.beat));
 }
 
 int NoteMap::getNoteInfo(list<NoteInfo>& infoList, int maxinum)
@@ -70,7 +87,7 @@ MapState NoteMap::getBgmBeginState()
     MapState tempState=beginState;
     tempState.beatOffset-=tempState.calcBeatOffset(tempState.timeOffset);
     tempState.timeOffset=0.0;
-    return tempState;
+    return std::move(tempState);
 }
 
 const char* NoteMap::getWavFilename()

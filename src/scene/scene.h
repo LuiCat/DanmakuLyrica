@@ -1,6 +1,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "beattime.h"
+
 class SceneManager;
 
 class Scene
@@ -18,7 +20,7 @@ public:
     virtual void load()=0;
     virtual void unload()=0;
 
-    virtual void update(double deltaSec)=0;
+    virtual void update(rtime_t deltaTime)=0;
     virtual void render()=0;
 
     friend class SceneManager;

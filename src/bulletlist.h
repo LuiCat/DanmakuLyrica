@@ -8,12 +8,18 @@
 
 class BulletList : public EntityList<BulletBase>
 {
+protected:
+
+    BulletJudge* judge;
+
 public:
 
     BulletList();
 
     void checkOutsideScene(double x1, double y1, double x2, double y2);
+    bool judgeBullets(Player& player);
 
 };
+
 
 #endif // BULLETLIST_H

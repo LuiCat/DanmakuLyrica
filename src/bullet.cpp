@@ -1,6 +1,7 @@
 #include "bullet.h"
 #include "bulletscene.h"
 #include "movement.h"
+#include "bulletjudge.h"
 
 #include "mathhelper.h"
 #include "debug.h"
@@ -73,4 +74,9 @@ void Bullet::onRender()
 void Bullet::onDestroy()
 {
     setDead();
+}
+
+bool Bullet::onJudge(Entity* entity, double span)
+{
+    return judge->judgeBullet(this, entity, span);
 }

@@ -1,4 +1,5 @@
 #include "position.h"
+#include "mathhelper.h"
 
 Position::Position()
     :x(0.0)
@@ -37,4 +38,9 @@ void Position::setPosition(double _x, double _y)
 {
     x=_x;
     y=_y;
+}
+
+double Position::distanceTo(const Position& another) const
+{
+    return dist(another.x-x, another.y-y);
 }

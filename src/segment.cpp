@@ -41,8 +41,9 @@ MapState Segment::getNextSegmentState() const
     }
 
     state.processEvent(0, segmentDiv-prevNum, segmentDiv);
+    state.currentSegment+=1;
 
-    return state;
+    return std::move(state);
 }
 
 void Segment::nextSegmentState()
@@ -69,8 +70,8 @@ double Segment::offsetMapState(MapState &state, double deltaSec) const
         state.processEvent(0, deltaSec);
         return 0.0;
     }
+
     state=tempState;
-    //state.processEvent(0, deltaOffset);
     deltaSec-=deltaOffset;
 
     for(; iter!=events.cend(); ++iter)
@@ -92,8 +93,60 @@ double Segment::offsetMapState(MapState &state, double deltaSec) const
         state.processEvent(0, deltaSec);
         return 0.0;
     }
+
     state.processEvent(0, deltaOffset);
     state.currentSegment++;
+
+    return deltaSec-deltaOffset;
+}
+
+double Segment::offsetMapStateSingleEvent(MapState &state, double deltaSec) const
+{
+    MapState tempState=segmentState;
+    int prevNum=0;
+    auto iter=events.cbegin();
+    double deltaOffset;
+
+    for(; iter!=events.cend()&&tempState.timeOffset<=state.timeOffset; ++iter)
+    {
+        tempState.processEvent(&*iter, iter->num-prevNum, segmentDiv);
+        prevNum=iter->num;
+    }
+
+    deltaOffset=tempState.timeOffset-state.timeOffset;
+    if(deltaOffset>deltaSec)
+    {
+        state.processEvent(0, deltaSec);
+        return 0.0;
+    }
+
+    state=tempState;
+    deltaSec-=deltaOffset;
+
+    if(iter!=events.cend())
+    {
+        deltaOffset=state.calcOffset_segment((double)(iter->num-prevNum)/segmentDiv);
+        if(deltaOffset>deltaSec)
+        {
+            state.processEvent(0, deltaSec);
+            return 0.0;
+        }
+        state.processEvent(&*iter, deltaOffset);
+        deltaSec-=deltaOffset;
+        prevNum=iter->num;
+        return deltaSec;
+    }
+
+    deltaOffset=state.calcOffset_segment((double)(segmentDiv-prevNum)/segmentDiv);
+    if(deltaOffset>deltaSec)
+    {
+        state.processEvent(0, deltaSec);
+        return 0.0;
+    }
+
+    state.processEvent(0, deltaOffset);
+    state.currentSegment++;
+
     return deltaSec-deltaOffset;
 }
 

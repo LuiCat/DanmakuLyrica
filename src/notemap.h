@@ -4,6 +4,7 @@
 #include "notedef.h"
 #include "segment.h"
 #include "mapstate.h"
+#include "beattime.h"
 
 #include "noteentity.h"
 
@@ -18,7 +19,8 @@ public:
 
     bool loadTjaFile(const char* filename);
 
-    double offsetMapState(MapState &state, double deltaSec) const;
+    BeatTime offsetMapState(MapState &state, double deltaSec) const;
+    BeatTime offsetMapStateSingle(MapState &state, double deltaSec) const;
 
     int getNoteInfo(list<NoteInfo> &infoList, int maxinum=-1);
 
@@ -37,9 +39,9 @@ protected:
 
     MapState beginState;
 
-    list<Segment> segments;
+    vector<Segment> segments;
 
-    list<Segment>::iterator loadProc;
+    vector<Segment>::iterator loadProc;
 
     bool reloadTjaFile();
 

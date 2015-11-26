@@ -7,6 +7,7 @@
 #include <set>
 #include <list>
 #include <functional>
+#include <memory>
 using namespace std;
 
 template <typename T>
@@ -31,7 +32,7 @@ public:
     template <typename _T>
     int pushEntity(const _T& entity)
     {
-        entityList[nextEntityID]=new _T(entity);
+        entityList[nextEntityID].reset(new _T(entity));
         return nextEntityID++;
     }
 
@@ -47,18 +48,18 @@ public:
     template <typename _T ,typename... Args>
     int newEntity(Args&&... args)
     {
-        entityList.emplace_hint(entityList.end(), nextEntityID, new _T(args...));
+        entityList.emplace_hint(entityList.end(), nextEntityID, unique_ptr<_T>(new _T(args...)));
         return nextEntityID++;
     }
 
     inline T* getEntity(int id)
     {
-        return entityList[id];
+        return entityList[id].get();
     }
 
     inline T* operator[](int id)
     {
-        return entityList[id];
+        return entityList[id].get();
     }
 
     inline bool hasEntity(int id)
@@ -69,9 +70,18 @@ public:
     template <typename Function>
     void forEach(Function fn)
     {
-        for(pair<const int, T*>& x : entityList)
+        for(auto& x : entityList)
         {
             fn(*(x.second));
+        }
+    }
+
+    template <typename MemberFunction, typename _T, typename... Args>
+    void forEach(MemberFunction _T::*fn, Args... args)
+    {
+        for(auto& x : entityList)
+        {
+            (x.second.get()->*fn)(args...);
         }
     }
 
@@ -104,7 +114,7 @@ public:
         {
             auto iter=entityList.find(id);
             if(iter!=entityList.end())
-                (iter->second->*fn)(args...);
+                (iter->second.get()->*fn)(args...);
         }
     }
 
@@ -115,13 +125,13 @@ public:
         {
             auto iter=entityList.find(id);
             if(iter!=entityList.end())
-                (iter->second->*fn)(args...);
+                (iter->second.get()->*fn)(args...);
         }
     }
 
     void updateAll(double deltaSec)
     {
-        for(pair<const int, T*>& x : entityList)
+        for(auto& x : entityList)
         {
             x.second->update(deltaSec);
         }
@@ -131,7 +141,7 @@ public:
 
     void renderAll()
     {
-        for(pair<const int, T*>& x : entityList)
+        for(auto& x : entityList)
         {
             x.second->render();
         }
@@ -142,7 +152,6 @@ public:
         auto iter=entityList.begin();
         while(iter!=entityList.end())
         {
-            delete (iter->second);
             iter=entityList.erase(iter);
         }
         entityList.clear();
@@ -155,7 +164,6 @@ public:
         {
             if(iter->second->dead())
             {
-                delete (iter->second);
                 iter=entityList.erase(iter);
             }
             else
@@ -177,7 +185,7 @@ public:
 
 protected:
 
-    map<int, T*> entityList;
+    map<int, shared_ptr<T>> entityList;
 
 private:
 

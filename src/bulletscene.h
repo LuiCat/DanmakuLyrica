@@ -5,6 +5,7 @@
 #include "bullet.h"
 #include "bulletlist.h"
 #include "scene.h"
+#include "player.h"
 
 #include <list>
 #include <set>
@@ -19,6 +20,8 @@ private:
     BulletList bulletList;
     //list<LuaTask*> taskList;
 
+    Player* player;
+
 public:
 
     double sceneCenterX, sceneCenterY;
@@ -30,19 +33,18 @@ public:
     BulletScene();
     virtual ~BulletScene();
 
-    int getBulletSize() const;
-
     int pushBullet(const Bullet& bullet);
     int pushBullet(double x, double y, double speed, double angle, int type);
 
     bool checkSceneBorder(Entity* entity);
 
+    int getBulletSize() const;
     BulletList* getBulletList();
 
     void load();
     void unload();
 
-    void update(double deltaSec);
+    void update(rtime_t deltaTime);
     void render();
 
 };

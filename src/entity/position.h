@@ -14,6 +14,9 @@ public:
     void setX(double value);
     void setY(double value);
     void setPosition(double _x, double _y);
+
+    double distanceTo(const Position& another) const;
+
 };
 
 

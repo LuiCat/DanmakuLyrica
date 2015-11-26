@@ -78,7 +78,7 @@ void LuaTimeline::update(double deltaSec)
 
     int result=LUA_OK;
 
-    while(true)
+    while(!taskList.empty())
     {
         currentTask=taskList.top();
 
@@ -112,7 +112,8 @@ double LuaTimeline::seekNextTask(double limitDeltaSec)
 {
     if(taskList.empty())
     {
-        return limitDeltaSec;
+        timeSec+=limitDeltaSec;
+        return 0.0;
     }
 
     double newSec=timeSec+limitDeltaSec;
@@ -124,7 +125,9 @@ double LuaTimeline::seekNextTask(double limitDeltaSec)
         return 0.0;
     }
 
-    timeSec=task->nextTime;
+    if(task->nextTime>timeSec)
+        timeSec=task->nextTime;
+
     return newSec-timeSec;
 
 }
@@ -133,7 +136,8 @@ double LuaTimeline::updateSingleTask(double limitDeltaSec)
 {
     if(taskList.empty())
     {
-        return limitDeltaSec;
+        timeSec+=limitDeltaSec;
+        return 0.0;
     }
 
     double newSec=timeSec+limitDeltaSec;

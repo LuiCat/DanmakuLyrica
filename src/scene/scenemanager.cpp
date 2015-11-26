@@ -76,17 +76,17 @@ void SceneManager::clearAllScene()
     coverScene=0;
 }
 
-void SceneManager::updateScene(double deltaSec, bool updateCoveredScene)
+void SceneManager::updateScene(rtime_t deltaTime, bool updateCoveredScene)
 {
     if(coverScene)
     {
-        coverScene->update(deltaSec);
+        coverScene->update(deltaTime);
         if(!updateCoveredScene)
             return;
     }
 
     for(Scene* p : stackScene)
-        p->update(deltaSec);
+        p->update(deltaTime);
 
 }
 

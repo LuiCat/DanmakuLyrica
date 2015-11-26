@@ -2,6 +2,7 @@
 #define MAPSTATE_H
 
 #include "notedef.h"
+#include "beattime.h"
 
 #include <list>
 using namespace std;
@@ -20,6 +21,11 @@ struct MapState
     int currentSegment;
 
     MapState(double _offset=0.0, double _bpm=120.0);
+
+    inline BeatTime toBeatTime() const
+    {
+        return BeatTime(timeOffset, beatOffset);
+    }
 
     inline double calcOffset_segment(double deltaSegment) const
     {

@@ -32,6 +32,8 @@ protected:
 
 private:
 
+    static double inputOffset;
+
     NoteMap noteMap;
     NoteScene noteScene;
 

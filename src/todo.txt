@@ -1,2 +1,4 @@
 ﻿重写Scene类型，增加SceneManager类型
-
+一个新的具有不同update函数的TimeObject类，按照更新顺序在当前节点计算下一次最长更新时间，并且以此时间更新子节点（或者用作其他的更新）
+Segment::offsetMapState有一个bug，在deltaSec远远小于1的时候，deltaSec+数量级为1的数A=数A，相当于deltaSec的效果被抵消。想想合适的手段解决这个问题，比如在合适的地方用M_DINFS替代0
+不限帧的时候播放速度很奇怪，原因在于原timeline时间轴平滑算法

@@ -1,0 +1,67 @@
+#include "bulletjudge.h"
+#include "commondef.h"
+
+BulletJudge::BulletJudge()
+{
+
+}
+
+void BulletJudge::updateModelBefore(BulletBase* bullet)
+{
+    UNUSED(bullet);
+    // undealt
+}
+
+void BulletJudge::updateModelAfter(BulletBase* bullet)
+{
+    UNUSED(bullet);
+    // undealt
+}
+
+bool BulletJudge::judgeBullet(Bullet* bullet, Entity* judgeObj, double span, bool fastJudge /* undealt */)
+{
+    UNUSED(fastJudge);
+
+    if(!bullet || !judgeObj)
+        return false;
+
+    auto type = bullet->typeInfo;
+    if(!type)
+        return false;
+
+    // Add span to sizeX
+    double sx = type->sizeX+span;
+
+    // Round judge treat sizeX as radius
+    if(type->judgeType == BulletType::round)
+        return judgeObj->distanceTo(*bullet)<sx;
+
+    // Do judges depend on bullet rotation
+
+    // Add span to sizeY
+    double sy = type->sizeY+span;
+
+    // Get relative position on original coordinate
+    double ox = judgeObj->getX()-bullet->getX();
+    double oy = judgeObj->getY()-bullet->getY();
+
+    // Position on rotated coordinate, according to bullet's facing angle
+    double angle = bullet->getFacingAngle();
+    double nx = ox*cos(angle)-oy*sin(angle);
+    double ny = ox*sin(angle)+oy*cos(angle);
+
+    switch(type->judgeType)
+    {
+    case BulletType::rect:
+        return abs(nx)*2<sx && abs(ny)*2<sy;
+    case BulletType::oval:
+        return dist(nx/sx, ny/sy)<0.5;
+    default:
+        return false;
+    }
+
+    // Oops.
+    return false;
+
+}
+

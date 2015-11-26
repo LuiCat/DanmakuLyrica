@@ -9,9 +9,16 @@
 
 DanmakuLyrica* DanmakuLyrica::instance = 0;
 
+#if defined(FPS_VSYNC)
+double DanmakuLyrica::inputOffset = 0.0075;
+#elif defined(FPS_UNLIMITED)
+double DanmakuLyrica::inputOffset = 0;
+#else
+double DanmakuLyrica::inputOffset = FPS_LIMIT_MSEC*0.0005;
+#endif
+
 DanmakuLyrica::DanmakuLyrica()
     :script(&bulletScene)
-    ,bgmTimeStamp(0.0)
     ,buttonA(DIK_Z, 0)
     ,buttonB(DIK_X, 0)
     ,buttonPause(DIK_SPACE, 0)
@@ -37,6 +44,8 @@ void DanmakuLyrica::mainInit()
     bgm.load(strcat(stageDir, noteMap.getWavFilename()));
     bgm.setVolume(0.5f);
 
+    bgmTimeStamp = 0.0;
+
     mapState=noteMap.getBgmBeginState();
 
     script.setTime(mapState.beatOffset);
@@ -58,7 +67,7 @@ void DanmakuLyrica::mainCleanup()
 void DanmakuLyrica::mainUpdate()
 {
     static bool isPaused=true;
-    static double timeTwigger=0;
+    static double timeTotal=0;
 
     JudgeResult judgeResult;
 
@@ -71,23 +80,33 @@ void DanmakuLyrica::mainUpdate()
 
     if(!isPaused)
     {
-        double newTime=bgm.getTime()+timeTwigger;
-        double deltaTime=timeLine.getDeltaTimeFixed(newTime-bgmTimeStamp);
-        double deltaBeat=noteMap.offsetMapState(mapState, deltaTime);
-        double newDelta;
+        double newTime=bgm.getTime()+inputOffset;
+        double deltaSec=timeLine.getDeltaTimeFixed(newTime-bgmTimeStamp);
+        timeTotal+=deltaSec;
 
         bgmTimeStamp=newTime;
 
-        while(deltaBeat>0)
+        while(deltaSec>=M_DINFS)
         {
-            newDelta=script.seekNextTask(deltaBeat);
-            deltaBeat-=newDelta;
-            sceneManager.updateScene(deltaBeat);
-            deltaBeat=newDelta;
-            if(deltaBeat<=0.0)
-                break;
-            script.updateSingleTask(deltaBeat);
+            BeatTime deltaTime=noteMap.offsetMapStateSingle(mapState, deltaSec);
+            deltaSec -= deltaTime.sec;
+
+            double newDelta;
+
+            while(deltaTime.beat>=M_DINFS)
+            {
+                newDelta=script.seekNextTask(deltaTime.beat);
+                BeatTime deltaDelta = deltaTime;
+                deltaDelta.offsetBeat(-newDelta);
+                sceneManager.updateScene(deltaDelta);
+                if(newDelta<=0.0)
+                    break;
+                deltaTime.resizeByBeat(newDelta);
+                script.updateSingleTask(deltaTime.beat);
+            }
+
         }
+
 
     }
 
@@ -96,10 +115,12 @@ void DanmakuLyrica::mainUpdate()
         isPaused=!isPaused;
         if(isPaused)
         {
+            timeLine.pause();
             bgm.pause();
         }
         else
         {
+            timeLine.resume();
             bgm.play();
         }
     }

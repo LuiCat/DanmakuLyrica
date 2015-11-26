@@ -2,6 +2,7 @@
 #define SCENEMANAGER_H
 
 #include "scene.h"
+#include "beattime.h"
 
 #include <list>
 using namespace std;
@@ -44,7 +45,7 @@ public:
     void removeScene(Scene* scene);
     void clearAllScene();
 
-    void updateScene(double deltaSec, bool updateCoveredScene=false);
+    void updateScene(rtime_t deltaTime, bool updateCoveredScene=false);
     void renderScene();
 
 };

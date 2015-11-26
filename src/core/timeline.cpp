@@ -4,87 +4,126 @@
 #include "commondef.h"
 #include "debug.h"
 
+using namespace std::chrono;
+
 TimeLine::TimeLine()
 {
+    setSmoothParam(60, 0.5);
+}
+
+void TimeLine::setSmoothParam(double halfTime, double decaySlope)
+{
+    ksum = -1.0/halfTime;
+    dslp = decaySlope;
     reset();
 }
 
 void TimeLine::reset()
 {
-    beginTime=timeGetTime()*0.001;
-    timeStamp=0;
+    realStamp = timeReal();
+    timeUnfix = 0;
     resetTimeRecord();
+    insertTimeRecord(realStamp, rawStamp);
+    timer.restart();
+}
+
+void TimeLine::pause()
+{
+    timer.pause();
+}
+
+void TimeLine::resume()
+{
+    timer.resume();
 }
 
 double TimeLine::getDeltaTime()
 {
-    double newSec=getCurrentTime();
-    double result=newSec-timeStamp;
-    timeStamp=newSec;
+    double newSec=timeReal();
+    double result=newSec-realStamp;
+    realStamp=newSec;
     resetTimeRecord();
     return result;
 }
 
 double TimeLine::getDeltaTimeFixed(double deltaSec)
 {
-    timeStamp=getCurrentTime();
-    unfixStamp+=deltaSec;
+    timeUnfix += deltaSec;
+    double newReal = timeReal();
+    double newRaw = rawStamp+timeUnfix;
 
-    insertTimeRecord(timeStamp, unfixStamp);
+    //cout<<newReal<<endl;
 
-    double newFix=getTimeFixed(timeStamp);
-    double result=newFix-fixStamp;
-    fixStamp=newFix;
-
-    if(tabs(unfixStamp-fixStamp)>MAX_TIMEFIX_TOLERATION)
+    // not insert additional records with timeUnfix<MIN_TIMEFIX_STEP
+    if(record.size()==0 || timeUnfix>MIN_TIMEFIX_STEP)
     {
-        result+=(unfixStamp-fixStamp);
-        resetTimeRecord();
-        insertTimeRecord(timeStamp, unfixStamp);
+        // here we insert a new record
+        insertTimeRecord(newReal, newRaw);
+        realStamp = newReal;
+        rawStamp = newRaw;
+        timeUnfix = 0;
     }
 
+    // then calculate fixed time
+    double newFix=getTimeFixed(newReal);
+    double result=newFix-fixStamp;
+
+    // no go back in time
+    if(result<0)
+        return 0.0;
+
+    fixStamp=newFix;
+
+    /*
+    if(fabs(unfixStamp-fixStamp)>MAX_TIMEFIX_TOLERATION)
+    {
+        reset();
+        getTimeFixed(realStamp);
+    }
+    */
+
+    //cout<<(fixStamp>rawStamp?' ':'-')<<fabs(fixStamp-rawStamp)<<endl;
+
     return result;
+
 }
 
-double TimeLine::getCurrentTime()
+double TimeLine::timeReal()
 {
-    return timeGetTime()*0.001-beginTime;
+    return timer.elapsed();
 }
 
 void TimeLine::resetTimeRecord()
 {
-    fixNum=0;
-    fixStamp=unfixStamp=timeStamp;
+    record.clear();
+    rawStamp=fixStamp=realStamp;
+    sumReal=sumRaw=sumNum=0;
+    slopeSum=slopeNum=0;
 }
 
-void TimeLine::insertTimeRecord(double stamp, double unfix)
+void TimeLine::insertTimeRecord(double real, double raw)
 {
-    if(fixNum<MAX_TIMEFIX_RECORD)++fixNum;
-    int i;
-    for(i=MAX_TIMEFIX_RECORD-1;i>0;--i)
-        timeRecord[i]=timeRecord[i-1];
-    for(i=MAX_TIMEFIX_RECORD-1;i>0;--i)
-        unfixRecord[i]=unfixRecord[i-1];
-    timeRecord[0]=stamp;
-    unfixRecord[0]=unfix;
-    if(fixNum<MAX_TIMEFIX_RECORD)
-        fixNum++;
+    record.emplace_back(real, raw);
+    if(record.size()>MAX_TIMEFIX_RECORD)
+        record.pop_front();
+
+    double dec = pow(2, ksum*(real-realStamp));
+    decaySum(sumReal, real, dec);
+    decaySum(sumRaw, raw, dec);
+    decaySum(sumNum, 1, dec);
+
+    if(record.size()>1)
+    {
+        double slope = (raw-sumRaw/sumNum)/(real-sumReal/sumNum);
+        decaySum(slopeSum, slope, dslp);
+        decaySum(slopeNum, 1, dslp);
+    }
+
 }
 
-double TimeLine::getTimeFixed(double stamp)
+double TimeLine::getTimeFixed(double real)
 {
-    double timeSum=0;
-    double unfixSum=0;
-    int i;
-
-    for(i=0;i<fixNum;++i)
-        timeSum+=timeRecord[i];
-    for(i=0;i<fixNum;++i)
-        unfixSum+=unfixRecord[i];
-
-    timeSum/=fixNum;
-    unfixSum/=fixNum;
-
-    return unfixSum+stamp-timeSum;
+    return sumRaw/sumNum + (record.size()>1 ?
+               slopeSum/slopeNum*(real-sumReal/sumNum) : 0);
 }
 

@@ -1,7 +1,7 @@
 setCurrentPath('data/sound/')
 loadSound('tick.wav', 'tick', 0.5)
-loadSound('pa0.wav', 'pa0', 0.7)
-loadSound('pa1.wav', 'pa1', 0.7)
+loadSound('pa0.wav', 'pa0', 1.0)
+loadSound('pa1.wav', 'pa1', 0.8)
 loadSound('fa.ogg', 'fa0', 1)
 loadSound('fa.ogg', 'fa1', 0.8)
 loadSound('ah.ogg', 'ah', 1)
@@ -66,14 +66,14 @@ end
 function fa()
 	sleepUntil(0)
 	while true do
-		soundPitch('pa0', 0.9)
+		sound('pa0')
 		sleep(1)
-		soundPitch('pa1', 1.0)
+		sound('pa1')
 		sleep(1)
 	end
 end
 
-function fas1()
+function fas()
 	sleepUntil(15.8)
 	sound('ah')
 	sleep(32.2)
@@ -87,7 +87,7 @@ function fas1()
 				'-6..+1..3.2..-7..5.',
 				'..-3.#1.3.6.......')
 	task(function()
-		playScore('fa0', 0.6674, 0.5,
+		playScore('fa0', 1.3348, 0.5,
 				'-3..6..+1.-7..#5..6.',
 				'-#5..3.#4#56#53.1....',
 				'-3..6..+1.#2..#1..-7.',
@@ -97,7 +97,7 @@ function fas1()
 				'-4..6..+1.-7..5..2.',
 				'..-3.#1.3.6.......')
 	end)
-	playScore('fa1', 0.6674, 0.5,
+	playScore('fa1', 1.3348, 0.5,
 			'-6..+1..3.b3..-7..+1.',
 			'2..-#5.67+1-76.3....',
 			'-6..+1..3.#4..3..#2.',
@@ -105,7 +105,7 @@ function fas1()
 			'6..3..6.7..b3..7.',
 			'6.#5b3-7.+3-3.#57+321-7#5',
 			'-6..+1..3.2..-7..5.',
-			'........-3.......')
+			'..-#1.-6.+#1.3.......')
 	task(function()
 		playScore('fa0', 1.122, 0.5,
 				'-3..6..+1.-7..#5..6.',
@@ -125,11 +125,10 @@ function fas1()
 			'6..3..6.7..b3..7.',
 			'6.#5b3-7.+3-3.#57+321-7#5',
 			'-6..+1..3.2..-7..5.',
-			'........-3.......')
+			'..-#1.-6.+#1.3.......')
 end
 
 task(main);
 task(main3);
 task(fa);
-task(fas1);
-task(fas2);
+task(fas);

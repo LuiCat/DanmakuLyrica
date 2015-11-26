@@ -54,8 +54,12 @@ SOURCES += main.cpp \
     luatimeline.cpp \
     bulletscript.cpp \
     textureregistry.cpp \
+    player.cpp \
     entity/renderobject.cpp \
-    entity/sprite.cpp
+    entity/sprite.cpp \
+    bulletjudge.cpp \
+    core/beattime.cpp \
+    core/accuratetimer.cpp
 
 HEADERS += \
     graphics/graphics.h \
@@ -110,8 +114,12 @@ HEADERS += \
     textureregistry.h \
     animatedtexture.h \
     bullettype.h \
+    player.h \
     entity/renderobject.h \
-    entity/sprite.h
+    entity/sprite.h \
+    bulletjudge.h \
+    core/beattime.h \
+    core/accuratetimer.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

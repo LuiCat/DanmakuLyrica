@@ -4,6 +4,9 @@
 #include "entity.h"
 #include "bulletdef.h"
 
+class BulletJudge;
+class Player;
+
 class BulletBase : public Entity
 {
 public:
@@ -13,10 +16,20 @@ public:
 
     void checkOutsideScene(double x1, double y1, double x2, double y2);
 
+    void setJudge(BulletJudge* judgeObj);
+
+    bool judgePlayer(Player& player);
+
 protected:
+
+    BulletJudge* judge;
 
     virtual bool isOutsideScene(double x1, double y1, double x2, double y2)=0;
     virtual void onOutsideScene();
+
+    virtual bool onJudge(Entity* entity, double span);
+
+    virtual void onUpdateMotion(double deltaSec, double deltaTick);
 
 };
 

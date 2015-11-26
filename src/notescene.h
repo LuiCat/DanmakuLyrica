@@ -14,7 +14,7 @@ public:
     void load();
     void unload();
 
-    void update(double deltaSec);
+    void update(rtime_t deltaTime);
     void render();
 
     void setNoteMap(NoteMap* m);

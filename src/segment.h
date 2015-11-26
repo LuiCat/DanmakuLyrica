@@ -26,6 +26,7 @@ public:
     void nextSegmentState();
 
     double offsetMapState(MapState& state, double deltaSec) const;
+    double offsetMapStateSingleEvent(MapState& state, double deltaSec) const;
 
     void getNoteInfo(list<NoteInfo>& infoList);
 
@@ -34,8 +35,8 @@ private:
     int segmentDiv;
     MapState segmentState;
 
-    list<SegmentNote> notes;
-    list<SegmentEvent> events;
+    vector<SegmentNote> notes;
+    vector<SegmentEvent> events;
 
 };
 

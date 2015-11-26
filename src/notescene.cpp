@@ -14,9 +14,9 @@ void NoteScene::unload()
     noteList.clearAll();
 }
 
-void NoteScene::update(double deltaSec)
+void NoteScene::update(rtime_t deltaTime)
 {
-    noteList.updateAll(deltaSec);
+    noteList.updateAll(deltaTime.beat);
 }
 
 void NoteScene::render()
