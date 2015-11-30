@@ -38,6 +38,8 @@ public:
 
     bool checkSceneBorder(Entity* entity);
 
+    void setPlayerMotion(PlayerDirection dir);
+
     int getBulletSize() const;
     BulletList* getBulletList();
 

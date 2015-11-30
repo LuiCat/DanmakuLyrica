@@ -55,6 +55,11 @@ private:
     KeyBinding buttonPause;
     KeyBinding buttonSkip;
 
+    KeyBinding buttonUp;
+    KeyBinding buttonDown;
+    KeyBinding buttonLeft;
+    KeyBinding buttonRight;
+
     Texture tex;
     TextureStrip strip;
 

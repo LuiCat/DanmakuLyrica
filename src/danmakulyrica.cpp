@@ -23,6 +23,10 @@ DanmakuLyrica::DanmakuLyrica()
     ,buttonB(DIK_X, 0)
     ,buttonPause(DIK_SPACE, 0)
     ,buttonSkip(DIK_S, 0)
+    ,buttonUp(DIK_UP, 0)
+    ,buttonDown(DIK_DOWN, 0)
+    ,buttonLeft(DIK_LEFT, 0)
+    ,buttonRight(DIK_RIGHT, 0)
 {
     instance=this;
 }
@@ -32,6 +36,7 @@ void DanmakuLyrica::mainInit()
 
     SoundRegistry::createSound("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
     SoundRegistry::createSound("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
+    SoundRegistry::createSound("miss", false, "data/sound/miss.wav", 1.0f);
 
     createTexture("data/tex.png", &tex);
     strip.setTexture(tex);
@@ -70,6 +75,18 @@ void DanmakuLyrica::mainUpdate()
     static double timeTotal=0;
 
     JudgeResult judgeResult;
+
+    // do player motion first
+    int flagDir = Dir_None;
+    if(buttonUp.isDown())
+        flagDir^=Dir_Up;
+    if(buttonDown.isDown())
+        flagDir^=Dir_Down;
+    if(buttonLeft.isDown())
+        flagDir^=Dir_Left;
+    if(buttonRight.isDown())
+        flagDir^=Dir_Right;
+    bulletScene.setPlayerMotion((PlayerDirection)flagDir);
 
     //1: do time line
     //2: update scenes

@@ -39,6 +39,11 @@ bool BulletScene::checkSceneBorder(Entity *entity)
             sy*py*2>abs(sy)*(sceneHeight+offsetBorderWidth));
 }
 
+void BulletScene::setPlayerMotion(PlayerDirection dir)
+{
+    player->setDirection(dir);
+}
+
 BulletList* BulletScene::getBulletList()
 {
     return &bulletList;
@@ -55,6 +60,7 @@ void BulletScene::load()
     bulletList.clearAll();
     SAFE_RELEASE(player);
     player = new Player();
+    player->setJudgeList(&bulletList);
 }
 
 void BulletScene::unload()
@@ -70,12 +76,15 @@ void BulletScene::update(rtime_t deltaTime)
                                  -sceneHeight*0.5-offsetBorderWidth,
                                  sceneWidth*0.5+offsetBorderWidth,
                                  sceneHeight*0.5+offsetBorderWidth);
+
+    player->update(deltaTime.sec);
 }
 
 void BulletScene::render()
 {
     d3d.pushMatrix();
     d3d.translate2D(sceneCenterX, sceneCenterY);
+    player->render();
     bulletList.renderAll();
     d3d.popMatrix();
 }

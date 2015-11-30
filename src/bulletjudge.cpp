@@ -30,16 +30,20 @@ bool BulletJudge::judgeBullet(Bullet* bullet, Entity* judgeObj, double span, boo
         return false;
 
     // Add span to sizeX
-    double sx = type->sizeX+span;
+    double sx = type->judgeSizeX+span;
 
     // Round judge treat sizeX as radius
     if(type->judgeType == BulletType::round)
-        return judgeObj->distanceTo(*bullet)<sx;
+    {
+        if(judgeObj->distanceTo(*bullet)<sx)
+            return true;
+        return false;
+    }
 
     // Do judges depend on bullet rotation
 
     // Add span to sizeY
-    double sy = type->sizeY+span;
+    double sy = type->judgeSizeY+span;
 
     // Get relative position on original coordinate
     double ox = judgeObj->getX()-bullet->getX();

@@ -11,6 +11,11 @@ TextureStrip::TextureStrip(Texture tex)
     setTexture(tex);
 }
 
+bool TextureStrip::loadFile(const char* filename)
+{
+    return createTexture(filename, &texture)==D3D_OK;
+}
+
 void TextureStrip::setTexture(Texture tex)
 {
     texture=tex;

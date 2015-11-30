@@ -2,11 +2,23 @@
 
 #include "bulletlist.h"
 #include "commondef.h"
+#include "debug.h"
+#include "soundregistry.h"
 
 Player::Player()
     : Entity(0, 0)
+    , judgeList(0)
+    , judgeSpan(0.0)
+    , moveSpeed(200.0)
+    , lastMissTime(0.0)
+    , invinTime(0.5)
+    , minX(-WIDTH/2)
+    , maxX(WIDTH/2)
+    , minY(-HEIGHT/2)
+    , maxY(HEIGHT/2)
 {
-
+    setTickRate(120);
+    tex.loadFile("data/image/player/test.png");
 }
 
 void Player::setJudgeList(BulletList* list)
@@ -21,7 +33,8 @@ void Player::setMoveSpeed(double speed)
 
 void Player::setDirection(PlayerDirection dir)
 {
-    dir = (PlayerDirection)(dir&(dir<<2)&Dir_Mask_Move);
+    // remove conflicted directions by xor shifted dirs
+    dir = (PlayerDirection)(dir&(~((dir<<2)|(dir>>2)))&Dir_All);
     double rotm;
 
     switch(dir)
@@ -59,25 +72,44 @@ void Player::setDirection(PlayerDirection dir)
 
 }
 
+void Player::setMoveField(double xmin, double xmax, double ymin, double ymax)
+{
+    minX = xmin;
+    maxX = xmax;
+    minY = ymin;
+    maxY = ymax;
+}
+
 void Player::onUpdateMotion(double deltaSec, double deltaTick)
 {
     // do some record ?
     Entity::onUpdateMotion(deltaSec, deltaTick);
+    if(x < minX) setX(minX);
+    else if(x > maxX) setX(maxX);
+    if(y < minY) setY(minY);
+    else if(y > maxY) setY(maxY);
 }
 
 void Player::onTick()
 {
+    static int t = 0;
     // do some record ?
-    if(judgeList)
+    if(timeSec-lastMissTime>invinTime && judgeList)
     {
-        judgeList->judgeBullets(*this);
+        if(judgeList->judgeBullets(*this))
+        {
+            lastMissTime = getTimeSec();
+            cout<<"miss "<<(++t)<<endl;
+            SOUND("miss")->play(true);
+        }
     }
+
 }
 
 void Player::onRender()
 {
     d3d.pushMatrix();
-    d3d.translate2D(30, 30);
+    d3d.translate2D(-30, -30);
     d3d.scale2D(60, 60);
     tex.pushVertices(0, 0);
     d3d.popMatrix();

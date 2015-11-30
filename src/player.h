@@ -8,15 +8,15 @@
 enum PlayerDirection
 {
     Dir_None = 0,
-    Dir_Left = 0x001,
-    Dir_Right = 0x101,
-    Dir_Up = 0x0010,
-    Dir_Down = 0x1010,
+    Dir_Left = 0x1,
+    Dir_Up = 0x2,
+    Dir_Right = 0x4,
+    Dir_Down = 0x8,
     Dir_LeftUp = Dir_Left|Dir_Up,
     Dir_LeftDown = Dir_Left|Dir_Down,
     Dir_RightUp = Dir_Right|Dir_Up,
     Dir_RightDown = Dir_Right|Dir_Down,
-    Dir_Mask_Move = 0x1111
+    Dir_All = 0xF
 };
 
 class BulletList;
@@ -30,6 +30,8 @@ public:
     void setJudgeList(BulletList* list);
 
     void setMoveSpeed(double speed);
+    void setMoveField(double xmin, double xmax, double ymin, double ymax);
+
     void setDirection(PlayerDirection dir);
 
     inline double getJudgeSpan() const
@@ -43,8 +45,14 @@ protected:
 
     BulletList* judgeList;
 
-    double moveSpeed;
     double judgeSpan;
+    double moveSpeed;
+
+    double lastMissTime;
+    double invinTime;
+
+    double minX, maxX;
+    double minY, maxY;
 
     void onUpdateMotion(double deltaSec, double deltaTick);
     void onTick();

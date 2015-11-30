@@ -9,6 +9,8 @@ public:
 
     TextureStrip(Texture tex=0);
 
+    bool loadFile(const char* filename);
+
     void setTexture(Texture tex);
     void setStripPos(double x, double y, double w, double h);
     void setMaxIndex(int i, int j);

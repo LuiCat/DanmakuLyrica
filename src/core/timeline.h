@@ -48,16 +48,13 @@ protected:
 private:
 
     typedef std::chrono::high_resolution_clock Clock;
-    typedef std::chrono::high_resolution_clock::time_point TimePoint;
-    typedef std::chrono::high_resolution_clock::duration Duration;
-
     inline void decaySum(double& sum, double x, double dec)
     {
         sum *= dec;
         sum += x;
     }
 
-    AccurateTimer<std::chrono::system_clock> timer;
+    AccurateTimer<Clock> timer;
 
     // sum of unfix raw time. this will not reach MIN_TIMEFIX_STEP
     double timeUnfix;
