@@ -3,17 +3,45 @@
 
 #include <chrono>
 
+template <typename Clock = std::chrono::high_resolution_clock>
 class AccurateTimer
 {
 public:
 
-    AccurateTimer();
+    AccurateTimer()
+    {
+        restart();
+    }
 
-    void restart();
-    void pause();
-    void resume();
+    void restart()
+    {
+        total = 0.0;
+        last = Clock::now();
+    }
 
-    double elapsed();
+    void pause()
+    {
+        if(paused)
+            return;
+        update();
+        paused=true;
+    }
+
+    void resume()
+    {
+        if(paused)
+        {
+            last = Clock::now();
+            paused=false;
+        }
+    }
+
+    double elapsed()
+    {
+        if(!paused)
+            update();
+        return total;
+    }
 
     inline double operator()()
     {
@@ -22,16 +50,22 @@ public:
 
 protected:
 
-    typedef std::chrono::high_resolution_clock              Clock;
-    typedef std::chrono::high_resolution_clock::time_point  TimePoint;
-    typedef std::chrono::high_resolution_clock::duration    Duration;
+    using duration_double = std::chrono::duration<double>;
+
+    typedef typename Clock::time_point  TimePoint;
+    typedef typename Clock::duration    Duration;
 
     TimePoint last;
     double total;
 
     bool paused;
 
-    void update();
+    void update()
+    {
+        TimePoint now = Clock::now();
+        total += std::chrono::duration_cast<duration_double>(now-last).count()*1e-9;
+        last = now;
+    }
 
 };
 

@@ -57,7 +57,7 @@ private:
         sum += x;
     }
 
-    AccurateTimer timer;
+    AccurateTimer<std::chrono::system_clock> timer;
 
     // sum of unfix raw time. this will not reach MIN_TIMEFIX_STEP
     double timeUnfix;

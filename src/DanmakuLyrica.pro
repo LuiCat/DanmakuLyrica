@@ -24,6 +24,8 @@ SOURCES += main.cpp \
     core/timeline.cpp \
     core/ticking.cpp \
     core/beatticking.cpp \
+    core/beattime.cpp \
+    core/accuratetimer.cpp \
     entity/entity.cpp \
     entity/position.cpp \
     entity/entitylist.cpp \
@@ -57,9 +59,7 @@ SOURCES += main.cpp \
     player.cpp \
     entity/renderobject.cpp \
     entity/sprite.cpp \
-    bulletjudge.cpp \
-    core/beattime.cpp \
-    core/accuratetimer.cpp
+    bulletjudge.cpp
 
 HEADERS += \
     graphics/graphics.h \
@@ -80,6 +80,9 @@ HEADERS += \
     core/registry.h \
     core/ticking.h \
     core/beatticking.h \
+    core/beattime.h \
+    core/accuratetimer.h \
+    core/timeline.h \
     entity/entity.h \
     entity/position.h \
     entity/entitylist.h \
@@ -117,9 +120,7 @@ HEADERS += \
     player.h \
     entity/renderobject.h \
     entity/sprite.h \
-    bulletjudge.h \
-    core/beattime.h \
-    core/accuratetimer.h
+    bulletjudge.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \
