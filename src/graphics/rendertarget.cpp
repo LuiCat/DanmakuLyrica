@@ -61,4 +61,4 @@ HRESULT RenderTarget::present(int x, int y, RenderTarget* target)
     }
 
     return pD3DDevice->StretchRect(surface(), &sr, dest, &sd, D3DTEXF_LINEAR);
-}\
+}

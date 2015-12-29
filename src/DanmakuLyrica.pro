@@ -59,7 +59,9 @@ SOURCES += main.cpp \
     player.cpp \
     entity/renderobject.cpp \
     entity/sprite.cpp \
-    bulletjudge.cpp
+    bulletjudge.cpp \
+    graphics/imagepiece.cpp \
+    graphics/texturecache.cpp
 
 HEADERS += \
     graphics/graphics.h \
@@ -120,7 +122,9 @@ HEADERS += \
     player.h \
     entity/renderobject.h \
     entity/sprite.h \
-    bulletjudge.h
+    bulletjudge.h \
+    graphics/imagepiece.h \
+    graphics/texturecache.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

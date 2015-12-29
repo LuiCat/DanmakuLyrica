@@ -4,6 +4,8 @@
 
 #include "mathhelper.h"
 
+ImagePiece Note::texNote("data/image/note/note.png");
+
 Note::Note(double _hitTime, double _hitBeat)
     :scrollSpeed(1.0)
     ,noteType(none)
@@ -51,6 +53,7 @@ void Note::setJudgeResult(double timeSec, JudgeResult result)
 {
     judgeResult=result;
     judgeTime=(timeSec>0?timeSec:hitTime);
+    this->destroy();
 }
 
 bool Note::isJudged() const
@@ -66,9 +69,12 @@ void Note::onTick()
 
 void Note::onRender()
 {
-    d3d.setColor(judgeResult==miss?0xffffff:judgeResult==bad?0xff0000:judgeResult==good?0xffff00:0x00ff00);
-    d3d.vertex( 0.5,  10, 0.0, 0.0);
-    d3d.vertex(-0.5,  10, 1.0, 0.0);
-    d3d.vertex(-0.5, -10, 1.0, 1.0);
-    d3d.vertex( 0.5, -10, 0.0, 1.0);
+    //d3d.setColor(judgeResult==miss?0xffffff:judgeResult==bad?0xff0000:judgeResult==good?0xffff00:0x00ff00);
+
+    if(getX()<0)
+    {
+        d3d.setAlpha(1+getX()*0.02);
+    }
+
+    texNote.vertice(0, 40, 80);
 }

@@ -6,6 +6,11 @@ NoteScene::NoteScene()
 
 void NoteScene::load()
 {
+    //Note::texNote.load("data/image/note/note.png");
+
+    texPanelB.load("data/image/note/panel_bottom.png");
+    texPanelO.load("data/image/note/panel_overlay.png");
+
     reloadNotes();
 }
 
@@ -22,17 +27,17 @@ void NoteScene::update(rtime_t deltaTime)
 void NoteScene::render()
 {
     d3d.pushMatrix();
-    d3d.translate2D(100, 300.0);
+    d3d.translate2D(400, 572);
+
+    texPanelB.vertice(80, 80, 160);
 
     d3d.pushMatrix();
-    d3d.setColor(0x00FF00);
-    d3d.vertex( 0.5,  20, 0.0, 0.0);
-    d3d.vertex(-0.5,  20, 1.0, 0.0);
-    d3d.vertex(-0.5, -20, 1.0, 1.0);
-    d3d.vertex( 0.5, -20, 0.0, 1.0);
+    noteList.renderAll();
+    d3d.scale2D(-1, 1);
+    noteList.renderAll();
     d3d.popMatrix();
 
-    noteList.renderAll();
+    texPanelO.vertice(80, 80, 160);
 
     d3d.popMatrix();
 }

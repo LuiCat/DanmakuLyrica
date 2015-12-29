@@ -5,12 +5,15 @@
 
 #include "notedef.h"
 #include "notejudge.h"
+#include "imagepiece.h"
 
 #include "mapstate.h"
 
 class Note : public Entity
 {
 public:
+
+    static ImagePiece texNote;
 
     Note(double _hitTime=0.0, double _hitBeat=0.0);
     Note(const NoteInfo& info, double forwardBeat);

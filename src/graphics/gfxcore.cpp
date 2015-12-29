@@ -16,6 +16,7 @@ void GFXCore::setDeviceStates()
     //g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);D3DTADDRESS_CLAMP
 
     pD3DDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE);
+    pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
     pD3DDevice->SetSamplerState(0,   D3DSAMP_MAGFILTER,   D3DTEXF_LINEAR );//D3DTEXF_LINEAR
     pD3DDevice->SetSamplerState(0,   D3DSAMP_MINFILTER,   D3DTEXF_LINEAR );//

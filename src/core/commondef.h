@@ -22,4 +22,8 @@
 
 #define SAFE_RELEASE(p) {if(p){delete p;p=0;}}
 
+#define SINGLE_INST(T) \
+private:\
+static unique_ptr<T> m_inst;
+
 #endif // COMMONDEF_H

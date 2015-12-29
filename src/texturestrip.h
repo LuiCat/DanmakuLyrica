@@ -16,6 +16,7 @@ public:
     void setMaxIndex(int i, int j);
 
     void pushVertices(int i, int j);
+    void pushVerticesFlip(int i, int j);
 
 protected:
 

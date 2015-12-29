@@ -61,6 +61,8 @@ void DanmakuLyrica::mainInit()
     sceneManager.pushScene(&bulletScene);
     sceneManager.pushScene(&noteScene);
 
+    ImagePiece::loadPending();
+
 }
 
 void DanmakuLyrica::mainCleanup()

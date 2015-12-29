@@ -4,7 +4,7 @@
 
 Sprite& Sprite::setTexture(Texture tex)
 {
-    textureStrip.setTexture(tex);
+    image.setTexture(tex);
     return *this;
 }
 
@@ -22,10 +22,15 @@ Sprite& Sprite::setRenderCenter(double x, double y)
     return *this;
 }
 
-Sprite& Sprite::setTextureSize(double posX, double posY, double sizeX, double sizeY)
+Sprite& Sprite::setImage(const ImagePiece& newImage)
 {
-    textureStrip.setStripPos(posX, posY, sizeX, sizeY);
+    image = newImage;
     return *this;
+}
+
+const ImagePiece& Sprite::getImage() const
+{
+    return image;
 }
 
 double Sprite::getAlpha() const
@@ -52,7 +57,6 @@ Sprite& Sprite::setAlpha(double x)
 
 Sprite::Sprite()
     :Entity()
-    ,textureStrip(0)
     ,renderSizeX(16.0)
     ,renderSizeY(16.0)
     ,renderCenterX(8.0)
@@ -64,7 +68,6 @@ Sprite::Sprite()
 
 Sprite::Sprite(double x, double y)
     :Entity(x, y)
-    ,textureStrip(0)
     ,renderSizeX(16.0)
     ,renderSizeY(16.0)
     ,renderCenterX(8.0)
@@ -81,10 +84,8 @@ void Sprite::onTick()
 void Sprite::onRender()
 {
     d3d.pushMatrix();
-    d3d.translate2D(-renderCenterX, -renderCenterY);
-    d3d.scale2D(renderSizeX, renderSizeY);
     if(useAlpha)
         d3d.setAlpha(alpha);
-    textureStrip.pushVertices(0, 0);
+    image.vertice(renderCenterX, renderCenterY, renderSizeX, renderSizeY);
     d3d.popMatrix();
 }
