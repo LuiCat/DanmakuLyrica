@@ -24,7 +24,7 @@ public:
                        SoundRegistry::createSound<typename SoundType>");
         SoundType b;
         b.loadVol(filename, volume);
-        return reg.registerName(name, &b);
+        return reg.registerName(name, b);
     }
 
     static void releaseAll();

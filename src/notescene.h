@@ -31,6 +31,8 @@ protected:
     ImagePiece texPanelB;
     ImagePiece texPanelO;
 
+    BeatTime beatTime;
+
 };
 
 #endif // NOTESCENE_H

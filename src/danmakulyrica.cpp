@@ -33,7 +33,6 @@ DanmakuLyrica::DanmakuLyrica()
 
 void DanmakuLyrica::mainInit()
 {
-
     SoundRegistry::createSound("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
     SoundRegistry::createSound("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
     SoundRegistry::createSound("miss", false, "data/sound/miss.wav", 1.0f);

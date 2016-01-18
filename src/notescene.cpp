@@ -12,6 +12,8 @@ void NoteScene::load()
     texPanelO.load("data/image/note/panel_overlay.png");
 
     reloadNotes();
+
+    beatTime = 1e7;
 }
 
 void NoteScene::unload()
@@ -22,6 +24,8 @@ void NoteScene::unload()
 void NoteScene::update(rtime_t deltaTime)
 {
     noteList.updateAll(deltaTime.beat);
+
+    beatTime += deltaTime;
 }
 
 void NoteScene::render()
@@ -29,7 +33,11 @@ void NoteScene::render()
     d3d.pushMatrix();
     d3d.translate2D(400, 572);
 
-    texPanelB.vertice(80, 80, 160);
+    d3d.pushMatrix();
+    double scale = 1-0.05*exp(-10*beatTime.sec);
+    d3d.scale2D(scale, scale);
+    texPanelB.vertice(0.5, 0.5, 160);
+    d3d.popMatrix();
 
     d3d.pushMatrix();
     noteList.renderAll();
@@ -37,7 +45,7 @@ void NoteScene::render()
     noteList.renderAll();
     d3d.popMatrix();
 
-    texPanelO.vertice(80, 80, 160);
+    texPanelO.vertice(0.5, 0.5, 160);
 
     d3d.popMatrix();
 }
@@ -49,6 +57,7 @@ void NoteScene::setNoteMap(NoteMap* m)
 
 JudgeResult NoteScene::judgeSingleNote(double timeSec)
 {
+    beatTime = BeatTime::zero;
     return noteList.judgeSingleNote(timeSec);
 }
 

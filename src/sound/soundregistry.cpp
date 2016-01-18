@@ -13,17 +13,17 @@ int SoundRegistry::createSound(const char *name, bool isStream, const char *file
     {
         StreamBuffer b;
         b.loadVol(filename, volume);
-        return reg.registerName(name, &b);
+        return reg.registerName(name, b);
     }
     else
     {
         SoundBuffer b;
         b.loadVol(filename, volume);
-        return reg.registerName(name, &b);
+        return reg.registerName(name, b);
     }
 }
 
 void SoundRegistry::releaseAll()
 {
-    reg.releaseAll(releaseFunc);
+    reg.releaseAll([](SoundBuffer* p){p->release();});
 }

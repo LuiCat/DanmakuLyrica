@@ -143,10 +143,7 @@ int BulletScript::lua_registerBullet(lua_State* L)
     strcpy(buffer, inst()->getCurrentPath());
     strcat(buffer, lua_tostring(L, 2));
 
-    type.texture=0;
-    DWORD r;
-    if((r=createTexture(buffer, &type.texture))!=D3D_OK)
-        return 0;
+    type.image.load(buffer);
 
     type.sizeX=lua_tonumber(L, 3);
     type.sizeY=lua_tonumber(L, 4);
@@ -198,9 +195,9 @@ int BulletScript::lua_registerBullet(lua_State* L)
     type.judgeSizeX=lua_tonumber(L, 9);
     type.judgeSizeY=lua_tonumber(L, 10);
 
-    lua_pushinteger(L, Bullet::reg(lua_tostring(L, 1), &type));
+    lua_pushinteger(L, Bullet::reg(lua_tostring(L, 1), type));
 
-    cout<<"Bullet \""<<lua_tostring(L, 1)<<"\" Registered, texture id "<<type.texture<<endl;
+    cout<<"Bullet \""<<lua_tostring(L, 1)<<"\" Registered, texture id "<<type.image.texture()<<endl;
 
     return 1;
 }

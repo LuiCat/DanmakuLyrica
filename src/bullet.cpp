@@ -8,10 +8,10 @@
 
 #include <cstring>
 
-BulletType Bullet::defaultBullet={0, 16, 16, 8, 8, BulletType::none, BulletType::rect, 8, 8};
+BulletType Bullet::defaultBullet={ImagePiece(), 16, 16, 8, 8, BulletType::none, BulletType::rect, 8, 8};
 Registry<BulletType> Bullet::reg;
 
-void Bullet::registerBullet(const char *typeName, const BulletType *typeInfo)
+void Bullet::registerBullet(const char *typeName, const BulletType& typeInfo)
 {
     reg(typeName, typeInfo);
 }
@@ -19,7 +19,7 @@ void Bullet::registerBullet(const char *typeName, const BulletType *typeInfo)
 void Bullet::registerBullet(const char *typeName, Texture texture, double sizeX, double sizeY, double centerX, double centerY, BulletType::FacingType facingType, BulletType::JudgeType judgeType, double judgeSizeX, double judgeSizeY)
 {
     BulletType info={texture, sizeX, sizeY, centerX, centerY, facingType, judgeType, judgeSizeX, judgeSizeY};
-    reg(typeName, &info);
+    reg(typeName, info);
 }
 
 //===================================================
@@ -57,17 +57,10 @@ void Bullet::onTick(){}
 
 void Bullet::onRender()
 {
+    if(typeInfo == nullptr)
+        return;
     d3d.pushMatrix();
-
-    d3d.translate2D(-typeInfo->centerX, -typeInfo->centerY);
-    d3d.scale2D(typeInfo->sizeX, typeInfo->sizeY);
-    d3d.setTexture(typeInfo->texture);
-
-    d3d.vertex(0.0, 0.0, 0.0, 0.0);
-    d3d.vertex(1.0, 0.0, 1.0, 0.0);
-    d3d.vertex(1.0, 1.0, 1.0, 1.0);
-    d3d.vertex(0.0, 1.0, 0.0, 1.0);
-
+    typeInfo->image.vertice(typeInfo->centerX, typeInfo->centerY, typeInfo->sizeX, typeInfo->sizeY);
     d3d.popMatrix();
 }
 

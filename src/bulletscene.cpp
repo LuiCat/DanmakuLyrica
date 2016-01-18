@@ -61,6 +61,7 @@ void BulletScene::load()
     SAFE_RELEASE(player);
     player = new Player();
     player->setJudgeList(&bulletList);
+    player->setMoveField(-380, 380, -270, 200);
 }
 
 void BulletScene::unload()

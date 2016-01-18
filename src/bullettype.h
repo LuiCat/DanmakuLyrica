@@ -3,9 +3,16 @@
 
 #include "texturestrip.h"
 
+#include <imagepiece.h>
+
 struct BulletType
 {
+    ImagePiece image;
+
+    /*
     Texture texture;
+*/
+
     double sizeX, sizeY;
     double centerX, centerY;
 

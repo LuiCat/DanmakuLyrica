@@ -25,22 +25,21 @@ public:
 
     }
 
-    int registerName(const char *name, const T *info)
+    int registerName(const char* name, const T& info)
     {
-        if(!info)return 0;
         ++lastRegisteredId;
         if(name && strlen(name)>0)
             typeNameMap[string(name)]=lastRegisteredId;
-        typeInfoList[lastRegisteredId]=*info;
+        typeInfoList.emplace(lastRegisteredId, std::move(info));
         return lastRegisteredId;
     }
 
-    inline int operator()(const char *name, const T *info)
+    inline int operator()(const char* name, const T& info)
     {
         return registerName(name, info);
     }
 
-    inline int getId(const char *typeName)
+    inline int getId(const char* typeName)
     {
         string str(typeName);
         if(typeNameMap.find(str)==typeNameMap.end())return 0;
@@ -54,7 +53,8 @@ public:
         return &typeInfoList[id];
     }
 
-    void releaseAll(void (*func)(T*))
+    template <typename Function>
+    void releaseAll(Function func)
     {
         while(!typeInfoList.empty())
         {

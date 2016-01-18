@@ -84,8 +84,10 @@ void Sprite::onTick()
 void Sprite::onRender()
 {
     d3d.pushMatrix();
+    d3d.translate2D(-renderCenterX, -renderCenterY);
+    d3d.scale2D(renderSizeX, renderSizeY);
     if(useAlpha)
         d3d.setAlpha(alpha);
-    image.vertice(renderCenterX, renderCenterY, renderSizeX, renderSizeY);
+    image.vertice();
     d3d.popMatrix();
 }

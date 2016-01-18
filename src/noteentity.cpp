@@ -76,5 +76,5 @@ void Note::onRender()
         d3d.setAlpha(1+getX()*0.02);
     }
 
-    texNote.vertice(0, 40, 80);
+    texNote.vertice(0, 0.5, 80);
 }

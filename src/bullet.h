@@ -23,7 +23,7 @@ public:
     static Registry<BulletType> reg;
 
     // bullet registry funcs
-    static void registerBullet(const char *typeName, const BulletType *typeInfo);
+    static void registerBullet(const char *typeName, const BulletType& typeInfo);
     static void registerBullet(const char *typeName, Texture texture,
                                double sizeX, double sizeY, double centerX, double centerY, BulletType::FacingType facingType,
                                BulletType::JudgeType judgeType, double judgeSizeX, double judgeSizeY);
