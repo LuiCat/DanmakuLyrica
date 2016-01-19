@@ -195,7 +195,7 @@ int BulletScript::lua_registerBullet(lua_State* L)
     type.judgeSizeX=lua_tonumber(L, 9);
     type.judgeSizeY=lua_tonumber(L, 10);
 
-    lua_pushinteger(L, Bullet::reg(lua_tostring(L, 1), type));
+    lua_pushinteger(L, Bullet::reg.registerName(lua_tostring(L, 1), std::move(type)));
 
     cout<<"Bullet \""<<lua_tostring(L, 1)<<"\" Registered, texture id "<<type.image.texture()<<endl;
 

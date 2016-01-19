@@ -22,9 +22,7 @@ public:
         static_assert(is_base_of<SoundBuffer, SoundType>::value,
                       "SoundType does not implement SoundBuffer in \
                        SoundRegistry::createSound<typename SoundType>");
-        SoundType b;
-        b.loadVol(filename, volume);
-        return reg.registerName(name, b);
+        return reg.registerName<SoundType>(name, filename, volume);
     }
 
     static void releaseAll();

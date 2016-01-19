@@ -1,25 +1,16 @@
 #include "soundregistry.h"
 
-void releaseFunc(SoundBuffer* p)
-{
-    p->release();
-}
-
 Registry<SoundBuffer> SoundRegistry::reg;
 
 int SoundRegistry::createSound(const char *name, bool isStream, const char *filename, float volume)
 {
     if(isStream)
     {
-        StreamBuffer b;
-        b.loadVol(filename, volume);
-        return reg.registerName(name, b);
+        return reg.registerName<StreamBuffer>(name, filename, volume);
     }
     else
     {
-        SoundBuffer b;
-        b.loadVol(filename, volume);
-        return reg.registerName(name, b);
+        return reg.registerName<SoundBuffer>(name, filename, volume);
     }
 }
 

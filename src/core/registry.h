@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <string>
 #include <cstring>
+#include <memory>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ class Registry
 {
 private:
 
-    unordered_map<int, T> typeInfoList;
+    unordered_map<int, unique_ptr<T>> typeInfoList;
     unordered_map<string, int> typeNameMap;
 
     int lastRegisteredId;
@@ -25,18 +26,41 @@ public:
 
     }
 
-    int registerName(const char* name, const T& info)
+    template <typename _T>
+    int registerName(const char* name, const _T& info)
     {
         ++lastRegisteredId;
         if(name && strlen(name)>0)
             typeNameMap[string(name)]=lastRegisteredId;
-        typeInfoList.emplace(lastRegisteredId, std::move(info));
+        typeInfoList.emplace(lastRegisteredId, unique_ptr<_T>(new _T(info)));
         return lastRegisteredId;
     }
 
-    inline int operator()(const char* name, const T& info)
+    template <typename _T>
+    int registerName(const char* name, _T&& info)
     {
-        return registerName(name, info);
+        ++lastRegisteredId;
+        if(name && strlen(name)>0)
+            typeNameMap[string(name)]=lastRegisteredId;
+        typeInfoList.emplace(lastRegisteredId,
+              unique_ptr<T>(new _T(std::forward<_T>(info))));
+        return lastRegisteredId;
+    }
+
+    template <typename _T, typename... Args>
+    int registerName(const char* name, Args&&... args)
+    {
+        ++lastRegisteredId;
+        if(name && strlen(name)>0)
+            typeNameMap[string(name)]=lastRegisteredId;
+        typeInfoList.emplace(lastRegisteredId, unique_ptr<_T>(new _T(args...)));
+        return lastRegisteredId;
+    }
+
+    template <typename... Args>
+    inline int operator()(const char* name, Args&&... args)
+    {
+        return registerName(name, std::forward<Args>(args)...);
     }
 
     inline int getId(const char* typeName)
@@ -50,17 +74,18 @@ public:
     {
         if(typeInfoList.find(id)==typeInfoList.end())
             return 0;
-        return &typeInfoList[id];
+        return typeInfoList[id].get();
     }
 
     template <typename Function>
     void releaseAll(Function func)
     {
-        while(!typeInfoList.empty())
+        for(auto& pair : typeInfoList)
         {
-            func(&(typeInfoList.begin()->second));
-            typeInfoList.erase(typeInfoList.begin());
+            func(pair.second.get());
         }
+        typeInfoList.clear();
+        typeNameMap.clear();
     }
 
 };

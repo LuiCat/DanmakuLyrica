@@ -250,6 +250,12 @@ SoundBuffer::~SoundBuffer()
 
 }
 
+SoundBuffer::SoundBuffer(const char* filename, float volume)
+    : SoundBuffer()
+{
+    loadVol(filename, volume);
+}
+
 void SoundBuffer::release()
 {
     if(buffer)
@@ -374,6 +380,11 @@ StreamBuffer::StreamBuffer()
 StreamBuffer::~StreamBuffer()
 {
 
+}
+
+StreamBuffer::StreamBuffer(const char* filename, float volume)
+{
+    loadVol(filename, volume);
 }
 
 void StreamBuffer::release()

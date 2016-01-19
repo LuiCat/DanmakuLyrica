@@ -1,4 +1,4 @@
 ﻿重写Scene类型，增加SceneManager类型
 一个新的具有不同update函数的TimeObject类，按照更新顺序在当前节点计算下一次最长更新时间，并且以此时间更新子节点（或者用作其他的更新）
 重构TextureStrip，和AnimatedTexture合并，实现一个可以按照标签确定图像或者通过传入时间达成动图效果的Image组；可以尝试自定义动画文件。
-Registry::registerName没能传入右值引用的info，没能调用ImagePiece(ImagePiece&& other)。尝试调整Registry类。
+

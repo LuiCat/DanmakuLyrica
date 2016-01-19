@@ -13,13 +13,13 @@ Registry<BulletType> Bullet::reg;
 
 void Bullet::registerBullet(const char *typeName, const BulletType& typeInfo)
 {
-    reg(typeName, typeInfo);
+    reg.registerName(typeName, typeInfo);
 }
 
 void Bullet::registerBullet(const char *typeName, Texture texture, double sizeX, double sizeY, double centerX, double centerY, BulletType::FacingType facingType, BulletType::JudgeType judgeType, double judgeSizeX, double judgeSizeY)
 {
     BulletType info={texture, sizeX, sizeY, centerX, centerY, facingType, judgeType, judgeSizeX, judgeSizeY};
-    reg(typeName, info);
+    reg.registerName(typeName, std::move(info));
 }
 
 //===================================================

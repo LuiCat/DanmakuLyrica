@@ -41,6 +41,8 @@ public:
     explicit SoundBuffer();
     virtual ~SoundBuffer();
 
+    SoundBuffer(const char *filename, float volume=1.0f);
+
     virtual void release();
 
     inline bool isAvailable() const
@@ -107,6 +109,8 @@ public:
 
     explicit StreamBuffer();
     ~StreamBuffer();
+
+    StreamBuffer(const char *filename, float volume=1.0f);
 
     void release();
 
