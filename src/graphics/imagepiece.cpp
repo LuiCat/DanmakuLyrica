@@ -163,18 +163,6 @@ void ImagePiece::setRenderRange(double minU, double minV, double maxU, double ma
     vmax = maxV;
 }
 
-ImagePiece& ImagePiece::operator=(const ImagePiece& other)
-{
-    loadExistLater(other);
-    return *this;
-}
-
-ImagePiece& ImagePiece::operator=(ImagePiece&& other)
-{
-    loadExistLater(other, true);
-    return *this;
-}
-
 void ImagePiece::vertice()
 {
     d3d.setTexture(tex);

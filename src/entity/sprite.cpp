@@ -22,9 +22,9 @@ Sprite& Sprite::setRenderCenter(double x, double y)
     return *this;
 }
 
-Sprite& Sprite::setImage(const ImagePiece& newImage)
+Sprite& Sprite::setImage(ImagePiece&& newImage)
 {
-    image = newImage;
+    image = std::forward<ImagePiece>(newImage);
     return *this;
 }
 

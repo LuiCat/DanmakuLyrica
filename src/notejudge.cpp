@@ -12,10 +12,10 @@ JudgeResult NoteJudge::judgeNote(double offsetSec)
     if(offsetSec<0)
         offsetSec=-offsetSec;
     if(offsetSec<rangeGreat)
-        return great;
+        return Judge_Great;
     if(offsetSec<rangeGood)
-        return good;
-    if(offsetSec<rangeBad)
-        return bad;
-    return miss;
+        return Judge_Cool;
+    //if(offsetSec<rangeBad)
+        //return bad;
+    return Judge_Miss;
 }

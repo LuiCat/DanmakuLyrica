@@ -9,7 +9,7 @@ Player::Player()
     : Entity(0, 0)
     , judgeList(0)
     , judgeSpan(0.0)
-    , moveSpeed(200.0)
+    , moveSpeed(160.0)
     , lastMissTime(0.0)
     , invinTime(0.5)
     , minX(-WIDTH/2)
@@ -94,16 +94,17 @@ void Player::onTick()
 {
     static int t = 0;
     // do some record ?
-    if(timeSec-lastMissTime>invinTime && judgeList)
+    if(!judgeList)
+        return;
+    if(judgeList->judgeBullets(*this))
     {
-        if(judgeList->judgeBullets(*this))
+        if(timeSec-lastMissTime>invinTime)
         {
             lastMissTime = getTimeSec();
             cout<<"miss "<<(++t)<<endl;
             SOUND("miss")->play(true);
         }
     }
-
 }
 
 void Player::onRender()
@@ -115,7 +116,7 @@ void Player::onRender()
     d3d.popMatrix();
 }
 
-void Player::onDestory()
+void Player::onDestroy()
 {
     // do some magic ?
 }

@@ -10,7 +10,7 @@ Note::Note(double _hitTime, double _hitBeat)
     :scrollSpeed(1.0)
     ,noteType(none)
     ,judgeTime(-1e7)
-    ,judgeResult(miss)
+    ,judgeResult(Judge_Miss)
 {
     setForceFacing(false);
     setJudgeTime(_hitTime, _hitBeat);
@@ -20,7 +20,7 @@ Note::Note(const NoteInfo& info, double forwardBeat)
     :scrollSpeed(info.hs)
     ,noteType(info.noteType)
     ,judgeTime(-1e7)
-    ,judgeResult(miss)
+    ,judgeResult(Judge_Miss)
 {
     setForceFacing(false);
     setJudgeTime(info.offsetSec, info.offsetBeat+forwardBeat);
@@ -58,7 +58,7 @@ void Note::setJudgeResult(double timeSec, JudgeResult result)
 
 bool Note::isJudged() const
 {
-    return judgeResult!=miss;
+    return judgeResult!=Judge_Miss;
 }
 
 void Note::onTick()

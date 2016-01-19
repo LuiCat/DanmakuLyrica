@@ -57,7 +57,7 @@ protected:
     void onUpdateMotion(double deltaSec, double deltaTick);
     void onTick();
     void onRender();
-    void onDestory();
+    void onDestroy();
 
     friend class BulletJudge;
 

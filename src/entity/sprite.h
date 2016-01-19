@@ -24,7 +24,7 @@ public:
     Sprite& setRenderSize(double x, double y);
     Sprite& setRenderCenter(double x, double y);
 
-    Sprite& setImage(const ImagePiece& newImage);
+    Sprite& setImage(ImagePiece&& newImage);
     const ImagePiece& getImage() const;
 
     double getAlpha() const;

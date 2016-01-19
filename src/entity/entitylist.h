@@ -37,6 +37,13 @@ public:
     }
 
     template <typename _T>
+    int pushEntity(_T&& entity)
+    {
+        entityList[nextEntityID].reset(new _T(std::forward<_T>(entity)));
+        return nextEntityID++;
+    }
+
+    template <typename _T>
     void pushEntities(const list<_T>& entities)
     {
         for(const _T& e : entities)

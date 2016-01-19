@@ -236,7 +236,7 @@ int BulletScript::lua_setAngle(lua_State* L)
 {
     LuaTask* task=inst()->currentTask;
     if(lua_isnumber(L, 1))
-        task->angle=lua_tonumber(L, 1);
+        task->angle=rad(lua_tonumber(L, 1));
     return 0;
 }
 
@@ -277,7 +277,7 @@ int BulletScript::lua_setSound(lua_State* L)
 int BulletScript::lua_attachAlloc(lua_State* L)
 {
     BulletAttachList* p=(BulletAttachList*)lua_newuserdata(L, sizeof(BulletAttachList));
-    p=new(p) BulletAttachList(inst()->bulletList);
+    p=new(p) BulletAttachList(inst()->scene->getBulletList());
     return 1;
 }
 
@@ -360,7 +360,7 @@ int BulletScript::lua_setAttachedBulletSpeed(lua_State* L)
         if(lua_isnumber(L, 2))
             p->forEach([&](BulletBase& b)
             {
-                b.pushEvent<Movement>(delay, Movement::speed, false, rad(lua_tonumber(L, 2)));
+                b.pushEvent<Movement>(delay, Movement::speed, false, lua_tonumber(L, 2));
             });
     }
     else
@@ -483,7 +483,6 @@ int BulletScript::lua_setAttachedBulletSpeedOffset(lua_State* L)
 BulletScript::BulletScript(BulletScene* scene)
     :scene(scene)
 {
-    bulletList=(scene?scene->getBulletList():0);
 
     registerLuaFuncs();
 
@@ -491,5 +490,10 @@ BulletScript::BulletScript(BulletScene* scene)
     loadScriptFile("data/script/attach.lua");
     loadScriptFile("data/script/reg_bullet.lua");
 
+}
+
+void BulletScript::setScene(BulletScene* _scene)
+{
+    scene = _scene;
 }
 

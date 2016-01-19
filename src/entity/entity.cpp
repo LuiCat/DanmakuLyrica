@@ -237,6 +237,7 @@ Entity::Entity()
     ,facingAngle(0.0)
     ,forceFacing(true)
     ,useDefaultMotion(true)
+    ,isDestroyed(false)
     ,isAxisVelocityCorrect(true)
 {
 
@@ -253,6 +254,7 @@ Entity::Entity(double posX, double posY)
     ,facingAngle(0.0)
     ,forceFacing(true)
     ,useDefaultMotion(true)
+    ,isDestroyed(false)
     ,isAxisVelocityCorrect(true)
 {
 }
@@ -275,7 +277,7 @@ void Entity::onUpdateMotion(double deltaSec, double)
     EntityEvent* p;
     while(!eventList.empty())
     {
-        p=eventList.top();
+         p=eventList.top();
         deltaSec=p->process(this, deltaSec);
         if(!p->isProcessed())
             break;
@@ -295,7 +297,7 @@ void Entity::onRender()
     d3d.vertex(0.0, 1.0, 0.0, 1.0);
 }
 
-void Entity::onDestory()
+void Entity::onDestroy()
 {
     setDead();
 }
@@ -304,7 +306,10 @@ void Entity::onDestory()
 
 void Entity::destroy()
 {
-    onDestory();
+    if(isDestroyed)
+        return;
+    isDestroyed = true;
+    onDestroy();
 }
 
 void Entity::render()

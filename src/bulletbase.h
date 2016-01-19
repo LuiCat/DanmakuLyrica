@@ -24,12 +24,16 @@ protected:
 
     BulletJudge* judge;
 
+    double deadTime;
+
     virtual bool isOutsideScene(double x1, double y1, double x2, double y2)=0;
     virtual void onOutsideScene();
 
     virtual bool onJudge(Entity* entity, double span);
 
+    virtual void onTick();
     virtual void onUpdateMotion(double deltaSec, double deltaTick);
+    virtual void onDestroy();
 
 };
 

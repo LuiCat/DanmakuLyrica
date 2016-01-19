@@ -78,6 +78,11 @@ public:
     // method to make destroying animations & set dead later
     void destroy();
 
+    inline bool destroyed() const
+    {
+        return isDestroyed;
+    }
+
 protected:
 
     double speed, rotation;
@@ -89,6 +94,8 @@ protected:
 
     bool useDefaultMotion;
 
+    bool isDestroyed;
+
     typedef priority_queue<EntityEvent*, vector<EntityEvent*>, EntityEvent::PointerLess> EventQueue;
 
     EventQueue eventList;
@@ -96,7 +103,7 @@ protected:
     virtual void onUpdateMotion(double deltaSec, double deltaTick);
     virtual void onTick();
     virtual void onRender();
-    virtual void onDestory();
+    virtual void onDestroy();
 
 private:
 

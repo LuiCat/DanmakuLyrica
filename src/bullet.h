@@ -41,10 +41,8 @@ protected:
     bool isOutsideScene(double x1, double y1, double x2, double y2);
 
     bool onJudge(Entity* entity, double span);
-
-    virtual void onTick();
-    virtual void onRender();
-    virtual void onDestroy();
+\
+    void onRender();
 
     friend class BulletJudge;
 

@@ -33,8 +33,17 @@ public:
     void setTexture(Texture texture);
     void setRenderRange(double minU, double minV, double maxU, double maxV);
 
-    inline ImagePiece& operator=(const ImagePiece& other);
-    inline ImagePiece& operator=(ImagePiece&& other);
+    inline ImagePiece& operator=(const ImagePiece& other)
+    {
+        loadExistLater(other);
+        return *this;
+    }
+
+    inline ImagePiece& operator=(ImagePiece&& other)
+    {
+        loadExistLater(other, true);
+        return *this;
+    }
 
     // push vertices with x and y either 0.0 or 1.0
     void vertice();

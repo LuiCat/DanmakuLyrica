@@ -43,11 +43,12 @@ private:
 protected:
 
     BulletScene* scene;
-    BulletList* bulletList;
 
 public:
 
     explicit BulletScript(BulletScene* scene);
+
+    void setScene(BulletScene* scene);
 
 };
 

@@ -4,13 +4,13 @@
 BulletBase::BulletBase()
     :Entity()
 {
-
+    setTickRate(10);
 }
 
 BulletBase::BulletBase(double posX, double posY, double vel, double angle)
     :Entity(posX, posY, vel, angle)
 {
-
+    setTickRate(10);
 }
 
 void BulletBase::onOutsideScene()
@@ -23,9 +23,15 @@ bool BulletBase::onJudge(Entity*, double)
     return false;
 }
 
+void BulletBase::onTick()
+{
+    if(isDestroyed && timeSec>deadTime)
+        setDead();
+}
+
 void BulletBase::onUpdateMotion(double deltaSec, double deltaTick)
 {
-    if(judge)
+     if(judge)
     {
         judge->updateModelBefore(this);
         Entity::onUpdateMotion(deltaSec, deltaTick);
@@ -35,6 +41,11 @@ void BulletBase::onUpdateMotion(double deltaSec, double deltaTick)
     {
         Entity::onUpdateMotion(deltaSec, deltaTick);
     }
+}
+
+void BulletBase::onDestroy()
+{
+    deadTime = getTimeSec() + 1.0;
 }
 
 void BulletBase::checkOutsideScene(double x1, double y1, double x2, double y2)
@@ -52,7 +63,7 @@ void BulletBase::setJudge(BulletJudge* judgeObj)
 
 bool BulletBase::judgePlayer(Player& player)
 {
-    return judge!=0 && onJudge(&player, player.getJudgeSpan());
+    return judge!=0 && !isDestroyed && onJudge(&player, player.getJudgeSpan());
 }
 
 

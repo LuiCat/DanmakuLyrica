@@ -35,6 +35,7 @@ void DanmakuLyrica::mainInit()
 {
     SoundRegistry::createSound("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
     SoundRegistry::createSound("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
+    SoundRegistry::createSound("tan1", false, "data/sound/se_tan01.wav", 1.0f);
     SoundRegistry::createSound("miss", false, "data/sound/miss.wav", 1.0f);
 
     createTexture("data/tex.png", &tex);
@@ -52,13 +53,13 @@ void DanmakuLyrica::mainInit()
 
     mapState=noteMap.getBgmBeginState();
 
-    script.setTime(mapState.beatOffset);
-    script.loadScriptFile("data/stage/test/main.lua");
-
     noteScene.setNoteMap(&noteMap);
 
     sceneManager.pushScene(&bulletScene);
     sceneManager.pushScene(&noteScene);
+
+    script.setTime(mapState.beatOffset);
+    script.loadScriptFile("data/stage/test/main.lua");
 
     ImagePiece::loadPending();
 
@@ -151,15 +152,25 @@ void DanmakuLyrica::mainUpdate()
         //nothing else happens....
     }
 
-    if(buttonA.isPushed() || buttonB.isPushed())
+    bool fA = buttonA.isPushed();
+    bool fB = buttonB.isPushed();
+    if(fA || fB)
     {
         judgeResult=noteScene.judgeSingleNote(bgmTimeStamp-0.015);
-        if(judgeResult==miss || judgeResult== bad)
-            SOUND("hit0")->play(true);
-        else
+        if(judgeResult>Judge_Miss)
+        {
             SOUND("hit1")->play(true);
+            if(fB)
+            {
+                SOUND("tan1")->play(true);
+                bulletScene.triggerBomb();
+            }
+        }
+        else
+        {
+            SOUND("hit0")->play(true);
+        }
     }
-
 }
 
 void DanmakuLyrica::mainRender()

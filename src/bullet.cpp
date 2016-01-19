@@ -53,23 +53,20 @@ bool Bullet::isOutsideScene(double x1, double y1, double x2, double y2)
     return (tx<x1&&sx<0)||(tx>x2&&sx>0)||(ty<y1&&sy<0)||(ty>y2&&sy>0);
 }
 
-void Bullet::onTick(){}
-
 void Bullet::onRender()
 {
     if(typeInfo == nullptr)
         return;
     d3d.pushMatrix();
+    if(isDestroyed)
+        d3d.setAlpha((deadTime-timeSec)*0.7); // alpha: 1.0 -> 0.8~0.0
     typeInfo->image.vertice(typeInfo->centerX, typeInfo->centerY, typeInfo->sizeX, typeInfo->sizeY);
     d3d.popMatrix();
 }
 
-void Bullet::onDestroy()
-{
-    setDead();
-}
-
 bool Bullet::onJudge(Entity* entity, double span)
 {
-    return judge->judgeBullet(this, entity, span);
+    bool res = judge->judgeBullet(this, entity, span);
+    if(res)destroy();
+    return res;
 }

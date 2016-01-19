@@ -3,10 +3,11 @@
 
 enum JudgeResult
 {
-    miss,
-    bad,
-    good,
-    great
+    Judge_Ignore = 0,
+    Judge_Miss = 1,
+    Judge_Bad = 2,
+    Judge_Cool = 3,
+    Judge_Great = 4
 };
 
 class NoteJudge

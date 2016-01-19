@@ -9,11 +9,11 @@ NoteList::NoteList()
 
 JudgeResult NoteList::judgeSingleNote(double timeSec)
 {
-    JudgeResult judge=miss;
+    JudgeResult judge=Judge_Miss;
     Note* note;
 
     auto iter=entityList.begin();
-    while(judge==miss && iter!=entityList.end())
+    while(judge==Judge_Miss && iter!=entityList.end())
     {
         note=(iter->second.get());
         if(!note->isJudged())

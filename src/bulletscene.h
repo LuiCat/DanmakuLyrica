@@ -17,7 +17,7 @@ class BulletScene : public Scene
 {
 private:
 
-    BulletList bulletList;
+    BulletList* bulletList;
     //list<LuaTask*> taskList;
 
     Player* player;
@@ -33,7 +33,7 @@ public:
     BulletScene();
     virtual ~BulletScene();
 
-    int pushBullet(const Bullet& bullet);
+    int pushBullet(Bullet&& bullet);
     int pushBullet(double x, double y, double speed, double angle, int type);
 
     bool checkSceneBorder(Entity* entity);
@@ -41,7 +41,9 @@ public:
     void setPlayerMotion(PlayerDirection dir);
 
     int getBulletSize() const;
-    BulletList* getBulletList();
+    BulletList* getBulletList() const;
+
+    void triggerBomb();
 
     void load();
     void unload();
