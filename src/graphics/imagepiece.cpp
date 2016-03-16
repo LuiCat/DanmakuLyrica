@@ -4,8 +4,9 @@
 
 #include <cstring>
 
-vector<pair<ImagePiece*, string>> ImagePiece::pendingList;
-unordered_map<const ImagePiece*, int>   ImagePiece::pendingMap;
+using namespace std;
+
+vector<pair<ImagePiece*, string>>* ImagePiece::pendingList = nullptr;
 bool ImagePiece::shouldLoadLater = true;
 
 void ImagePiece::pendingLoads()
@@ -16,14 +17,17 @@ void ImagePiece::pendingLoads()
 void ImagePiece::loadPending()
 {
     shouldLoadLater = false;
-    for(auto& pair : pendingList)
+    if(pendingList == nullptr)
+        return;
+    for(auto& pair : *pendingList)
     {
         if(pair.first == nullptr)
             continue;
         pair.first->tex = TextureCache::load(pair.second.c_str());
+        pair.first->loadId = -1;
     }
-    pendingList.clear();\
-    pendingMap.clear();
+    delete pendingList;
+    //pendingMap.clear();
 }
 
 ImagePiece::ImagePiece(Texture texture)
@@ -32,6 +36,7 @@ ImagePiece::ImagePiece(Texture texture)
     , vmin(0.0)
     , umax(1.0)
     , vmax(1.0)
+    , loadId(-1)
 {
 
 }
@@ -42,6 +47,7 @@ ImagePiece::ImagePiece(Texture texture, double minU, double minV, double maxU, d
     , vmin(minV)
     , umax(maxU)
     , vmax(maxV)
+    , loadId(-1)
 {
 
 }
@@ -52,6 +58,7 @@ ImagePiece::ImagePiece(const char* filename)
     , vmin(0.0)
     , umax(1.0)
     , vmax(1.0)
+    , loadId(-1)
 {
     loadOrLater(filename);
 }
@@ -62,6 +69,7 @@ ImagePiece::ImagePiece(const char* filename, double minU, double minV, double ma
     , vmin(minV)
     , umax(maxU)
     , vmax(maxV)
+    , loadId(-1)
 {
     loadOrLater(filename);
 }
@@ -72,6 +80,7 @@ ImagePiece::ImagePiece(const ImagePiece& other)
     , vmin(other.vmin)
     , umax(other.umax)
     , vmax(other.vmax)
+    , loadId(-1)
 {
     loadExistLater(other);
 }
@@ -82,8 +91,42 @@ ImagePiece::ImagePiece(ImagePiece&& other)
     , vmin(other.vmin)
     , umax(other.umax)
     , vmax(other.vmax)
+    , loadId(-1)
 {
-    loadExistLater(other, true);
+    loadExistLaterMove(std::forward<ImagePiece>(other));
+}
+
+vector<ImagePiece> ImagePiece::createImageSet(const char* filename, int row, int col, int maxIndex)
+{
+    return move(createImageSet(filename, row, col, maxIndex, 0, 0, 1, 1));
+}
+
+vector<ImagePiece> ImagePiece::createImageSet(const char* filename, int row, int col, int maxIndex,
+                                              double minU, double minV, double maxU, double maxV)
+{
+    if(row <= 0 || col <= 0)
+        return vector<ImagePiece>();
+    vector<ImagePiece> res;
+    res.reserve((maxIndex>=0 && maxIndex<row*col) ? maxIndex : row*col);
+    double u0, v0, u1, v1;
+    double du = (maxU-minU)/col;
+    double dv = (maxV-minV)/row;
+    for(int i=0; i<row; ++i)
+    {
+        for(int j=0; j<col; ++j)
+        {
+            if(maxIndex==0)
+                return move(res);
+            --maxIndex;
+            u0 = minU + du*j;
+            u1 = u0 + du;
+            v0 = minV + dv*i;
+            v1 = v0 + dv;
+            res.push_back(ImagePiece((Texture)0, u0, v0, u1, v1));
+            res.back().loadOrLater(filename);
+        }
+    }
+    return move(res);
 }
 
 ImagePiece::~ImagePiece()
@@ -93,42 +136,42 @@ ImagePiece::~ImagePiece()
 
 void ImagePiece::loadOrLater(const char* filename)
 {
+    if(filename == nullptr)
+        return;
     if(!shouldLoadLater)
         tex = TextureCache::load(filename);
-    pendingMap[this]=pendingList.size();
-    pendingList.emplace_back(this, filename);
+    if(pendingList == nullptr)
+        pendingList = new vector<pair<ImagePiece*, string>>();
+    loadId = pendingList->size();
+    pendingList->emplace_back(this, filename);
 }
 
 void ImagePiece::tryNotLoadSelf()
 {
-    if(shouldLoadLater && pendingMap.count(this))
+    if(shouldLoadLater && pendingList && loadId>=0)
     {
-        auto iter = pendingMap.find(this);
-        if(iter != pendingMap.end())
-        {
-            pendingList[iter->second].first = nullptr;
-            pendingMap.erase(iter);
-        }
+        (*pendingList)[loadId].first = nullptr;
+        loadId=-1;
     }
 }
 
-void ImagePiece::loadExistLater(const ImagePiece& other, bool move)
+void ImagePiece::loadExistLaterMove(ImagePiece&& other)
 {
     memcpy(this, &other, sizeof(ImagePiece));
-    if(shouldLoadLater)
+    if(shouldLoadLater && pendingList && loadId>=0)
     {
-        auto iter = pendingMap.find(&other);
-        if(move)
-        {
-            pendingMap[this]=iter->second;
-            pendingList[iter->second].first = this;
-            pendingMap.erase(iter);
-        }
-        else if(iter != pendingMap.end())
-        {
-            pendingMap[this]=pendingList.size();
-            pendingList.emplace_back(this, pendingList[iter->second].second);
-        }
+        (*pendingList)[loadId].first = this;
+        other.loadId = -1;
+    }
+}
+
+void ImagePiece::loadExistLater(const ImagePiece& other)
+{
+    memcpy(this, &other, sizeof(ImagePiece));
+    if(shouldLoadLater && pendingList && loadId>=0)
+    {
+        loadId = pendingList->size();
+        pendingList->emplace_back(this, (*pendingList)[loadId].second);
     }
 }
 

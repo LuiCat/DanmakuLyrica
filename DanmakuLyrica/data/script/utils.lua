@@ -4,10 +4,19 @@ function task(func)
 	return pushTask(co)
 end
 
--- function bullet(x,y,sp,rt[,type])
+-- function bullet(x,y,sp,rt[,type]) return id
 bullet = pushBullet
 
--- function now()
+-- function spirit(x,y,sp,rt,life[,hp]) return id
+spirit = pushSpirit
+
+-- function splash([x,y]) return id
+splash = pushSplash
+
+-- function clearBullets()
+-- function clearScene()
+
+-- function now() return time
 now = getTime
 
 -- function loadSound(filename[, (string)name][, (number)volume])
@@ -21,8 +30,11 @@ soundPitch = playSoundPitch
 -- function registerBullet(name, pic, w, h, centerx, centery, facetype={'none','forward','spin'},
 --                         judgetype={'round','rect','oval'}, judgew, judgeh)
 
+-- function setCenter(id)
 -- function setCenter(x,y)
+-- function setCenter(id,x,y)
 center = setCenter
+boss_id = -1
 
 -- function setAngle(rt)
 angle = setAngle
@@ -31,6 +43,28 @@ angle = setAngle
 bulletType = setBulletType
 
 -- function setSound([{name|soundid}])
+
+-- function playerPos() return x,y
+playerPos = getPlayerPos
+
+-- function bulletPos() return x,y
+bulletPos = getBulletPos
+
+-- function centerPos() return x,y
+centerPos = getCenterPos
+
+-- function moveBoss(x,y[,time])
+
+function playerAngle(id)
+	local x,y=getPlayerPos();
+	local cx,cy;
+	if id == nil then
+		cx,cy=getCenterPos(id);
+	else
+		cx,cy=getBulletPos(id);
+	end
+	return math.atan2(x-cx,y-cy)/math.pi*180
+end
 
 function sleep(t)
 	delay(t)

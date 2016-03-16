@@ -29,5 +29,13 @@ function Attach.new()
 end
 
 function Attach:bullet(x,y,sp,rt,t)
-	self:attach(bullet(x,y,sp,rt,t))
+	local id = bullet(x,y,sp,rt,t)
+	self:attach(id)
+	return id
+end
+
+function Attach:spirit(x,y,sp,rt,life,hp)
+	local id = spirit(x,y,sp,rt,life,hp)
+	self:attach(id)
+	return id
 end

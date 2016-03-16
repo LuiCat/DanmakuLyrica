@@ -27,6 +27,18 @@ private:
     static int lua_setBulletType(lua_State* L);
     static int lua_setSound(lua_State* L);
 
+    static int lua_pushSpirit(lua_State* L);
+    static int lua_pushSplash(lua_State* L);
+
+    static int lua_clearBullets(lua_State* L);
+    static int lua_clearScene(lua_State* L);
+
+    static int lua_getPlayerPos(lua_State* L);
+    static int lua_getBulletPos(lua_State* L);
+    static int lua_getCenterPos(lua_State* L);
+
+    static int lua_moveBoss(lua_State* L);
+
     static int lua_attachAlloc(lua_State* L);
     static int lua_attachBullet(lua_State* L);
     static int lua_clearAttach(lua_State* L);
@@ -40,9 +52,13 @@ private:
     static int lua_setAttachedBulletRotationOffset(lua_State* L);
     static int lua_setAttachedBulletSpeedOffset(lua_State* L);
 
+    static int lua_jumpTime(lua_State* L);
+
 protected:
 
     BulletScene* scene;
+
+    bool beforeTask(LuaTask *task);
 
 public:
 

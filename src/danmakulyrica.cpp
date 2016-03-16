@@ -7,6 +7,8 @@
 #include "commondef.h"
 #include "debug.h"
 
+#include <fstream>
+
 DanmakuLyrica* DanmakuLyrica::instance = 0;
 
 #if defined(FPS_VSYNC)
@@ -36,17 +38,27 @@ void DanmakuLyrica::mainInit()
     SoundRegistry::createSound("hit0", false, "data/sound/lyrica_notehit0.wav", 1.0f);
     SoundRegistry::createSound("hit1", false, "data/sound/lyrica_notehit1.wav", 1.0f);
     SoundRegistry::createSound("tan1", false, "data/sound/se_tan01.wav", 1.0f);
-    SoundRegistry::createSound("miss", false, "data/sound/miss.wav", 1.0f);
+    SoundRegistry::createSound("pop", false, "data/sound/pop.wav", 0.5f);
+    SoundRegistry::createSound("miss", false, "data/sound/miss.wav", 0.8f);
 
     createTexture("data/tex.png", &tex);
     strip.setTexture(tex);
     strip.setStripPos(0, 0, 0.5, 0.5);
     strip.setMaxIndex(2, 2);
 
-    noteMap.loadTjaFile("data/stage/test/oggtest.lrc");
+    string stagename;
+    string tjaname;
+    ifstream fin("data/stage/stage.txt");
+    getline(fin, stagename);
+    getline(fin, tjaname);
+    fin.close();
 
-    char stageDir[200]="data/stage/test/";
-    bgm.load(strcat(stageDir, noteMap.getWavFilename()));
+    stagename = "data/stage/" + stagename + "/";
+
+    tjaname = stagename + tjaname;
+    noteMap.loadTjaFile(tjaname.c_str());
+
+    bgm.load((stagename + noteMap.getWavFilename()).c_str());
     bgm.setVolume(0.5f);
 
     bgmTimeStamp = 0.0;
@@ -55,11 +67,17 @@ void DanmakuLyrica::mainInit()
 
     noteScene.setNoteMap(&noteMap);
 
+    noteScene.setScoreObj(&score);
+    bulletScene.setScoreObj(&score);
+
     sceneManager.pushScene(&bulletScene);
     sceneManager.pushScene(&noteScene);
 
+    bulletScene.getPlayer()->setNoteScene(&noteScene);
+
+    stagename = stagename + "main.lua";
     script.setTime(mapState.beatOffset);
-    script.loadScriptFile("data/stage/test/main.lua");
+    script.loadScriptFile(stagename.c_str());
 
     ImagePiece::loadPending();
 
@@ -75,6 +93,7 @@ void DanmakuLyrica::mainUpdate()
 {
     static bool isPaused=true;
     static double timeTotal=0;
+    //static int hits=0;
 
     JudgeResult judgeResult;
 
@@ -90,6 +109,40 @@ void DanmakuLyrica::mainUpdate()
         flagDir^=Dir_Right;
     bulletScene.setPlayerMotion((PlayerDirection)flagDir);
 
+    bool fA = buttonA.isPushed();
+    bool fB = false; //buttonB.isPushed();
+    if(fA || fB)
+    {
+        judgeResult=noteScene.judgeSingleNote(bgmTimeStamp-0.015);
+        if(judgeResult>Judge_Miss)
+        {
+            SOUND("hit1")->play(true);
+            if(fB)
+            {
+                SOUND("tan1")->play(true);
+                bulletScene.triggerBomb();
+            }
+            else
+            {
+                /*
+                auto spirit = bulletScene.nearestSpiritToPlayer();
+                if(spirit && spirit->hit())
+                {
+                    if(hits>0)
+                        hits=0;
+                    bulletScene.getBulletList()->destroyBulletInCircle(
+                                spirit->getX(), spirit->getY(), 80);
+                    ++hits;
+                }*/
+                bulletScene.hitPlayerTargetSpirit();
+            }
+        }
+        else
+        {
+            SOUND("hit0")->play(true);
+        }
+    }
+
     //1: do time line
     //2: update scenes
     //2.1: get process time from lua events
@@ -101,9 +154,24 @@ void DanmakuLyrica::mainUpdate()
     {
         double newTime=bgm.getTime()+inputOffset;
         double deltaSec=timeLine.getDeltaTimeFixed(newTime-bgmTimeStamp);
-        timeTotal+=deltaSec;
 
-        bgmTimeStamp=newTime;
+        if(buttonSkip.isPushed())
+        {
+            double t = bulletScene.getJump();
+            if(t>newTime)
+            {
+                bgm.pause();
+                bgm.setTime(t-inputOffset);
+                bgm.play();
+                newTime = t;
+                deltaSec = t-bgmTimeStamp;
+                timeLine.reset();
+            }
+        }
+
+        bgmTimeStamp = newTime;
+
+        timeTotal+=deltaSec;
 
         while(deltaSec>=M_DINFS)
         {
@@ -131,6 +199,14 @@ void DanmakuLyrica::mainUpdate()
 
     if(buttonPause.isPushed())
     {
+        //*/
+        if(isPaused)
+        {
+            isPaused=!isPaused;
+            timeLine.resume();
+            bgm.play();
+        }
+        /*/
         isPaused=!isPaused;
         if(isPaused)
         {
@@ -142,35 +218,9 @@ void DanmakuLyrica::mainUpdate()
             timeLine.resume();
             bgm.play();
         }
+        //*/
     }
 
-    if(buttonSkip.isPushed())
-    {
-        double btime=bgm.getTime();
-        cout<<btime<<endl;
-        bgm.setTime(btime+2);
-        //nothing else happens....
-    }
-
-    bool fA = buttonA.isPushed();
-    bool fB = buttonB.isPushed();
-    if(fA || fB)
-    {
-        judgeResult=noteScene.judgeSingleNote(bgmTimeStamp-0.015);
-        if(judgeResult>Judge_Miss)
-        {
-            SOUND("hit1")->play(true);
-            if(fB)
-            {
-                SOUND("tan1")->play(true);
-                bulletScene.triggerBomb();
-            }
-        }
-        else
-        {
-            SOUND("hit0")->play(true);
-        }
-    }
 }
 
 void DanmakuLyrica::mainRender()

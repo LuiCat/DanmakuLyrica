@@ -11,6 +11,15 @@ class BulletBase : public Entity
 {
 public:
 
+    enum ExtendType
+    {
+        Type_Unknown = 0,
+        Type_Bullet,
+        Type_SpiritWheel,
+        Type_Enemy,
+        Type_Effect
+    };
+
     BulletBase();
     BulletBase(double posX, double posY, double vel, double angle);
 
@@ -19,6 +28,8 @@ public:
     void setJudge(BulletJudge* judgeObj);
 
     bool judgePlayer(Player& player);
+
+    virtual ExtendType getType() const = 0;
 
 protected:
 

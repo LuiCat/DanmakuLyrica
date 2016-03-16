@@ -10,7 +10,7 @@ function main()
 	local x=0
 	local t=0
 	setCenter(0,-80)
-	setBulletType('PinkRice')
+	setBulletType('sharp2')
 	sleepUntil(0)
 	while true do
 		--x=x;
@@ -31,44 +31,71 @@ function main3()
 	local c=0
 	local di=67
 	local sp
+	local d=-7
 	setCenter(0,-80)
-	setBulletType('BlueRing')
+	setBulletType('dot1')
 	--setSound('tick')
 	sleepUntil(0)
 	while true do
+	
 		task(function()
-			att=Attach.new()
-			for i=0,11 do
-				setAngle(i*30+20)
-				sp = 80.0+math.random()*20.0
-				for j=0,3 do
-					att:bullet(0,0,sp,j*2)
+			local att=Attach.new()
+			for i=0,17 do
+				setAngle(i*20+12)
+				sp = 60.0+math.random()*20.0
+				for j=0,2 do
+					att:bullet(0,0,sp,j*1.5)
 				end
 			end
-			att:setAcc(-70.0)
+			att:setAcc(-50.0)
 			att:setRS(3.0)
 			sleep(1)
-			att:setAcc(5.0)
+			att:setAcc(3.0)
 			att:offsetRot(30.0)
+			sleep(2)
+			att:setAcc(0)
 		end)
+		
+		local atts = Attach.new()
+		setAngle(math.random()*360)
+		for i=0,4 do
+			atts:spirit(0,0,5,72*i,16,2);
+		end
+		atts:setAcc(3.0)
+		atts:setRS(d)
+		d = -d
+	
 		sleep(2)
+		
 		task(function()
-			att=Attach.new()
-			for i=0,11 do
-				setAngle(i*30+10)
-				sp = 80.0+math.random()*20.0
-				for j=0,3 do
-					att:bullet(0,0,sp,j*2)
-					att:bullet(0,0,sp,j*2)
+			local att=Attach.new()
+			for i=0,17 do
+				setAngle(i*20+12)
+				sp = 60.0+math.random()*20.0
+				for j=0,2 do
+					att:bullet(0,0,sp,j*1.5)
 				end
 			end
-			att:setAcc(-60.0)
+			att:setAcc(-50.0)
 			att:setRS(-3.0)
 			sleep(1)
 			att:setAcc(5.0)
 			att:offsetRot(-30.0)
+			sleep(2)
+			att:setAcc(0)
 		end)
+		
+		--[[
+		atts = Attach.new()
+		setAngle(math.random()*360)
+		for i=0,3 do
+			atts:spirit(0,0,5,90*i,16,2);
+		end
+		atts:setAcc(3.0)
+		atts:setRS(-9.0)]]
+		
 		sleep(2)
+		
 	end
 end
 
@@ -139,5 +166,5 @@ end
 
 task(main);
 task(main3);
-task(fa);
-task(fas);
+--task(fa);
+--task(fas);

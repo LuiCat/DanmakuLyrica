@@ -47,7 +47,7 @@ protected:
 
 private:
 
-    typedef std::chrono::high_resolution_clock Clock;
+    typedef std::chrono::steady_clock Clock;
     inline void decaySum(double& sum, double x, double dec)
     {
         sum *= dec;

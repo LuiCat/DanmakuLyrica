@@ -18,7 +18,7 @@ class EntityList
 public:
 
     EntityList()
-        :nextEntityID(0)
+        :nextEntityID(1)
         ,autoClear(true)
     {
         clearAll();
@@ -61,12 +61,18 @@ public:
 
     inline T* getEntity(int id)
     {
-        return entityList[id].get();
+        auto iter = entityList.find(id);
+        if(iter == entityList.end())
+            return nullptr;
+        return iter->second.get();
     }
 
     inline T* operator[](int id)
     {
-        return entityList[id].get();
+        auto iter = entityList.find(id);
+        if(iter == entityList.end())
+            return nullptr;
+        return iter->second.get();
     }
 
     inline bool hasEntity(int id)
@@ -156,11 +162,6 @@ public:
 
     void clearAll()
     {
-        auto iter=entityList.begin();
-        while(iter!=entityList.end())
-        {
-            iter=entityList.erase(iter);
-        }
         entityList.clear();
     }
 
@@ -169,7 +170,7 @@ public:
         auto iter=entityList.begin();
         while(iter!=entityList.end())
         {
-            if(iter->second->dead())
+            if(iter->second == nullptr || iter->second->dead())
             {
                 iter=entityList.erase(iter);
             }

@@ -61,7 +61,13 @@ SOURCES += main.cpp \
     entity/sprite.cpp \
     bulletjudge.cpp \
     graphics/imagepiece.cpp \
-    graphics/texturecache.cpp
+    graphics/texturecache.cpp \
+    spiritwheel.cpp \
+    enemy.cpp \
+    numbersprite.cpp \
+    splash.cpp \
+    attacktrail.cpp \
+    score.cpp
 
 HEADERS += \
     graphics/graphics.h \
@@ -124,7 +130,13 @@ HEADERS += \
     entity/sprite.h \
     bulletjudge.h \
     graphics/imagepiece.h \
-    graphics/texturecache.h
+    graphics/texturecache.h \
+    spiritwheel.h \
+    enemy.h \
+    numbersprite.h \
+    splash.h \
+    attacktrail.h \
+    score.h
 
 LIBS += -ld3d9 \
         -ld3dx9 \

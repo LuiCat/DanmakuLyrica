@@ -4,24 +4,34 @@
 
 NoteList::NoteList()
 {
-
+    lastJudgedId = -1;
 }
 
 JudgeResult NoteList::judgeSingleNote(double timeSec)
 {
     JudgeResult judge=Judge_Miss;
     Note* note;
+    double offset;
 
-    auto iter=entityList.begin();
+    auto iter = entityList.find(lastJudgedId);
+    if(iter == entityList.end())
+        iter = entityList.begin();
+
     while(judge==Judge_Miss && iter!=entityList.end())
     {
-        note=(iter->second.get());
+        note = (iter->second.get());
         if(!note->isJudged())
-            judge=noteJudge.judgeNote(note->getTimeOffset(timeSec));
+        {
+            offset = note->getTimeOffset(timeSec);
+            if(offset > noteJudge.getJudgeWindow())
+                return Judge_Miss;
+            judge = noteJudge.judgeNote(offset);
+            lastJudgedId = iter->first;
+        }
         iter++;
     }
 
-    if(iter!=entityList.end())
+    if(judge!=Judge_Miss)
     {
         note->setJudgeResult(timeSec, judge);
     }

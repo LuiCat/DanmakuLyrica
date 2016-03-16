@@ -18,9 +18,14 @@ public:
 
     JudgeResult judgeSingleNote(double timeSec);
 
+
+
+
 protected:
 
     NoteJudge noteJudge;
+
+    int lastJudgedId;
 
 };
 

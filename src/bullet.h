@@ -17,6 +17,8 @@ private:
     // default bullet for registry quest
     static BulletType defaultBullet;
 
+    static BulletJudge bulletJudge;
+
 public:
 
     // bullet registry
@@ -33,6 +35,11 @@ public:
     Bullet(double posX, double posY, double vel, double angle, int type);
 
     Bullet& setBulletType(int type);
+
+    virtual ExtendType getType() const
+    {
+        return Type_Bullet;
+    }
 
 protected:
 

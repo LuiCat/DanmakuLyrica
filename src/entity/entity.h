@@ -95,6 +95,7 @@ protected:
     bool useDefaultMotion;
 
     bool isDestroyed;
+    double destroyTime;
 
     typedef priority_queue<EntityEvent*, vector<EntityEvent*>, EntityEvent::PointerLess> EventQueue;
 

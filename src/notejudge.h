@@ -18,6 +18,11 @@ public:
 
     JudgeResult judgeNote(double offsetSec);
 
+    inline double getJudgeWindow() const
+    {
+        return rangeBad;
+    }
+
 private:
 
     double rangeBad;

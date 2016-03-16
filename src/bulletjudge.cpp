@@ -1,7 +1,9 @@
 #include "bulletjudge.h"
 #include "commondef.h"
+#include "debug.h"
 
 BulletJudge::BulletJudge()
+    : list(nullptr)
 {
 
 }
@@ -23,11 +25,15 @@ bool BulletJudge::judgeBullet(Bullet* bullet, Entity* judgeObj, double span, boo
     UNUSED(fastJudge);
 
     if(!bullet || !judgeObj)
+    {
         return false;
+    }
 
     auto type = bullet->typeInfo;
     if(!type)
+    {
         return false;
+    }
 
     // Add span to sizeX
     double sx = type->judgeSizeX+span;

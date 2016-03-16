@@ -45,6 +45,8 @@ protected:
     double timeSec;
     LuaTask* currentTask;
 
+    virtual bool beforeTask(LuaTask* task);
+
 public:
 
     LuaTimeline();

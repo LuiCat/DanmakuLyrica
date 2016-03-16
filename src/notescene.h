@@ -5,6 +5,8 @@
 #include "notemap.h"
 #include "scene.h"
 #include "imagepiece.h"
+#include "numbersprite.h"
+#include "score.h"
 
 class NoteScene : public Scene
 {
@@ -22,6 +24,16 @@ public:
     void reloadNotes();
 
     JudgeResult judgeSingleNote(double timeSec);
+    inline int getCombo() const
+    {
+        return combo;
+    }
+
+    void breakCombo();
+
+    Note* getNextPendingNote();
+
+    void setScoreObj(Score* score);
 
 protected:
 
@@ -31,7 +43,16 @@ protected:
     ImagePiece texPanelB;
     ImagePiece texPanelO;
 
+    ImagePiece track;
+    ImagePiece title;
+
     BeatTime beatTime;
+
+    int combo;
+    NumberSprite comboNum;
+
+    Score* score;
+    NumberSprite scoreNum;
 
 };
 

@@ -6,6 +6,7 @@
 #include "notescene.h"
 #include "sounds.h"
 #include "keybinding.h"
+#include "enemy.h"
 
 #include "timeline.h"
 
@@ -49,6 +50,8 @@ private:
 
     double bgmTimeStamp;
     TimeLine timeLine;
+
+    Score score;
 
     KeyBinding buttonA;
     KeyBinding buttonB;

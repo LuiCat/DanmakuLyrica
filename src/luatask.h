@@ -4,6 +4,7 @@
 #include "lua/lua.hpp"
 
 #include "bullet.h"
+#include "bulletscene.h"
 
 #include <set>
 #include <list>
@@ -17,13 +18,18 @@ struct LuaTask
     int luaRef;
     double nextTime;
 
+    bool isFinished;
+
     double centerX, centerY;
     double angle;
     int bulletType;
 
     SoundBuffer* sound;
 
-    set<int> attachList;
+    double deltaX, deltaY;
+    int centerObj;
+
+    //set<int> attachList;
 
     /*
      * todo:
@@ -33,6 +39,7 @@ struct LuaTask
     LuaTask();
     LuaTask(lua_State* thread, int ref, double beginTime, const LuaTask* center=0);
 
+    /*
     inline void attachBullet(int bulletID)
     {
         attachList.insert(bulletID);
@@ -49,7 +56,7 @@ struct LuaTask
     inline void clearAttach()
     {
         attachList.clear();
-    }
+    }*/
 
     inline void delay(double timeSec)
     {
@@ -59,6 +66,28 @@ struct LuaTask
     inline void delayUntil(double timeSec)
     {
         nextTime=timeSec;
+    }
+
+    inline void updateCenter(BulletScene* scene)
+    {
+        if(centerObj == 0)
+        {
+            centerX=deltaX;
+            centerY=deltaY;
+        }
+        else
+        {
+            auto center = scene->getBullet(centerObj);
+            if(center == nullptr || center->dead() || center->destroyed())
+            {
+                isFinished=true;
+            }
+            else
+            {
+                centerX=deltaX+center->getX();
+                centerY=deltaY+center->getY();
+            }
+        }
     }
 
     friend class LuaTaskTimeline;

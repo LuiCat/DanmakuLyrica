@@ -1,14 +1,17 @@
 #include "bulletbase.h"
 #include "bulletjudge.h"
+#include "debug.h"
 
 BulletBase::BulletBase()
     :Entity()
+    ,judge(nullptr)
 {
     setTickRate(10);
 }
 
 BulletBase::BulletBase(double posX, double posY, double vel, double angle)
     :Entity(posX, posY, vel, angle)
+    ,judge(nullptr)
 {
     setTickRate(10);
 }
@@ -31,7 +34,7 @@ void BulletBase::onTick()
 
 void BulletBase::onUpdateMotion(double deltaSec, double deltaTick)
 {
-     if(judge)
+    if(judge)
     {
         judge->updateModelBefore(this);
         Entity::onUpdateMotion(deltaSec, deltaTick);
@@ -63,7 +66,8 @@ void BulletBase::setJudge(BulletJudge* judgeObj)
 
 bool BulletBase::judgePlayer(Player& player)
 {
-    return judge!=0 && !isDestroyed && onJudge(&player, player.getJudgeSpan());
+    return (judge!=nullptr) && (!isDestroyed)
+            && onJudge(&player, player.getJudgeSpan());
 }
 
 

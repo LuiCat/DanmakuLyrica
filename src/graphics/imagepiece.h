@@ -25,6 +25,11 @@ public:
     ImagePiece(const ImagePiece& other);
     ImagePiece(ImagePiece&& other);
 
+    // create multiple image piece. indexed row by row.
+    static std::vector<ImagePiece> createImageSet(const char* filename, int row, int col, int maxIndex=-1);
+    static std::vector<ImagePiece> createImageSet(const char* filename, int row, int col, int maxIndex,
+                                                  double minU, double minV, double maxU, double maxV);
+
     ~ImagePiece();
 
     void load(const char* filename);
@@ -41,7 +46,7 @@ public:
 
     inline ImagePiece& operator=(ImagePiece&& other)
     {
-        loadExistLater(other, true);
+        loadExistLaterMove(std::forward<ImagePiece>(other));
         return *this;
     }
 
@@ -61,18 +66,20 @@ public:
 
 protected:
 
-    static vector<pair<ImagePiece*, string>> pendingList;
-    static unordered_map<const ImagePiece*, int> pendingMap;
+    static vector<pair<ImagePiece*, string>>* pendingList;
     static bool shouldLoadLater;
 
     void loadOrLater(const char* filename);
     void tryNotLoadSelf();
-    void loadExistLater(const ImagePiece& other, bool move=false);
+    void loadExistLater(const ImagePiece& other);
+    void loadExistLaterMove(ImagePiece&& other);
 
     Texture tex;
 
     double umin, vmin;
     double umax, vmax;
+
+    int loadId;
 
 };
 

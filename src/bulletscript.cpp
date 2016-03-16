@@ -6,6 +6,8 @@
 #include "functionevent.h"
 #include "movement.h"
 #include "soundregistry.h"
+#include "spiritwheel.h"
+#include "splash.h"
 
 void BulletScript::registerLuaFuncs()
 {
@@ -21,6 +23,18 @@ void BulletScript::registerLuaFuncs()
     registerFuncName(setBulletType);
     registerFuncName(setSound);
 
+    registerFuncName(pushSpirit);
+    registerFuncName(pushSplash);
+
+    registerFuncName(clearBullets);
+    registerFuncName(clearScene);
+
+    registerFuncName(getPlayerPos);
+    registerFuncName(getBulletPos);
+    registerFuncName(getCenterPos);
+
+    registerFuncName(moveBoss);
+
     lua_createtable(luaState, 0, 8);
     registerTableFunc("alloc", lua_attachAlloc);
     registerTableFunc("attach", lua_attachBullet);
@@ -34,6 +48,9 @@ void BulletScript::registerLuaFuncs()
     registerTableFunc("offsetRot", lua_setAttachedBulletRotationOffset);
     registerTableFunc("offsetSpeed", lua_setAttachedBulletSpeedOffset);
     lua_setglobal(luaState, "Attach");
+
+    registerFuncName(jumpTime);
+
 }
 
 int BulletScript::lua_loadStream(lua_State* L)
@@ -225,10 +242,31 @@ int BulletScript::lua_pushBullet(lua_State* L)
 int BulletScript::lua_setCenter(lua_State* L)
 {
     LuaTask* task=inst()->currentTask;
-    if(lua_isnumber(L, 1))
-        task->centerX=lua_tonumber(L, 1);
-    if(lua_isnumber(L, 2))
-        task->centerY=lua_tonumber(L, 2);
+    int top=lua_gettop(L);
+    if(top==1)
+    {
+        if(lua_isnumber(L, 1))
+            task->centerObj=lua_tonumber(L, 1);
+        task->deltaX=0;
+        task->deltaY=0;
+    }
+    else if(top==2)
+    {
+        if(lua_isnumber(L, 1))
+            task->deltaX=lua_tonumber(L, 1);
+        if(lua_isnumber(L, 2))
+            task->deltaY=lua_tonumber(L, 2);
+    }
+    else if(top==3)
+    {
+        if(lua_isnumber(L, 1))
+            task->centerObj=lua_tonumber(L, 1);
+        if(lua_isnumber(L, 2))
+            task->deltaX=lua_tonumber(L, 2);
+        if(lua_isnumber(L, 3))
+            task->deltaY=lua_tonumber(L, 3);
+    }
+    task->updateCenter(inst()->scene);
     return 0;
 }
 
@@ -271,6 +309,102 @@ int BulletScript::lua_setSound(lua_State* L)
     {
         task->sound=sound;
     }
+    return 0;
+}
+
+int BulletScript::lua_pushSpirit(lua_State* L)
+{
+    if(lua_gettop(L)<5)
+        return 0;
+
+    LuaTask* task=inst()->currentTask;
+    double x=lua_tonumber(L, 1)+task->centerX;
+    double y=lua_tonumber(L, 2)+task->centerY;
+    double sp=lua_tonumber(L, 3);
+    double rt=rad(lua_tonumber(L, 4))+task->angle;
+    double life=lua_tonumber(L, 5);
+    int hp=(lua_tonumber(L, 6)?lua_tointeger(L, 6):1);
+
+    lua_pushinteger(L, inst()->scene->pushSpirit(x, y, sp, rt, life, hp));
+
+    return 1;
+}
+
+int BulletScript::lua_pushSplash(lua_State* L)
+{
+    LuaTask* task=inst()->currentTask;
+    double x=0, y=0;
+    if(lua_isnumber(L, 1))
+        x=lua_tonumber(L, 1);
+    if(lua_isnumber(L, 2))
+        y=lua_tonumber(L, 2);
+    lua_pushinteger(L, inst()->scene->getBulletList()->newEntity<Splash>(x+task->centerX, y+task->centerY));
+    return 1;
+}
+
+int BulletScript::lua_clearBullets(lua_State* L)
+{
+    inst()->scene->getBulletList()->destroyAllBullets();
+    return 0;
+}
+
+int BulletScript::lua_clearScene(lua_State* L)
+{
+    inst()->scene->getBulletList()->destroyAll();
+    return 0;
+}
+
+int BulletScript::lua_getPlayerPos(lua_State* L)
+{
+    auto player = inst()->scene->player;
+    lua_pushnumber(L, player->getX());
+    lua_pushnumber(L, player->getY());
+    return 2;
+}
+
+int BulletScript::lua_getBulletPos(lua_State* L)
+{
+    if(!lua_isnumber(L, 1))
+        return 0;
+    auto bullet = inst()->scene->getBullet(lua_tointeger(L, 1));
+    if(bullet == nullptr)
+        return 0;
+    lua_pushnumber(L, bullet->getX());
+    lua_pushnumber(L, bullet->getY());
+    return 2;
+}
+
+int BulletScript::lua_getCenterPos(lua_State* L)
+{
+    auto task = inst()->currentTask;
+    lua_pushnumber(L, task->centerX);
+    lua_pushnumber(L, task->centerY);
+    return 2;
+}
+
+int BulletScript::lua_moveBoss(lua_State* L)
+{
+    auto boss = inst()->scene->boss;
+    double t = 0;
+    if(lua_isnumber(L, 3))
+        t = lua_tonumber(L, 3);
+    double x=boss->getX(), y=boss->getY();
+    if(lua_isnumber(L, 1))
+        x=lua_tonumber(L, 1);
+    if(lua_isnumber(L, 2))
+        y=lua_tonumber(L, 2);
+    if(t>M_DINFS)
+    {
+        boss->setAxisSpeed((x-boss->getX())/t, (y-boss->getY())/t);
+        boss->pushEvent<Movement>(t, Movement::axisspeed, false, 0, 0);
+        boss->pushEvent<Movement>(t, Movement::position, false, x, y);
+    }
+    else
+    {
+        boss->setPosition(x, y);
+    }
+    if(inst()->currentTask->centerObj == -1)
+        inst()->currentTask->updateCenter(inst()->scene);
     return 0;
 }
 
@@ -476,6 +610,19 @@ int BulletScript::lua_setAttachedBulletSpeedOffset(lua_State* L)
             p->forEach(BulletBase::setSpeedOffset, lua_tonumber(L, 2));
     }
     return 0;
+}
+
+int BulletScript::lua_jumpTime(lua_State* L)
+{
+    if(lua_isnumber(L, 1))
+        inst()->scene->setJump(lua_tonumber(L, 1));
+    return 0;
+}
+
+bool BulletScript::beforeTask(LuaTask* task)
+{
+    task->updateCenter(scene);
+    return LuaTimeline::beforeTask(task);
 }
 
 //==================================================================

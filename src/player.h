@@ -4,6 +4,13 @@
 #include "entity.h"
 #include "texturestrip.h"
 #include "keybinding.h"
+#include "imagepiece.h"
+#include "spiritwheel.h"
+#include "numbersprite.h"
+#include "score.h"
+
+#include <memory>
+using namespace std;
 
 enum PlayerDirection
 {
@@ -20,6 +27,7 @@ enum PlayerDirection
 };
 
 class BulletList;
+class NoteScene;
 
 class Player : public Entity
 {
@@ -39,9 +47,29 @@ public:
         return judgeSpan;
     }
 
+    void setTarget(SpiritWheel* spirit);
+    inline SpiritWheel* getTarget() const
+    {
+        return target;
+    }
+
+    void onHitTarget();
+
+    void checkTargetDist();
+
+    void renderOverlay();
+
+    void setNoteScene(NoteScene* scene);
+
+    void setScoreObj(Score* score);
+
 protected:
 
-    TextureStrip tex;
+    ImagePiece tex;
+    vector<ImagePiece> img;
+
+    ImagePiece plotInner;
+    ImagePiece plotOuter;
 
     BulletList* judgeList;
 
@@ -53,6 +81,20 @@ protected:
 
     double minX, maxX;
     double minY, maxY;
+
+    int moveFrame;
+    int stayFrame;
+
+    double lastHitTime;
+
+    Position targetPos;
+    SpiritWheel* target;
+
+    NumberSprite number;
+
+    NoteScene* noteScene;
+
+    Score* score;
 
     void onUpdateMotion(double deltaSec, double deltaTick);
     void onTick();

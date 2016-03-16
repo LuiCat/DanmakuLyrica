@@ -6,6 +6,8 @@
 
 ImagePiece Note::texNote("data/image/note/note.png");
 
+double Note::moveSpeed = 110;
+
 Note::Note(double _hitTime, double _hitBeat)
     :scrollSpeed(1.0)
     ,noteType(none)
@@ -30,8 +32,8 @@ void Note::setJudgeTime(double _hitTime, double _hitBeat)
 {
     hitTime=_hitTime;
     hitBeat=_hitBeat;
-    setPosition(_hitBeat*90, 0);
-    setSpeedRotation(90.0, rad(-90));
+    setPosition(_hitBeat*moveSpeed*scrollSpeed, 0);
+    setSpeedRotation(moveSpeed*scrollSpeed, rad(-90));
 }
 
 void Note::setScrollSpeed(double hs)

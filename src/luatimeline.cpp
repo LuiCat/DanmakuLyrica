@@ -47,6 +47,11 @@ int LuaTimeline::lua_getTime(lua_State* L)
     return 1;
 }
 
+bool LuaTimeline::beforeTask(LuaTask* task)
+{
+    return !task->isFinished;
+}
+
 //===========================================================
 
 LuaTimeline::LuaTimeline()
@@ -91,9 +96,14 @@ void LuaTimeline::update(double deltaSec)
         result=LUA_OK;
 
         if(currentTask->luaThread)
-            result=lua_resume(currentTask->luaThread, 0, 0);
+        {
+            beginScript();
+            if(beforeTask(currentTask))
+                result=lua_resume(currentTask->luaThread, 0, 0);
+            endScript();
+        }
 
-        if(result!=LUA_YIELD)
+        if(result!=LUA_YIELD || currentTask->isFinished)
         {
             luaL_unref(luaState, LUA_REGISTRYINDEX, currentTask->luaRef);
             taskMap.erase(currentTask->luaRef);
@@ -160,11 +170,12 @@ double LuaTimeline::updateSingleTask(double limitDeltaSec)
     if(currentTask->luaThread)
     {
         beginScript();
-        result=lua_resume(currentTask->luaThread, 0, 0);
+        if(beforeTask(currentTask))
+            result=lua_resume(currentTask->luaThread, 0, 0);
         endScript();
     }
 
-    if(result!=LUA_YIELD)
+    if(result!=LUA_YIELD || currentTask->isFinished)
     {
         luaL_unref(luaState, LUA_REGISTRYINDEX, currentTask->luaRef);
         taskMap.erase(currentTask->luaRef);

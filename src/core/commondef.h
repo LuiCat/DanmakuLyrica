@@ -26,4 +26,7 @@
 private:\
 static unique_ptr<T> m_inst;
 
+#define MAKE_RGB(r,g,b) (0xFF000000|(((r)<<16)&0xFF0000)|(((g)<<8)&0xFF00)|((b)&0xFF))
+#define MAKE_RGBA(r,g,b,a) ((((a)<<24)&0xFF000000)|(((r)<<16)&0xFF0000)|(((g)<<8)&0xFF00)|((b)&0xFF))
+
 #endif // COMMONDEF_H

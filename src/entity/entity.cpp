@@ -309,6 +309,7 @@ void Entity::destroy()
     if(isDestroyed)
         return;
     isDestroyed = true;
+    destroyTime = getTimeSec();
     onDestroy();
 }
 

@@ -11,6 +11,8 @@
 BulletType Bullet::defaultBullet={ImagePiece(), 16, 16, 8, 8, BulletType::none, BulletType::rect, 8, 8};
 Registry<BulletType> Bullet::reg;
 
+BulletJudge Bullet::bulletJudge;
+
 void Bullet::registerBullet(const char *typeName, const BulletType& typeInfo)
 {
     reg.registerName(typeName, typeInfo);
@@ -28,12 +30,14 @@ Bullet::Bullet()
     :BulletBase()
 {
     setBulletType(0);
+    setJudge(&bulletJudge);
 }
 
 Bullet::Bullet(double posX, double posY, double vel, double angle, int type)
     :BulletBase(posX, posY, vel, angle)
 {
     setBulletType(type);
+    setJudge(&bulletJudge);
 }
 
 Bullet& Bullet::setBulletType(int type)
@@ -59,7 +63,15 @@ void Bullet::onRender()
         return;
     d3d.pushMatrix();
     if(isDestroyed)
+    {
         d3d.setAlpha((deadTime-timeSec)*0.7); // alpha: 1.0 -> 0.8~0.0
+    }
+    else if(timeSec<0.5)
+    {
+        d3d.scale2D(timeSec+0.5, timeSec+0.5);
+        d3d.setAlpha(timeSec*2);
+    }
+
     typeInfo->image.vertice(typeInfo->centerX, typeInfo->centerY, typeInfo->sizeX, typeInfo->sizeY);
     d3d.popMatrix();
 }
