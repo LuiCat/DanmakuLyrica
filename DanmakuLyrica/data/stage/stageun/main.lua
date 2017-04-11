@@ -1,25 +1,30 @@
 
 function task_1()
-	setBulletType('sharp1');
 	for t = 1,4 do
 		setAngle(playerAngle());
 		for i=-2,2 do
-			spirit(0,0,25,45*i,16,2);
+			spirit(0,0,35+5*t,45*i,16,2);
 		end
-		seq('1001001001001010', 0.5, function()
-			splash();
-			task(function()
+		local cl=function(c)
+			return function()
+				local dd=360/c;
+				splash();
 				setAngle(math.random()*360);
 				setCenter((math.random()*40-20)*t,(math.random()*10-5)*t)
+				if c > 30 then
+					setBulletType('sharp0');
+				else
+					setBulletType('sharp1');
+				end
 				local att = Attach.new();
-				for i = 0,29 do
-					att:bullet(0, 0, 180+t*5, i*12);
+				for i = 0,c-1 do
+					att:bullet(0, 0, 178+t*5, i*dd);
 				end
 				att:setAcc(-150);
-				sleep(1);
-				att:setAcc(0);
-			end);
-		end);
+				att:setAcc(0,1);
+			end
+		end
+		seq('2001001001001010', 0.5, cl(20), cl(85));
 	end
 end
 
@@ -135,10 +140,12 @@ function task_4()
 						splash();
 						local att = Attach.new();
 						for j = 0,35 do
-							att:bullet(0, 0, 240, j*10);
+							att:bullet(0, 0, 150, j*10);
 						end
-						att:setAcc(-200);
+						att:setAcc(-150);
 						att:setAcc(0,1);
+						att:setAcc(30,2);
+						att:setAcc(0,4);
 					end
 				end
 				return res;
@@ -207,6 +214,8 @@ function task_5()
 				end
 				att:setAcc(-90);
 				att:setAcc(0,1);
+				att:setAcc(12,16-k*2);
+				att:setAcc(0,20-k*2);
 				sleep(1);
 			end
 		end)
@@ -235,6 +244,11 @@ function task_6()
 	end
 	sleep(2);
 	setBulletType('round1');
+	local px,py=playerPos();
+	local sa=function()
+		cx,cy=getCenterPos();
+		setAngle(math.atan2(px-cx,py-cy)/math.pi*180);
+	end
 	for i = 1,7 do
 		if i > 3 then
 			task(function()
@@ -245,7 +259,7 @@ function task_6()
 				setCenter(id);
 				att:setAcc(-2);
 				seq('1010001010010010100100100010001', 0.25, function()
-					setAngle(math.random()*360);
+					setAngle(playerAngle()+20+math.random()*77);
 					att = Attach.new();
 					for j = 0,1 do
 						att:bullet(0, 0, 160, j*3);
@@ -254,15 +268,14 @@ function task_6()
 					end
 					att:setAcc(-160);
 					att:setAcc(0,1);
-					att:setSpeed(20,2);
+					att:setSpeed(18,2);
 				end);
 			end);
 		end
 		task(function()
-			setAngle(playerAngle());
 			seq('12121212',1,
 			function()
-				setAngle(playerAngle());
+				sa();
 				local att = Attach.new();
 				for j = 0,9 do
 					att:bullet(0,0,220,j*36);
@@ -272,7 +285,7 @@ function task_6()
 				att:setAcc(0,1);
 			end,
 			function()
-				setAngle(playerAngle());
+				sa();
 				local att = Attach.new();
 				for j = 0,9 do
 					att:bullet(0,0,220,j*36+18);
@@ -301,7 +314,7 @@ function task_6()
 				setAngle(playerAngle()+math.random()*10-5);
 				att = Attach.new();
 				for j = -4,4 do
-					att:bullet(0, 0, 125+math.random()*20, j*15);
+					att:bullet(0, 0, 125+math.random()*12, j*15);
 				end
 				att:setAcc(-120);
 				att:setAcc(0,1);
@@ -310,7 +323,9 @@ function task_6()
 		end)
 		sleep(4);
 		moveBoss(math.random()*120-60,math.random()*20-150, 4);
-		sleep(4);
+		sleep(0.5);
+		px,py=playerPos();
+		sleep(3.5);
 	end
 	sleep(4);
 	moveBoss(0, -150, 4);
@@ -492,6 +507,11 @@ function task_10()
 	moveBoss(math.random()*80-40,math.random()*20-150, 4);
 	sleep(2);
 	setBulletType('round1');
+	local px,py=playerPos();
+	local sa=function()
+		cx,cy=getCenterPos();
+		setAngle(math.atan2(px-cx,py-cy)/math.pi*180);
+	end
 	for i = 1,23 do
 		if i > 3 then
 			task(function()
@@ -502,7 +522,7 @@ function task_10()
 				setCenter(id);
 				att:setAcc(-2);
 				seq('1010001010010010100100100010001', 0.25, function()
-					setAngle(math.random()*360);
+					setAngle(playerAngle()+20+math.random()*77);
 					att = Attach.new();
 					for j = 0,1 do
 						att:bullet(0, 0, 120, j*3);
@@ -511,15 +531,14 @@ function task_10()
 					end
 					att:setAcc(-120);
 					att:setAcc(0,1);
-					att:setSpeed(20,3);
+					att:setSpeed(18,3);
 				end);
 			end);
 		end
 		task(function()
-			setAngle(playerAngle());
 			seq('12121212',1,
 			function()
-				setAngle(playerAngle());
+				sa();
 				local att = Attach.new();
 				if i<16 then
 					for j = 0,9 do
@@ -535,8 +554,8 @@ function task_10()
 				else
 					setBulletType('round0');
 					for j = 0,11 do
-						att:bullet(0,0,210,j*30);
-						att:bullet(0,0,220,j*30);
+						att:bullet(0,0,216,j*30);
+						att:bullet(0,0,223,j*30);
 						att:bullet(0,0,230,j*30);
 					end
 				end
@@ -544,7 +563,7 @@ function task_10()
 				att:setAcc(0,1);
 			end,
 			function()
-				setAngle(playerAngle());
+				sa();
 				local att = Attach.new();
 				if i<16 then
 					for j = 0,9 do
@@ -560,9 +579,9 @@ function task_10()
 				else
 					setBulletType('round0');
 					for j = 0,11 do
-						att:bullet(0,0,210,j*30+15);
-						att:bullet(0,0,220,j*30+15);
-						att:bullet(0,0,230,j*30+15);
+						att:bullet(0,0,218,j*30+15);
+						att:bullet(0,0,225,j*30+15);
+						att:bullet(0,0,232,j*30+15);
 					end
 				end
 				att:setAcc(-180);
@@ -585,7 +604,7 @@ function task_10()
 				setAngle(playerAngle()+math.random()*10-5);
 				att = Attach.new();
 				for j = -4,4 do
-					att:bullet(0, 0, 125+math.random()*15, j*15);
+					att:bullet(0, 0, 125+math.random()*12, j*15);
 				end
 				att:setAcc(-120);
 				att:setAcc(0,1);
@@ -594,7 +613,9 @@ function task_10()
 		end)
 		sleep(4);
 		moveBoss(math.random()*80-40,math.random()*20-150, 4);
-		sleep(4);
+		sleep(0.5);
+		px,py=playerPos();
+		sleep(3.5);
 	end
 	clearScene();
 end
@@ -740,7 +761,7 @@ function main()
 	task(task_9);
 	task(task_10);
 	task(task_11);--]]
-	task(punch);
+	--task(punch);
 end
 
 task(main);

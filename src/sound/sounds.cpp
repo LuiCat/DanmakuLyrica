@@ -3,9 +3,9 @@
 #include <mmsystem.h>
 #include <cmath>
 
-#include "ogg/ogg.h"
-#include "vorbis/codec.h"
-#include "vorbis/vorbisfile.h"
+#include <ogg/ogg.h>
+#include <vorbis/codec.h>
+#include <vorbis/vorbisfile.h>
 
 #include "debug.h"
 
@@ -42,8 +42,6 @@ bool SoundBuffer::loadWavFile(const char *filename, char **memout, DWORD *memsiz
 
     WAVEFORMATEX    wfmtx;
 
-    CHAR            namestr[100];
-
     parent.ckid         = (FOURCC)0;
     parent.cksize       = 0;
     parent.fccType      = (FOURCC)0;
@@ -51,7 +49,9 @@ bool SoundBuffer::loadWavFile(const char *filename, char **memout, DWORD *memsiz
     parent.dwFlags      = 0;
     child = parent;
 
-    strcpy(namestr, filename);
+	size_t len = strlen(filename);
+	auto namestr = new char[len+1];
+    strncpy(namestr, filename, len);
 
     // open the WAV file
     if ((hwav = mmioOpen(namestr, NULL, MMIO_READ | MMIO_ALLOCBUF))==NULL)
@@ -316,7 +316,7 @@ DWORD SoundBuffer::getPos() const
 
 void SoundBuffer::setTime(double timeSec)
 {
-    setPos(timeSec*waveFormat.nAvgBytesPerSec);
+    setPos(static_cast<DWORD>(timeSec * waveFormat.nAvgBytesPerSec));
 }
 
 double SoundBuffer::getTime() const
@@ -327,7 +327,7 @@ double SoundBuffer::getTime() const
 void SoundBuffer::setPitch(double pitch)
 {
     if(!isAvailable())return;
-    buffer->SetFrequency(waveFormat.nSamplesPerSec * pitch);
+    buffer->SetFrequency(static_cast<DWORD>(waveFormat.nSamplesPerSec * pitch));
     pitchChanged = true;
 }
 
@@ -349,7 +349,7 @@ void SoundBuffer::setVolume(long volume)
 void SoundBuffer::setVolume(float volume)
 {
     if(!isAvailable())return;
-    buffer->SetVolume(2000.0 * log10(volume));
+    buffer->SetVolume(static_cast<DWORD>(2000.0 * log10(volume)));
 }
 
 void SoundBuffer::setPan(long pan)

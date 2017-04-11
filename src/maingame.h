@@ -1,7 +1,7 @@
 #ifndef MAINGAME_H
 #define MAINGAME_H
 
-#include "windef.h"
+#include <windows.h>
 
 class MainGame
 {

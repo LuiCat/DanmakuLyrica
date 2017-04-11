@@ -66,9 +66,10 @@ void NumberSprite::setAlignment(NumberSprite::Alignment align)
 
 void NumberSprite::formatContent()
 {
-    char buf[maxbuf+1];
+    auto buf = new char[maxbuf+1];
     snprintf(buf, maxbuf, format.c_str(), num);
     content = buf;
+	delete[] buf;
 }
 
 void NumberSprite::onRender()
@@ -88,7 +89,7 @@ void NumberSprite::onRender()
     for(int i=0; i<size; ++i)
     {
         int digit = content[i]-'0';
-        if(digit>=0 && digit<imageNum.size())
+        if(digit>=0 && digit<static_cast<int>(imageNum.size()))
             imageNum[digit].vertice(0.5, 0.5, w, h);
         d3d.translate2D(w*k, 0);
     }

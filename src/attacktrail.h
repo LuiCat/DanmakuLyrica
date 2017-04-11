@@ -10,7 +10,7 @@ class AttackTrail : public BulletBase
 {
 public:
 
-    AttackTrail(int x, int y, int targetX, int targetY);
+    AttackTrail(double x, double y, double targetX, double targetY);
 
     ExtendType getType() const
     {

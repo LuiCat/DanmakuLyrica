@@ -60,8 +60,8 @@ int BulletScript::lua_loadStream(lua_State* L)
 
     int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 1));
     char* buffer = new char[buflen+1];
-    strcpy(buffer, inst()->getCurrentPath());
-    strcat(buffer, lua_tostring(L, 1));
+    strncpy(buffer, inst()->getCurrentPath(), buflen);
+    strncat(buffer, lua_tostring(L, 1), buflen);
 
     double vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0);
     const char* name=(lua_isstring(L, 2) ? lua_tostring(L, 2) : 0);
@@ -79,10 +79,10 @@ int BulletScript::lua_loadSound(lua_State* L)
 
     int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 1));
     char* buffer = new char[buflen+1];
-    strcpy(buffer, inst()->getCurrentPath());
-    strcat(buffer, lua_tostring(L, 1));
+    strncpy(buffer, inst()->getCurrentPath(), buflen);
+    strncat(buffer, lua_tostring(L, 1), buflen);
 
-    double vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0);
+    float vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0f);
     const char* name=(lua_isstring(L, 2) ? lua_tostring(L, 2) : 0);
 
     int id=SoundRegistry::createSound<SoundBuffer>(name, buffer, vol);
@@ -104,7 +104,7 @@ int BulletScript::lua_playSound(lua_State* L)
     }
     else if(lua_isnumber(L, 1))
     {
-        sound=SoundRegistry::get(lua_tonumber(L, 1));
+        sound=SoundRegistry::get(lua_tointeger(L, 1));
     }
 
     if(sound)
@@ -134,7 +134,7 @@ int BulletScript::lua_playSoundPitch(lua_State* L)
         }
         else if(lua_isnumber(L, 1))
         {
-            sound=SoundRegistry::get(lua_tonumber(L, 1));
+            sound=SoundRegistry::get(lua_tointeger(L, 1));
         }
     }
 
@@ -157,8 +157,8 @@ int BulletScript::lua_registerBullet(lua_State* L)
 
     int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 2));
     char* buffer = new char[buflen+1];
-    strcpy(buffer, inst()->getCurrentPath());
-    strcat(buffer, lua_tostring(L, 2));
+    strncpy(buffer, inst()->getCurrentPath(), buflen);
+    strncat(buffer, lua_tostring(L, 2), buflen);
 
     type.image.load(buffer);
 
@@ -229,7 +229,7 @@ int BulletScript::lua_pushBullet(lua_State* L)
     double y=lua_tonumber(L, 2)+task->centerY;
     double sp=lua_tonumber(L, 3);
     double rt=rad(lua_tonumber(L, 4))+task->angle;
-    double type=(lua_isstring(L, 5)?BULLET(lua_tostring(L, 5)):lua_isnumber(L, 5)?lua_tointeger(L, 5):task->bulletType);
+    int type=(lua_isstring(L, 5)?BULLET(lua_tostring(L, 5)):lua_isnumber(L, 5)?lua_tointeger(L, 5):task->bulletType);
 
     lua_pushinteger(L, inst()->scene->pushBullet(x, y, sp, rt, type));
 
@@ -246,7 +246,7 @@ int BulletScript::lua_setCenter(lua_State* L)
     if(top==1)
     {
         if(lua_isnumber(L, 1))
-            task->centerObj=lua_tonumber(L, 1);
+            task->centerObj=lua_tointeger(L, 1);
         task->deltaX=0;
         task->deltaY=0;
     }
@@ -260,7 +260,7 @@ int BulletScript::lua_setCenter(lua_State* L)
     else if(top==3)
     {
         if(lua_isnumber(L, 1))
-            task->centerObj=lua_tonumber(L, 1);
+            task->centerObj= lua_tointeger(L, 1);
         if(lua_isnumber(L, 2))
             task->deltaX=lua_tonumber(L, 2);
         if(lua_isnumber(L, 3))
@@ -458,9 +458,9 @@ int BulletScript::lua_setAttachedBulletPosition(lua_State* L)
     else
     {
         if(lua_isnumber(L, 2))
-            p->forEach(BulletBase::setX, lua_tonumber(L, 2));
+            p->forEach(&BulletBase::setX, lua_tonumber(L, 2));
         if(lua_isnumber(L, 3))
-            p->forEach(BulletBase::setY, lua_tonumber(L, 3));
+            p->forEach(&BulletBase::setY, lua_tonumber(L, 3));
     }
     return 0;
 }
@@ -480,7 +480,7 @@ int BulletScript::lua_setAttachedBulletRotation(lua_State* L)
     else
     {
         if(lua_isnumber(L, 2))
-            p->forEach(BulletBase::setRotation, rad(lua_tonumber(L, 2)));
+            p->forEach(&BulletBase::setRotation, rad(lua_tonumber(L, 2)));
     }
     return 0;
 }
@@ -500,7 +500,7 @@ int BulletScript::lua_setAttachedBulletSpeed(lua_State* L)
     else
     {
         if(lua_isnumber(L, 2))
-            p->forEach(BulletBase::setSpeed, lua_tonumber(L, 2));
+            p->forEach(&BulletBase::setSpeed, lua_tonumber(L, 2));
     }
     return 0;
 }
@@ -520,7 +520,7 @@ int BulletScript::lua_setAttachedBulletAcceleration(lua_State* L)
     else
     {
         if(lua_isnumber(L, 2))
-            p->forEach(BulletBase::setAccelerateSpeed, lua_tonumber(L, 2));
+            p->forEach(&BulletBase::setAccelerateSpeed, lua_tonumber(L, 2));
     }
     return 0;
 }
@@ -540,7 +540,7 @@ int BulletScript::lua_setAttachedBulletRotateSpeed(lua_State* L)
     else
     {
         if(lua_isnumber(L, 2))
-            p->forEach(BulletBase::setRotateSpeed, rad(lua_tonumber(L, 2)));
+            p->forEach(&BulletBase::setRotateSpeed, rad(lua_tonumber(L, 2)));
     }
     return 0;
 }
@@ -587,7 +587,7 @@ int BulletScript::lua_setAttachedBulletRotationOffset(lua_State* L)
     else
     {
         if(lua_isnumber(L, 2))
-            p->forEach(BulletBase::setRotationOffset, rad(lua_tonumber(L, 2)));
+            p->forEach(&BulletBase::setRotationOffset, rad(lua_tonumber(L, 2)));
     }
     return 0;
 }
@@ -607,7 +607,7 @@ int BulletScript::lua_setAttachedBulletSpeedOffset(lua_State* L)
     else
     {
         if(lua_isnumber(L, 2))
-            p->forEach(BulletBase::setSpeedOffset, lua_tonumber(L, 2));
+            p->forEach(&BulletBase::setSpeedOffset, lua_tonumber(L, 2));
     }
     return 0;
 }

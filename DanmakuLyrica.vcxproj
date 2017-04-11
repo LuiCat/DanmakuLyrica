@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C01EDC47-27F2-4E26-982D-7708BD1EA5E9}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>src;src\graphics;src\sound;src\keybinding;src\core;src\entity;src\scene;src\script;src\external;src\external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>src;src\external;src\external\lua\$(Configuration);src\external\libogg\$(Configuration);src\external\libvorbis\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua.lib;libVorbisFile.lib;libVorbis.lib;libOgg.lib;d3d9.lib;d3dx9.lib;winmm.lib;dsound.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>src;src\graphics;src\sound;src\keybinding;src\core;src\entity;src\scene;src\script;src\external;src\external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>src;src\external;src\external\lua\$(Configuration);src\external\libogg\$(Configuration);src\external\libvorbis\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>lua.lib;libVorbisFile.lib;libVorbis.lib;libOgg.lib;d3d9.lib;d3dx9.lib;winmm.lib;dsound.lib;dinput8.lib;dxguid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\animatedtexture.cpp" />
+    <ClCompile Include="src\attacktrail.cpp" />
+    <ClCompile Include="src\bullet.cpp" />
+    <ClCompile Include="src\bulletattachlist.cpp" />
+    <ClCompile Include="src\bulletbase.cpp" />
+    <ClCompile Include="src\bulletjudge.cpp" />
+    <ClCompile Include="src\bulletlist.cpp" />
+    <ClCompile Include="src\bulletscene.cpp" />
+    <ClCompile Include="src\bulletscript.cpp" />
+    <ClCompile Include="src\core\accuratetimer.cpp" />
+    <ClCompile Include="src\core\beatticking.cpp" />
+    <ClCompile Include="src\core\beattime.cpp" />
+    <ClCompile Include="src\core\registry.cpp" />
+    <ClCompile Include="src\core\ticking.cpp" />
+    <ClCompile Include="src\core\timeline.cpp" />
+    <ClCompile Include="src\danmakulyrica.cpp" />
+    <ClCompile Include="src\enemy.cpp" />
+    <ClCompile Include="src\entity\entity.cpp" />
+    <ClCompile Include="src\entity\entityattachlist.cpp" />
+    <ClCompile Include="src\entity\entityevent.cpp" />
+    <ClCompile Include="src\entity\entitylist.cpp" />
+    <ClCompile Include="src\entity\functionevent.cpp" />
+    <ClCompile Include="src\entity\movement.cpp" />
+    <ClCompile Include="src\entity\position.cpp" />
+    <ClCompile Include="src\entity\renderobject.cpp" />
+    <ClCompile Include="src\entity\sprite.cpp" />
+    <ClCompile Include="src\graphics\gfxcore.cpp" />
+    <ClCompile Include="src\graphics\gfxresource.cpp" />
+    <ClCompile Include="src\graphics\imagepiece.cpp" />
+    <ClCompile Include="src\graphics\rendersurface.cpp" />
+    <ClCompile Include="src\graphics\rendertarget.cpp" />
+    <ClCompile Include="src\graphics\rendertexture.cpp" />
+    <ClCompile Include="src\graphics\textrenderer.cpp" />
+    <ClCompile Include="src\graphics\texturecache.cpp" />
+    <ClCompile Include="src\graphics\vertexbuffer.cpp" />
+    <ClCompile Include="src\keybinding\keybinding.cpp" />
+    <ClCompile Include="src\luascript.cpp" />
+    <ClCompile Include="src\luatask.cpp" />
+    <ClCompile Include="src\luatimeline.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\maingame.cpp" />
+    <ClCompile Include="src\mapstate.cpp" />
+    <ClCompile Include="src\noteentity.cpp" />
+    <ClCompile Include="src\notejudge.cpp" />
+    <ClCompile Include="src\notelist.cpp" />
+    <ClCompile Include="src\notemap.cpp" />
+    <ClCompile Include="src\notescene.cpp" />
+    <ClCompile Include="src\numbersprite.cpp" />
+    <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\scene\scene.cpp" />
+    <ClCompile Include="src\scene\scenemanager.cpp" />
+    <ClCompile Include="src\score.cpp" />
+    <ClCompile Include="src\segment.cpp" />
+    <ClCompile Include="src\sound\soundregistry.cpp" />
+    <ClCompile Include="src\sound\sounds.cpp" />
+    <ClCompile Include="src\spiritwheel.cpp" />
+    <ClCompile Include="src\splash.cpp" />
+    <ClCompile Include="src\textureregistry.cpp" />
+    <ClCompile Include="src\texturestrip.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\animatedtexture.h" />
+    <ClInclude Include="src\attacktrail.h" />
+    <ClInclude Include="src\bullet.h" />
+    <ClInclude Include="src\bulletattachlist.h" />
+    <ClInclude Include="src\bulletbase.h" />
+    <ClInclude Include="src\bulletdef.h" />
+    <ClInclude Include="src\bulletjudge.h" />
+    <ClInclude Include="src\bulletlist.h" />
+    <ClInclude Include="src\bulletscene.h" />
+    <ClInclude Include="src\bulletscript.h" />
+    <ClInclude Include="src\bullettype.h" />
+    <ClInclude Include="src\core\accuratetimer.h" />
+    <ClInclude Include="src\core\beatticking.h" />
+    <ClInclude Include="src\core\beattime.h" />
+    <ClInclude Include="src\core\commondef.h" />
+    <ClInclude Include="src\core\debug.h" />
+    <ClInclude Include="src\core\mathhelper.h" />
+    <ClInclude Include="src\core\registry.h" />
+    <ClInclude Include="src\core\ticking.h" />
+    <ClInclude Include="src\core\timeline.h" />
+    <ClInclude Include="src\danmakulyrica.h" />
+    <ClInclude Include="src\enemy.h" />
+    <ClInclude Include="src\entity\entity.h" />
+    <ClInclude Include="src\entity\entityattachlist.h" />
+    <ClInclude Include="src\entity\entityevent.h" />
+    <ClInclude Include="src\entity\entitylist.h" />
+    <ClInclude Include="src\entity\functionevent.h" />
+    <ClInclude Include="src\entity\movement.h" />
+    <ClInclude Include="src\entity\position.h" />
+    <ClInclude Include="src\entity\renderobject.h" />
+    <ClInclude Include="src\entity\sprite.h" />
+    <ClInclude Include="src\graphics\gfxcore.h" />
+    <ClInclude Include="src\graphics\gfxdef.h" />
+    <ClInclude Include="src\graphics\gfxresource.h" />
+    <ClInclude Include="src\graphics\graphics.h" />
+    <ClInclude Include="src\graphics\imagepiece.h" />
+    <ClInclude Include="src\graphics\rendersurface.h" />
+    <ClInclude Include="src\graphics\rendertarget.h" />
+    <ClInclude Include="src\graphics\rendertexture.h" />
+    <ClInclude Include="src\graphics\textrenderer.h" />
+    <ClInclude Include="src\graphics\texturecache.h" />
+    <ClInclude Include="src\graphics\vertexbuffer.h" />
+    <ClInclude Include="src\keybinding\keybinding.h" />
+    <ClInclude Include="src\luascript.h" />
+    <ClInclude Include="src\luatask.h" />
+    <ClInclude Include="src\luatimeline.h" />
+    <ClInclude Include="src\maingame.h" />
+    <ClInclude Include="src\mapstate.h" />
+    <ClInclude Include="src\notedef.h" />
+    <ClInclude Include="src\noteentity.h" />
+    <ClInclude Include="src\notejudge.h" />
+    <ClInclude Include="src\notelist.h" />
+    <ClInclude Include="src\notemap.h" />
+    <ClInclude Include="src\notescene.h" />
+    <ClInclude Include="src\numbersprite.h" />
+    <ClInclude Include="src\player.h" />
+    <ClInclude Include="src\scene\scene.h" />
+    <ClInclude Include="src\scene\scenemanager.h" />
+    <ClInclude Include="src\score.h" />
+    <ClInclude Include="src\segment.h" />
+    <ClInclude Include="src\sound\soundregistry.h" />
+    <ClInclude Include="src\sound\sounds.h" />
+    <ClInclude Include="src\spiritwheel.h" />
+    <ClInclude Include="src\splash.h" />
+    <ClInclude Include="src\textureregistry.h" />
+    <ClInclude Include="src\texturestrip.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -39,17 +39,21 @@ inline double deg(double x)
     return x*180/M_PI;
 }
 
+#ifndef min
 template <typename T>
-inline const T& min(const T& x, const T& y)
+inline T& min(T& x, T& y)
 {
     return x<y?x:y;
 }
+#endif
 
+#ifndef max
 template <typename T>
 inline const T& max(const T& x, const T& y)
 {
     return x>y?x:y;
 }
+#endif
 
 template <typename T>
 inline const T tabs(const T& x)

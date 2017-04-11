@@ -66,7 +66,7 @@ LRESULT WINAPI msgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-WINAPI INT WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, int)
 {
     hInstance=hInst;
 

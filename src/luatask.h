@@ -1,7 +1,7 @@
 #ifndef LUATASK_H
 #define LUATASK_H
 
-#include "lua/lua.hpp"
+#include <lua.hpp>
 
 #include "bullet.h"
 #include "bulletscene.h"

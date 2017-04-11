@@ -3,7 +3,7 @@ class LuaScript;
 #ifndef LUASCRIPT_H
 #define LUASCRIPT_H
 
-#include "lua/lua.hpp"
+#include <lua.hpp>
 
 #define lua_tableregister(L,n,f) (lua_pushstring(L,n),lua_pushcfunction(L,f),lua_settable(L,-3))
 

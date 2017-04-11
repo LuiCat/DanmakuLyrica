@@ -1,7 +1,7 @@
 #include "attacktrail.h"
 #include "debug.h"
 
-AttackTrail::AttackTrail(int x, int y, int targetX, int targetY)
+AttackTrail::AttackTrail(double x, double y, double targetX, double targetY)
     : BulletBase(x, y, 0, 0)
 {
     setTickRate(0.6);
