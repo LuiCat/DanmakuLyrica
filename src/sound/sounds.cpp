@@ -49,12 +49,8 @@ bool SoundBuffer::loadWavFile(const char *filename, char **memout, DWORD *memsiz
     parent.dwFlags      = 0;
     child = parent;
 
-	size_t len = strlen(filename);
-	auto namestr = new char[len+1];
-    strncpy(namestr, filename, len);
-
     // open the WAV file
-    if ((hwav = mmioOpen(namestr, NULL, MMIO_READ | MMIO_ALLOCBUF))==NULL)
+    if ((hwav = mmioOpen(const_cast<char*>(filename), NULL, MMIO_READ | MMIO_ALLOCBUF))==NULL)
         return false;
 
     // descend into the RIFF
