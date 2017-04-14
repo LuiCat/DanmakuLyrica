@@ -51,6 +51,7 @@ build*/
 .vs
 *.vc.*
 [Dd]ebug*/
+[Rr]elease*/
 
 # =========================
 # Others

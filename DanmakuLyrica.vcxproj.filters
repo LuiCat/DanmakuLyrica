@@ -1,396 +1,423 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{a90924ed-7c6b-43db-b91d-8fd7e2264e34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{45669617-77f8-4db6-9b39-881dd54b3599}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    <Filter Include="Notemap">
+      <UniqueIdentifier>{bc91d7f0-fadb-48b8-b70c-760fd2ccfd28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{9074e0da-7b91-4282-875f-c284a6f67253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{358a7a0f-17b2-4730-af39-df036a0bf253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullet">
+      <UniqueIdentifier>{0c295408-adcb-4053-a0b0-861f7824c2fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core">
+      <UniqueIdentifier>{9fa0ee67-95a8-4323-954b-ea88eee0dc35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Entity">
+      <UniqueIdentifier>{955af33e-fe50-4933-9b85-746c36b91221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Graphics">
+      <UniqueIdentifier>{5e59e00f-0c7e-4480-831d-f80a11235c24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Input">
+      <UniqueIdentifier>{2c1a3767-eac4-429f-b6ea-82a2ab7b5c0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Sound">
+      <UniqueIdentifier>{fb69ffd2-b007-4f80-9437-6b3fd1d816b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Script">
+      <UniqueIdentifier>{a76d34ca-53ba-4cbd-8585-ac65e8ba529f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Script\Event">
+      <UniqueIdentifier>{88824304-671e-41e6-8373-22efd81d7d24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Scene">
+      <UniqueIdentifier>{bfbf2658-41bf-45fa-ae8e-b7fd2eec55ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Util">
+      <UniqueIdentifier>{0258536d-2605-4e59-91b5-542b2662aeb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="0Core\Time">
+      <UniqueIdentifier>{6b42d150-0c34-44a5-bd62-f02453b52d07}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\animatedtexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\attacktrail.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bullet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bulletattachlist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bulletbase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bulletjudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bulletlist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bulletscene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\bulletscript.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\danmakulyrica.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\luascript.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\luatask.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\luatimeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\maingame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\mapstate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\noteentity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\notejudge.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\notelist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\notemap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\notescene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\numbersprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\score.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\segment.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\spiritwheel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\splash.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\textureregistry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\texturestrip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\accuratetimer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Time</Filter>
     </ClCompile>
     <ClCompile Include="src\core\beatticking.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\animatedtexture.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\core\beattime.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\registry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\ticking.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\timeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\entityattachlist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\entityevent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Time</Filter>
     </ClCompile>
     <ClCompile Include="src\entity\entitylist.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="src\entity\functionevent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\movement.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\position.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\renderobject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\sprite.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\entity\entity.cpp">
+      <Filter>0Core\Entity</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\gfxcore.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\gfxresource.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\imagepiece.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\rendersurface.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\luascript.cpp">
+      <Filter>0Core\Script</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\rendertarget.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\luatask.cpp">
+      <Filter>0Core\Script</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\rendertexture.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\luatimeline.cpp">
+      <Filter>0Core\Script</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\textrenderer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\maingame.cpp">
+      <Filter>0Core\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\texturecache.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\entity\movement.cpp">
+      <Filter>0Core\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\vertexbuffer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\entity\entityattachlist.cpp">
+      <Filter>0Core\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\entityevent.cpp">
+      <Filter>0Core\Script\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\functionevent.cpp">
+      <Filter>0Core\Script\Event</Filter>
     </ClCompile>
     <ClCompile Include="src\keybinding\keybinding.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\position.cpp">
+      <Filter>0Core\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\registry.cpp">
+      <Filter>0Core\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\renderobject.cpp">
+      <Filter>0Core\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\rendertarget.cpp">
+      <Filter>0Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\rendertexture.cpp">
+      <Filter>0Core\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\scene.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\scenemanager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Scene</Filter>
     </ClCompile>
     <ClCompile Include="src\sound\soundregistry.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Sound</Filter>
     </ClCompile>
     <ClCompile Include="src\sound\sounds.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>0Core\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="src\entity\sprite.cpp">
+      <Filter>0Core\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\textrenderer.cpp">
+      <Filter>0Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\texturecache.cpp">
+      <Filter>0Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\textureregistry.cpp">
+      <Filter>0Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texturestrip.cpp">
+      <Filter>0Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\ticking.cpp">
+      <Filter>0Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\timeline.cpp">
+      <Filter>0Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\vertexbuffer.cpp">
+      <Filter>0Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\score.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bullet.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bulletattachlist.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bulletbase.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bulletjudge.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bulletlist.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bulletscene.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\bulletscript.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\attacktrail.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mapstate.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\noteentity.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\notejudge.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\notelist.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\notemap.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\notescene.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\segment.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spiritwheel.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\danmakulyrica.cpp" />
+    <ClCompile Include="src\splash.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\numbersprite.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\animatedtexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\attacktrail.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bullet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bulletattachlist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bulletbase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bulletdef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bulletjudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bulletlist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bulletscene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bulletscript.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\bullettype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\danmakulyrica.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\luascript.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\luatask.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\luatimeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\maingame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mapstate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\notedef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\noteentity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\notejudge.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\notelist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\notemap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\notescene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\numbersprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\score.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\segment.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\spiritwheel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\splash.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\textureregistry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\texturestrip.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\accuratetimer.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Time</Filter>
     </ClInclude>
     <ClInclude Include="src\core\beatticking.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="src\animatedtexture.h">
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="src\core\beattime.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Time</Filter>
     </ClInclude>
     <ClInclude Include="src\core\commondef.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Util</Filter>
     </ClInclude>
     <ClInclude Include="src\core\debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\mathhelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\registry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\ticking.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\timeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\entityattachlist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\entityevent.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Util</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\entitylist.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="src\entity\functionevent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\movement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\position.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\renderobject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\sprite.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\entity\entity.h">
+      <Filter>0Core\Entity</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\gfxcore.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\gfxdef.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\gfxresource.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\graphics.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\imagepiece.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\rendersurface.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\luascript.h">
+      <Filter>0Core\Script</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\rendertarget.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\luatimeline.h">
+      <Filter>0Core\Script</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\rendertexture.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\luatask.h">
+      <Filter>0Core\Script</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\textrenderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\core\mathhelper.h">
+      <Filter>0Core\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\texturecache.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\maingame.h">
+      <Filter>0Core\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\vertexbuffer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\entity\movement.h">
+      <Filter>0Core\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\entityattachlist.h">
+      <Filter>0Core\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\entityevent.h">
+      <Filter>0Core\Script\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\functionevent.h">
+      <Filter>0Core\Script\Event</Filter>
     </ClInclude>
     <ClInclude Include="src\keybinding\keybinding.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Input</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\scene.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\entity\position.h">
+      <Filter>0Core\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\registry.h">
+      <Filter>0Core\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\renderobject.h">
+      <Filter>0Core\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\rendertexture.h">
+      <Filter>0Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\rendertarget.h">
+      <Filter>0Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\scenemanager.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\scene.h">
+      <Filter>0Core\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\sound\soundregistry.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Sound</Filter>
     </ClInclude>
     <ClInclude Include="src\sound\sounds.h">
-      <Filter>Header Files</Filter>
+      <Filter>0Core\Sound</Filter>
     </ClInclude>
+    <ClInclude Include="src\entity\sprite.h">
+      <Filter>0Core\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\textrenderer.h">
+      <Filter>0Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\texturecache.h">
+      <Filter>0Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\textureregistry.h">
+      <Filter>0Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texturestrip.h">
+      <Filter>0Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\ticking.h">
+      <Filter>0Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\timeline.h">
+      <Filter>0Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\vertexbuffer.h">
+      <Filter>0Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\score.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bullet.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bulletattachlist.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bulletbase.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bulletdef.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bulletjudge.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bulletlist.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bulletscene.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bulletscript.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\bullettype.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\attacktrail.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mapstate.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\notedef.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\noteentity.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\notejudge.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\notelist.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\notemap.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\notescene.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\segment.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\spiritwheel.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\danmakulyrica.h" />
+    <ClInclude Include="src\splash.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\numbersprite.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="DanmakuLyrica\data\stage\stage.txt" />
   </ItemGroup>
 </Project>

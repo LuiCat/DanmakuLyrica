@@ -68,11 +68,15 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)Include;$(IncludePath)</IncludePath>
     <LibraryPath>$(DXSDK_DIR)Lib\x86\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,7 +85,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>src;src\graphics;src\sound;src\keybinding;src\core;src\entity;src\scene;src\script;src\external;src\external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\graphics;src\sound;src\keybinding;src\core;src\entity;src\scene;src\script;src\external\libogg\include;src\external\libvorbis\include;src\external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -99,7 +103,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>src;src\graphics;src\sound;src\keybinding;src\core;src\entity;src\scene;src\script;src\external;src\external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\graphics;src\sound;src\keybinding;src\core;src\entity;src\scene;src\script;src\external\libogg\include;src\external\libvorbis\include;src\external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -143,7 +147,6 @@
     <ClCompile Include="src\graphics\gfxcore.cpp" />
     <ClCompile Include="src\graphics\gfxresource.cpp" />
     <ClCompile Include="src\graphics\imagepiece.cpp" />
-    <ClCompile Include="src\graphics\rendersurface.cpp" />
     <ClCompile Include="src\graphics\rendertarget.cpp" />
     <ClCompile Include="src\graphics\rendertexture.cpp" />
     <ClCompile Include="src\graphics\textrenderer.cpp" />
@@ -211,7 +214,6 @@
     <ClInclude Include="src\graphics\gfxresource.h" />
     <ClInclude Include="src\graphics\graphics.h" />
     <ClInclude Include="src\graphics\imagepiece.h" />
-    <ClInclude Include="src\graphics\rendersurface.h" />
     <ClInclude Include="src\graphics\rendertarget.h" />
     <ClInclude Include="src\graphics\rendertexture.h" />
     <ClInclude Include="src\graphics\textrenderer.h" />
@@ -241,6 +243,9 @@
     <ClInclude Include="src\splash.h" />
     <ClInclude Include="src\textureregistry.h" />
     <ClInclude Include="src\texturestrip.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="DanmakuLyrica\data\stage\stage.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
