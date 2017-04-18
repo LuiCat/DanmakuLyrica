@@ -44,13 +44,13 @@ void AttackTrail::onRender()
         double npos = pos+0.02;
         d3d.vertex(f(pos)*(w-2.5),  pos*len*2,  0, 0);
         d3d.vertex(f(npos)*(w-2.5), npos*len*2, 0, 0);
-        d3d.vertex(f(npos)*(w+2.5), npos*len*2, 0, 0);
         d3d.vertex(f(pos)*(w+2.5),  pos*len*2,  0, 0);
+        d3d.vertex(f(npos)*(w+2.5), npos*len*2, 0, 0);
     }
 
     d3d.vertex(f(pos)*(w-2.5), pos*len*2, 0, 0);
     d3d.vertex(0, len, 0, 0);
-    d3d.vertex(0, len, 0, 0);
     d3d.vertex(f(pos)*(w+2.5), pos*len*2, 0, 0);
+    d3d.vertex(0, len, 0, 0);
 
 }

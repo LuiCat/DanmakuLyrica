@@ -45,11 +45,7 @@ void TextureStrip::pushVertices(int i, int j)
     vmax=vmin+sizeY;
 
     d3d.setTexture(texture);
-
-    d3d.vertex(0.0, 0.0, umin, vmin);
-    d3d.vertex(1.0, 0.0, umax, vmin);
-    d3d.vertex(1.0, 1.0, umax, vmax);
-    d3d.vertex(0.0, 1.0, umin, vmax);
+    d3d.rect(umin, vmin, umax, vmax);
 }
 
 void TextureStrip::pushVerticesFlip(int i, int j)
@@ -62,9 +58,5 @@ void TextureStrip::pushVerticesFlip(int i, int j)
     vmax=vmin+sizeY;
 
     d3d.setTexture(texture);
-
-    d3d.vertex(0.0, 0.0, umin, vmin);
-    d3d.vertex(0.0, 1.0, umin, vmax);
-    d3d.vertex(1.0, 1.0, umax, vmax);
-    d3d.vertex(1.0, 0.0, umax, vmin);
+    d3d.rect(umax, vmin, umin, vmax);
 }

@@ -209,10 +209,7 @@ void ImagePiece::setRenderRange(double minU, double minV, double maxU, double ma
 void ImagePiece::vertice()
 {
     d3d.setTexture(tex);
-    d3d.vertex(0.0, 0.0, umin, vmin);
-    d3d.vertex(1.0, 0.0, umax, vmin);
-    d3d.vertex(1.0, 1.0, umax, vmax);
-    d3d.vertex(0.0, 1.0, umin, vmax);
+    d3d.rect(umin, vmin, umax, vmax);
 }
 
 void ImagePiece::vertice(double centerXRatio, double centerYRatio, double size)
@@ -223,10 +220,7 @@ void ImagePiece::vertice(double centerXRatio, double centerYRatio, double size)
     d3d.translate2D(-centerXRatio, -centerYRatio);
 
     d3d.setTexture(tex);
-    d3d.vertex(0.0, 0.0, umin, vmin);
-    d3d.vertex(1.0, 0.0, umax, vmin);
-    d3d.vertex(1.0, 1.0, umax, vmax);
-    d3d.vertex(0.0, 1.0, umin, vmax);
+    d3d.rect(umin, vmin, umax, vmax);
 
     d3d.popMatrix();
 }
@@ -239,10 +233,7 @@ void ImagePiece::vertice(double centerXRatio, double centerYRatio, double sizeX,
     d3d.translate2D(-centerXRatio, -centerYRatio);
 
     d3d.setTexture(tex);
-    d3d.vertex(0.0, 0.0, umin, vmin);
-    d3d.vertex(1.0, 0.0, umax, vmin);
-    d3d.vertex(1.0, 1.0, umax, vmax);
-    d3d.vertex(0.0, 1.0, umin, vmax);
+    d3d.rect(umin, vmin, umax, vmax);
 
     d3d.popMatrix();
 }

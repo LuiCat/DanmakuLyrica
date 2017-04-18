@@ -24,8 +24,5 @@ void RenderObject::render()
 
 void RenderObject::onRender()
 {
-    d3d.vertex(0.0, 0.0, 0.0, 0.0);
-    d3d.vertex(1.0, 0.0, 1.0, 0.0);
-    d3d.vertex(1.0, 1.0, 1.0, 1.0);
-    d3d.vertex(0.0, 1.0, 0.0, 1.0);
+    d3d.rect(0, 0, 1, 1);
 }

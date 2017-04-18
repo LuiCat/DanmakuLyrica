@@ -37,26 +37,15 @@ void AnimatedTexture::pushVertices(int i)
     if(c<=0)
     {
         d3d.setTexture(0);
-        d3d.vertex(0.0, 0.0, 0.0, 0.0);
-        d3d.vertex(1.0, 0.0, 1.0, 0.0);
-        d3d.vertex(1.0, 1.0, 1.0, 1.0);
-        d3d.vertex(0.0, 1.0, 0.0, 1.0);
+        d3d.rect(0, 0, 1, 1);
     }
     else
     {
         if(i<0)i=-i;
         i%=c;
         Frame& f=frames[i];
-
         d3d.setTexture(f.tex);
-
-        double umax=f.x+f.w;
-        double vmax=f.y+f.h;
-
-        d3d.vertex(0.0, 0.0, f.x,  f.y );
-        d3d.vertex(1.0, 0.0, umax, f.y );
-        d3d.vertex(1.0, 1.0, umax, vmax);
-        d3d.vertex(0.0, 1.0, f.x,  vmax);
+        d3d.rect(f.x, f.y, f.x + f.w, f.y + f.h);
     }
 }
 

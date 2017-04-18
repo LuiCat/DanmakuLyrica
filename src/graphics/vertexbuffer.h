@@ -53,14 +53,14 @@ private:
 
     RenderTarget* currentTarget;
 
-	UINT currentChunkOffset;
+    UINT currentChunkOffset;
 
-	Texture lastRenderTexture;
-	DWORD lastRenderBlendDest;
+    Texture lastRenderTexture;
+    DWORD lastRenderBlendDest;
 
-	void renderResetState();
-	void renderSetTexture(Texture texture);
-	void renderSetBlendDest(DWORD blend);
+    void renderResetState();
+    void renderSetTexture(Texture texture);
+    void renderSetBlendDest(DWORD blend);
 
 protected:
 
@@ -84,16 +84,19 @@ public:
     void pushMatrix();
     void popMatrix();
 
-    void vertex(double x, double y, double u, double v);
-    void vertex(double x, double y, double z, double u, double v);
+    void rect(float u1, float v1, float u2, float v2);
+    void rect(float x, float y, float w, float h, float u1, float v1, float u2, float v2);
 
-    void translate2D(double x, double y);
-    void rotate2D(double angle);
-    void scale2D(double scaleX, double scaleY);
+    void vertex(float x, float y, float u, float v);
+    void vertex(float x, float y, float z, float u, float v);
 
-    void translate3D(double x, double y, double z);
-    void rotate3D(double axisX, double axisY, double axisZ, double angle);
-    void scale3D(double scaleX, double scaleY, double scaleZ);
+    void translate2D(float x, float y);
+    void rotate2D(float angle);
+    void scale2D(float scaleX, float scaleY);
+
+    void translate3D(float x, float y, float z);
+    void rotate3D(float axisX, float axisY, float axisZ, float angle);
+    void scale3D(float scaleX, float scaleY, float scaleZ);
 
     void setBlend(bool add);
     void setTexture(Texture tex);

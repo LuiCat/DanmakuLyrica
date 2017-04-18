@@ -27,10 +27,7 @@ RenderTexture::~RenderTexture()
 void RenderTexture::pushVertices()
 {
     d3d.setTexture(texture);
-    d3d.vertex(0.0, 0.0, 0.0, 0.0);
-    d3d.vertex(1.0, 0.0, 1.0, 0.0);
-    d3d.vertex(1.0, 1.0, 1.0, 1.0);
-    d3d.vertex(0.0, 1.0, 0.0, 1.0);
+    d3d.rect(0, 0, 1, 1);
 }
 
 void RenderTexture::draw(int x, int y, RenderTarget* target)
