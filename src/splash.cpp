@@ -1,6 +1,6 @@
 #include "splash.h"
 
-ImagePiece Splash::img("data/image/effect/blow.png");
+TexturePiece Splash::img("data/image/effect/blow.png");
 
 
 Splash::Splash(double x, double y)

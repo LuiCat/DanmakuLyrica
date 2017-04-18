@@ -79,7 +79,7 @@ void DanmakuLyrica::mainInit()
     script.setTime(mapState.beatOffset);
     script.loadScriptFile(stagename.c_str());
 
-    ImagePiece::loadPending();
+    TexturePiece::loadPending();
 
 }
 

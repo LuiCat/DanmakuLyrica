@@ -8,7 +8,7 @@
 
 #include <cstring>
 
-BulletType Bullet::defaultBullet={ImagePiece(), 16, 16, 8, 8, BulletType::none, BulletType::rect, 8, 8};
+BulletType Bullet::defaultBullet={TexturePiece(), 16, 16, 8, 8, BulletType::none, BulletType::rect, 8, 8};
 Registry<BulletType> Bullet::reg;
 
 BulletJudge Bullet::bulletJudge;

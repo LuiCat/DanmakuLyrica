@@ -5,7 +5,7 @@
 
 #include "notedef.h"
 #include "notejudge.h"
-#include "imagepiece.h"
+#include "texturepiece.h"
 
 #include "mapstate.h"
 
@@ -13,7 +13,7 @@ class Note : public Entity
 {
 public:
 
-    static ImagePiece texNote;
+    static TexturePiece texNote;
 
     static double moveSpeed;
 

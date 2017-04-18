@@ -28,7 +28,7 @@ NumberSprite::NumberSprite(const char* filename, int row, int col)
 
 void NumberSprite::loadImage(const char* filename, int row, int col)
 {
-    imageNum = ImagePiece::createImageSet(filename, row, col, 10);
+    imageNum = TexturePiece::createImageSet(filename, row, col, 10);
 
 }
 

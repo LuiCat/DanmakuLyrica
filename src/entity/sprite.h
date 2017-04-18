@@ -2,13 +2,13 @@
 #define SPRITE_H
 
 #include "entity.h"
-#include "ImagePiece.h"
+#include "texturepiece.h"
 
 class Sprite : public Entity
 {
 protected:
 
-    ImagePiece image;
+    TexturePiece image;
     double renderSizeX, renderSizeY;
     double renderCenterX, renderCenterY;
 
@@ -24,8 +24,8 @@ public:
     Sprite& setRenderSize(double x, double y);
     Sprite& setRenderCenter(double x, double y);
 
-    Sprite& setImage(ImagePiece&& newImage);
-    const ImagePiece& getImage() const;
+    Sprite& setImage(TexturePiece&& newImage);
+    const TexturePiece& getImage() const;
 
     double getAlpha() const;
     Sprite& setAlpha(double x);

@@ -75,9 +75,6 @@
     <ClCompile Include="src\graphics\gfxresource.cpp">
       <Filter>0Core\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\imagepiece.cpp">
-      <Filter>0Core\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\luascript.cpp">
       <Filter>0Core\Script</Filter>
     </ClCompile>
@@ -221,6 +218,9 @@
     <ClCompile Include="src\numbersprite.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\texturepiece.cpp">
+      <Filter>0Core\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\accuratetimer.h">
@@ -257,9 +257,6 @@
       <Filter>0Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\graphics.h">
-      <Filter>0Core\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\imagepiece.h">
       <Filter>0Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\luascript.h">
@@ -415,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="src\numbersprite.h">
       <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\texturepiece.h">
+      <Filter>0Core\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

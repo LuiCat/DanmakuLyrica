@@ -22,13 +22,13 @@ Sprite& Sprite::setRenderCenter(double x, double y)
     return *this;
 }
 
-Sprite& Sprite::setImage(ImagePiece&& newImage)
+Sprite& Sprite::setImage(TexturePiece&& newImage)
 {
-    image = std::forward<ImagePiece>(newImage);
+    image = std::forward<TexturePiece>(newImage);
     return *this;
 }
 
-const ImagePiece& Sprite::getImage() const
+const TexturePiece& Sprite::getImage() const
 {
     return image;
 }

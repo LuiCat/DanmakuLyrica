@@ -2,13 +2,13 @@
 #define SPIRITWHEEL_H
 
 #include "bulletbase.h"
-#include "imagepiece.h"
+#include "texturepiece.h"
 
 class SpiritWheel : public BulletBase
 {
 protected:
 
-    static ImagePiece imgWheel;
+    static TexturePiece imgWheel;
 
     double life;
 

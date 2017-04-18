@@ -146,7 +146,7 @@
     <ClCompile Include="src\entity\sprite.cpp" />
     <ClCompile Include="src\graphics\gfxcore.cpp" />
     <ClCompile Include="src\graphics\gfxresource.cpp" />
-    <ClCompile Include="src\graphics\imagepiece.cpp" />
+    <ClCompile Include="src\graphics\texturepiece.cpp" />
     <ClCompile Include="src\graphics\rendertarget.cpp" />
     <ClCompile Include="src\graphics\rendertexture.cpp" />
     <ClCompile Include="src\graphics\textrenderer.cpp" />
@@ -213,7 +213,7 @@
     <ClInclude Include="src\graphics\gfxdef.h" />
     <ClInclude Include="src\graphics\gfxresource.h" />
     <ClInclude Include="src\graphics\graphics.h" />
-    <ClInclude Include="src\graphics\imagepiece.h" />
+    <ClInclude Include="src\graphics\texturepiece.h" />
     <ClInclude Include="src\graphics\rendertarget.h" />
     <ClInclude Include="src\graphics\rendertexture.h" />
     <ClInclude Include="src\graphics\textrenderer.h" />

@@ -4,7 +4,7 @@
 #include "entity.h"
 #include "texturestrip.h"
 #include "keybinding.h"
-#include "imagepiece.h"
+#include "texturepiece.h"
 #include "spiritwheel.h"
 #include "numbersprite.h"
 #include "score.h"
@@ -65,11 +65,11 @@ public:
 
 protected:
 
-    ImagePiece tex;
-    vector<ImagePiece> img;
+    TexturePiece tex;
+    vector<TexturePiece> img;
 
-    ImagePiece plotInner;
-    ImagePiece plotOuter;
+    TexturePiece plotInner;
+    TexturePiece plotOuter;
 
     BulletList* judgeList;
 

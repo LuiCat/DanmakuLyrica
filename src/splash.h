@@ -3,14 +3,14 @@
 
 #include "bulletbase.h"
 
-#include <imagepiece.h>
+#include <texturepiece.h>
 
 
 class Splash : public BulletBase
 {
 public:
 
-    static ImagePiece img;
+    static TexturePiece img;
 
     Splash(double x, double y);
 

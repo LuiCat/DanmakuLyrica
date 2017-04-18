@@ -1,4 +1,4 @@
-#include "imagepiece.h"
+#include "texturepiece.h"
 #include "texturecache.h"
 #include "vertexbuffer.h"
 
@@ -6,15 +6,15 @@
 
 using namespace std;
 
-vector<pair<ImagePiece*, string>>* ImagePiece::pendingList = nullptr;
-bool ImagePiece::shouldLoadLater = true;
+vector<pair<TexturePiece*, string>>* TexturePiece::pendingList = nullptr;
+bool TexturePiece::shouldLoadLater = true;
 
-void ImagePiece::pendingLoads()
+void TexturePiece::pendingLoads()
 {
     shouldLoadLater = true;
 }
 
-void ImagePiece::loadPending()
+void TexturePiece::loadPending()
 {
     shouldLoadLater = false;
     if(pendingList == nullptr)
@@ -30,7 +30,7 @@ void ImagePiece::loadPending()
     //pendingMap.clear();
 }
 
-ImagePiece::ImagePiece(Texture texture)
+TexturePiece::TexturePiece(Texture texture)
     : tex(texture)
     , umin(0.0)
     , vmin(0.0)
@@ -41,7 +41,7 @@ ImagePiece::ImagePiece(Texture texture)
 
 }
 
-ImagePiece::ImagePiece(Texture texture, double minU, double minV, double maxU, double maxV)
+TexturePiece::TexturePiece(Texture texture, double minU, double minV, double maxU, double maxV)
     : tex(texture)
     , umin(minU)
     , vmin(minV)
@@ -52,7 +52,7 @@ ImagePiece::ImagePiece(Texture texture, double minU, double minV, double maxU, d
 
 }
 
-ImagePiece::ImagePiece(const char* filename)
+TexturePiece::TexturePiece(const char* filename)
     : tex(0)
     , umin(0.0)
     , vmin(0.0)
@@ -63,7 +63,7 @@ ImagePiece::ImagePiece(const char* filename)
     loadOrLater(filename);
 }
 
-ImagePiece::ImagePiece(const char* filename, double minU, double minV, double maxU, double maxV)
+TexturePiece::TexturePiece(const char* filename, double minU, double minV, double maxU, double maxV)
     : tex(0)
     , umin(minU)
     , vmin(minV)
@@ -74,7 +74,7 @@ ImagePiece::ImagePiece(const char* filename, double minU, double minV, double ma
     loadOrLater(filename);
 }
 
-ImagePiece::ImagePiece(const ImagePiece& other)
+TexturePiece::TexturePiece(const TexturePiece& other)
     : tex(other.tex)
     , umin(other.umin)
     , vmin(other.vmin)
@@ -85,7 +85,7 @@ ImagePiece::ImagePiece(const ImagePiece& other)
     loadExistLater(other);
 }
 
-ImagePiece::ImagePiece(ImagePiece&& other)
+TexturePiece::TexturePiece(TexturePiece&& other)
     : tex(other.tex)
     , umin(other.umin)
     , vmin(other.vmin)
@@ -93,20 +93,20 @@ ImagePiece::ImagePiece(ImagePiece&& other)
     , vmax(other.vmax)
     , loadId(-1)
 {
-    loadExistLaterMove(std::forward<ImagePiece>(other));
+    loadExistLaterMove(std::forward<TexturePiece>(other));
 }
 
-vector<ImagePiece> ImagePiece::createImageSet(const char* filename, int row, int col, int maxIndex)
+vector<TexturePiece> TexturePiece::createImageSet(const char* filename, int row, int col, int maxIndex)
 {
     return move(createImageSet(filename, row, col, maxIndex, 0, 0, 1, 1));
 }
 
-vector<ImagePiece> ImagePiece::createImageSet(const char* filename, int row, int col, int maxIndex,
+vector<TexturePiece> TexturePiece::createImageSet(const char* filename, int row, int col, int maxIndex,
                                               double minU, double minV, double maxU, double maxV)
 {
     if(row <= 0 || col <= 0)
-        return vector<ImagePiece>();
-    vector<ImagePiece> res;
+        return vector<TexturePiece>();
+    vector<TexturePiece> res;
     res.reserve((maxIndex>=0 && maxIndex<row*col) ? maxIndex : row*col);
     double u0, v0, u1, v1;
     double du = (maxU-minU)/col;
@@ -122,31 +122,31 @@ vector<ImagePiece> ImagePiece::createImageSet(const char* filename, int row, int
             u1 = u0 + du;
             v0 = minV + dv*i;
             v1 = v0 + dv;
-            res.push_back(ImagePiece((Texture)0, u0, v0, u1, v1));
+            res.push_back(TexturePiece((Texture)0, u0, v0, u1, v1));
             res.back().loadOrLater(filename);
         }
     }
     return move(res);
 }
 
-ImagePiece::~ImagePiece()
+TexturePiece::~TexturePiece()
 {
     tryNotLoadSelf();
 }
 
-void ImagePiece::loadOrLater(const char* filename)
+void TexturePiece::loadOrLater(const char* filename)
 {
     if(filename == nullptr)
         return;
     if(!shouldLoadLater)
         tex = TextureCache::load(filename);
     if(pendingList == nullptr)
-        pendingList = new vector<pair<ImagePiece*, string>>();
+        pendingList = new vector<pair<TexturePiece*, string>>();
     loadId = pendingList->size();
     pendingList->emplace_back(this, filename);
 }
 
-void ImagePiece::tryNotLoadSelf()
+void TexturePiece::tryNotLoadSelf()
 {
     if(shouldLoadLater && pendingList && loadId>=0)
     {
@@ -155,9 +155,9 @@ void ImagePiece::tryNotLoadSelf()
     }
 }
 
-void ImagePiece::loadExistLaterMove(ImagePiece&& other)
+void TexturePiece::loadExistLaterMove(TexturePiece&& other)
 {
-    memcpy(this, &other, sizeof(ImagePiece));
+    memcpy(this, &other, sizeof(TexturePiece));
     if(shouldLoadLater && pendingList && loadId>=0)
     {
         (*pendingList)[loadId].first = this;
@@ -165,9 +165,9 @@ void ImagePiece::loadExistLaterMove(ImagePiece&& other)
     }
 }
 
-void ImagePiece::loadExistLater(const ImagePiece& other)
+void TexturePiece::loadExistLater(const TexturePiece& other)
 {
-    memcpy(this, &other, sizeof(ImagePiece));
+    memcpy(this, &other, sizeof(TexturePiece));
     if(shouldLoadLater && pendingList && loadId>=0)
     {
         loadId = pendingList->size();
@@ -175,7 +175,7 @@ void ImagePiece::loadExistLater(const ImagePiece& other)
     }
 }
 
-void ImagePiece::load(const char* filename)
+void TexturePiece::load(const char* filename)
 {
     loadOrLater(filename);
     umin = 0.0;
@@ -184,7 +184,7 @@ void ImagePiece::load(const char* filename)
     vmax = 1.0;
 }
 
-void ImagePiece::load(const char* filename, double minU, double minV, double maxU, double maxV)
+void TexturePiece::load(const char* filename, double minU, double minV, double maxU, double maxV)
 {
     loadOrLater(filename);
     umin = minU;
@@ -193,12 +193,12 @@ void ImagePiece::load(const char* filename, double minU, double minV, double max
     vmax = maxV;
 }
 
-void ImagePiece::setTexture(Texture texture)
+void TexturePiece::setTexture(Texture texture)
 {
     tex = texture;
 }
 
-void ImagePiece::setRenderRange(double minU, double minV, double maxU, double maxV)
+void TexturePiece::setRenderRange(double minU, double minV, double maxU, double maxV)
 {
     umin = minU;
     vmin = minV;
@@ -206,13 +206,13 @@ void ImagePiece::setRenderRange(double minU, double minV, double maxU, double ma
     vmax = maxV;
 }
 
-void ImagePiece::vertice()
+void TexturePiece::vertice()
 {
     d3d.setTexture(tex);
     d3d.rect(umin, vmin, umax, vmax);
 }
 
-void ImagePiece::vertice(double centerXRatio, double centerYRatio, double size)
+void TexturePiece::vertice(double centerXRatio, double centerYRatio, double size)
 {
     d3d.pushMatrix();
 
@@ -225,7 +225,7 @@ void ImagePiece::vertice(double centerXRatio, double centerYRatio, double size)
     d3d.popMatrix();
 }
 
-void ImagePiece::vertice(double centerXRatio, double centerYRatio, double sizeX, double sizeY)
+void TexturePiece::vertice(double centerXRatio, double centerYRatio, double sizeX, double sizeY)
 {
     d3d.pushMatrix();
 

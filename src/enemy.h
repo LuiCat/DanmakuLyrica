@@ -3,7 +3,7 @@
 
 #include "bulletbase.h"
 
-#include "imagepiece.h"
+#include "texturepiece.h"
 #include <vector>
 
 using namespace std;
@@ -22,8 +22,8 @@ public:
 
 protected:
 
-    vector<ImagePiece> img;
-    ImagePiece wheel;
+    vector<TexturePiece> img;
+    TexturePiece wheel;
 
     void onTick();
     void onRender();

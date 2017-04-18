@@ -5,7 +5,7 @@ Enemy::Enemy()
     :BulletBase(0, -150, 0, 0)
 {
     setForceFacing(false);
-    img = ImagePiece::createImageSet("data/image/enemy/flan.png", 1, 4, 3);
+    img = TexturePiece::createImageSet("data/image/enemy/flan.png", 1, 4, 3);
     wheel.load("data/image/enemy/wheel.png");
 }
 

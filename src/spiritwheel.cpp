@@ -2,7 +2,7 @@
 
 #include "commondef.h"
 
-ImagePiece SpiritWheel::imgWheel("data/image/enemy/wheel.png");
+TexturePiece SpiritWheel::imgWheel("data/image/enemy/wheel.png");
 
 SpiritWheel::SpiritWheel(double posX, double posY, double vel, double angle, double life, int hp)
     : BulletBase(posX, posY, vel, angle)

@@ -2,7 +2,7 @@
 #define NUMBERSPRITE_H
 
 #include "renderobject.h"
-#include "imagepiece.h"
+#include "texturepiece.h"
 
 #include <vector>
 #include <string>
@@ -38,7 +38,7 @@ protected:
 
     void onRender();
 
-    vector<ImagePiece> imageNum;
+    vector<TexturePiece> imageNum;
 
     int num;
     int maxbuf;

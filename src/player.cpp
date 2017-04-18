@@ -29,7 +29,7 @@ Player::Player()
     setForceFacing(false);
 
     tex.load("data/image/player/judgepoint.png");
-    img = ImagePiece::createImageSet("data/image/player/lyrica.png", 2, 4, 8);
+    img = TexturePiece::createImageSet("data/image/player/lyrica.png", 2, 4, 8);
     plotInner.load("data/image/player/plot_inner.png");
     plotOuter.load("data/image/player/plot_outer.png");
 

@@ -4,7 +4,7 @@
 #include "notelist.h"
 #include "notemap.h"
 #include "scene.h"
-#include "imagepiece.h"
+#include "texturepiece.h"
 #include "numbersprite.h"
 #include "score.h"
 
@@ -40,11 +40,11 @@ protected:
     NoteList noteList;
     NoteMap* noteMap;
 
-    ImagePiece texPanelB;
-    ImagePiece texPanelO;
+    TexturePiece texPanelB;
+    TexturePiece texPanelO;
 
-    ImagePiece track;
-    ImagePiece title;
+    TexturePiece track;
+    TexturePiece title;
 
     BeatTime beatTime;
 

@@ -4,7 +4,7 @@
 
 #include "mathhelper.h"
 
-ImagePiece Note::texNote("data/image/note/note.png");
+TexturePiece Note::texNote("data/image/note/note.png");
 
 double Note::moveSpeed = 110;
 

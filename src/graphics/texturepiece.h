@@ -1,5 +1,5 @@
-#ifndef IMAGEPIECE_H
-#define IMAGEPIECE_H
+#ifndef TEXTUREPIECE_H
+#define TEXTUREPIECE_H
 
 #include "gfxdef.h"
 
@@ -9,28 +9,28 @@
 #include <deque>
 using namespace std;
 
-class ImagePiece
+class TexturePiece
 {
 public:
 
     static void pendingLoads();
     static void loadPending();
 
-    ImagePiece(Texture texture=0);
-    ImagePiece(Texture texture, double minU, double minV, double maxU, double maxV);
+    TexturePiece(Texture texture=0);
+    TexturePiece(Texture texture, double minU, double minV, double maxU, double maxV);
 
-    ImagePiece(const char* filename);
-    ImagePiece(const char* filename, double minU, double minV, double maxU, double maxV);
+    TexturePiece(const char* filename);
+    TexturePiece(const char* filename, double minU, double minV, double maxU, double maxV);
 
-    ImagePiece(const ImagePiece& other);
-    ImagePiece(ImagePiece&& other);
+    TexturePiece(const TexturePiece& other);
+    TexturePiece(TexturePiece&& other);
 
     // create multiple image piece. indexed row by row.
-    static std::vector<ImagePiece> createImageSet(const char* filename, int row, int col, int maxIndex=-1);
-    static std::vector<ImagePiece> createImageSet(const char* filename, int row, int col, int maxIndex,
+    static std::vector<TexturePiece> createImageSet(const char* filename, int row, int col, int maxIndex=-1);
+    static std::vector<TexturePiece> createImageSet(const char* filename, int row, int col, int maxIndex,
                                                   double minU, double minV, double maxU, double maxV);
 
-    ~ImagePiece();
+    ~TexturePiece();
 
     void load(const char* filename);
     void load(const char* filename, double minU, double minV, double maxU, double maxV);
@@ -38,15 +38,15 @@ public:
     void setTexture(Texture texture);
     void setRenderRange(double minU, double minV, double maxU, double maxV);
 
-    inline ImagePiece& operator=(const ImagePiece& other)
+    inline TexturePiece& operator=(const TexturePiece& other)
     {
         loadExistLater(other);
         return *this;
     }
 
-    inline ImagePiece& operator=(ImagePiece&& other)
+    inline TexturePiece& operator=(TexturePiece&& other)
     {
-        loadExistLaterMove(std::forward<ImagePiece>(other));
+        loadExistLaterMove(std::forward<TexturePiece>(other));
         return *this;
     }
 
@@ -66,13 +66,13 @@ public:
 
 protected:
 
-    static vector<pair<ImagePiece*, string>>* pendingList;
+    static vector<pair<TexturePiece*, string>>* pendingList;
     static bool shouldLoadLater;
 
     void loadOrLater(const char* filename);
     void tryNotLoadSelf();
-    void loadExistLater(const ImagePiece& other);
-    void loadExistLaterMove(ImagePiece&& other);
+    void loadExistLater(const TexturePiece& other);
+    void loadExistLaterMove(TexturePiece&& other);
 
     Texture tex;
 
@@ -83,4 +83,4 @@ protected:
 
 };
 
-#endif // IMAGEPIECE_H
+#endif // TEXTUREPIECE_H
