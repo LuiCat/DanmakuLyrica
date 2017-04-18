@@ -9,6 +9,7 @@
 using namespace std;
 
 #define D3D_VERTEXBUFFERSIZE 120000
+#define D3D_VERTEXCHUNKSIZE 10000
 
 #define INITSIZE_STACK_MATRIX 64
 #define INITSIZE_PENDING_VERTEX 1024
@@ -51,6 +52,15 @@ private:
     HANDLE mutex;
 
     RenderTarget* currentTarget;
+
+	UINT currentChunkOffset;
+
+	Texture lastRenderTexture;
+	DWORD lastRenderBlendDest;
+
+	void renderResetState();
+	void renderSetTexture(Texture texture);
+	void renderSetBlendDest(DWORD blend);
 
 protected:
 

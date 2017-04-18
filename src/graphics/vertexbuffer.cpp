@@ -13,6 +13,9 @@ VertexBuffer::VertexBuffer()
     ,pD3DVertexBuffer(0)
     ,mutex(0)
     ,currentTarget(0)
+	,currentChunkOffset(0)
+	,lastRenderTexture(0)
+	,lastRenderBlendDest(0)
 {
 
 }
@@ -51,47 +54,89 @@ void VertexBuffer::cleanup()
     pD3DVertexBuffer=0;
 }
 
+void VertexBuffer::renderResetState()
+{
+	lastRenderTexture = 0;
+	lastRenderBlendDest = 0;
+}
+
+void VertexBuffer::renderSetTexture(Texture texture)
+{
+	if (lastRenderTexture == texture)
+		return;
+	pD3DDevice->SetTexture(0, texture);
+	lastRenderTexture = texture;
+}
+
+void VertexBuffer::renderSetBlendDest(DWORD blend)
+{
+	if (lastRenderBlendDest == blend)
+		return;
+	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, blend);
+	lastRenderBlendDest = blend;
+}
+
 void VertexBuffer::drawScene(RenderTarget* target)
 {
-    int vsize=pendingVertex.size()/4*4;
+	if (FAILED(pD3DDevice->BeginScene()))
+		return;
+
+	if (target)
+		target->setTarget();
+
+	pD3DDevice->SetStreamSource(0, pD3DVertexBuffer, 0, sizeof(Vertex));
+	pD3DDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
+
+	UINT vertexSize = pendingVertex.size() / 4 * 4;
+	UINT vertexCount = 0;
+	UINT currVertex = 0;
     Vertex* pVertices;
 
-    if(FAILED(pD3DVertexBuffer->Lock(0, vsize*sizeof(Vertex), (LPVOID*)&pVertices, 0)))
-        return;
+	if (FAILED(pD3DVertexBuffer->Lock(currentChunkOffset * sizeof(Vertex), D3D_VERTEXCHUNKSIZE * sizeof(Vertex),
+									  (LPVOID*)&pVertices, currentChunkOffset ? D3DLOCK_NOOVERWRITE : D3DLOCK_DISCARD)))
+		return;
 
-    for(int i=0;i<vsize;++i)
+	for (int i = 0; i < vertexSize; ++i)
     {
-        pVertices[i]=pendingVertex[i].vertex;
+		*pVertices = pendingVertex[i].vertex;
+		++pVertices;
+		++vertexCount;
+
+		if (vertexCount == D3D_VERTEXCHUNKSIZE)
+		{
+			pD3DVertexBuffer->Unlock();
+
+			renderResetState();
+			for (; currVertex + 3 <= i; currVertex += 4)
+			{
+				renderSetBlendDest(pendingVertex[currVertex].isAddBlend ? D3DBLEND_ONE : D3DBLEND_INVSRCALPHA);
+				renderSetTexture(pendingVertex[currVertex].texture);
+				pD3DDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, currVertex, 2);
+			}
+
+			vertexCount = 0;
+			currentChunkOffset += D3D_VERTEXCHUNKSIZE;
+			if (currentChunkOffset >= D3D_VERTEXBUFFERSIZE)
+				currentChunkOffset = 0;
+
+			if (FAILED(pD3DVertexBuffer->Lock(currentChunkOffset * sizeof(Vertex), D3D_VERTEXCHUNKSIZE * sizeof(Vertex),
+				(LPVOID*)&pVertices, currentChunkOffset ? D3DLOCK_NOOVERWRITE : D3DLOCK_DISCARD)))
+				return;
+		}
+
     }
+	
+	for (; currVertex < vertexSize; currVertex += 4)
+	{
+		renderSetBlendDest(pendingVertex[currVertex].isAddBlend ? D3DBLEND_ONE : D3DBLEND_INVSRCALPHA);
+		renderSetTexture(pendingVertex[currVertex].texture);
+		pD3DDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, currVertex, 2);
+	}
 
-    pD3DVertexBuffer->Unlock();
+	if (target)
+		target->unsetTarget();
 
-    if(SUCCEEDED(pD3DDevice->BeginScene()))
-    {
-        if(target)
-            target->setTarget();
-
-        pD3DDevice->SetStreamSource(0, pD3DVertexBuffer, 0, sizeof(Vertex));
-        pD3DDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
-
-        for(unsigned int i=0;i<pendingVertex.size();i+=4)
-        {
-            if(pendingVertex[i].isAddBlend)
-                pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-            else
-                pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-            pD3DDevice->SetTexture(0, pendingVertex[i].texture);
-            pD3DDevice->DrawPrimitive(D3DPT_TRIANGLEFAN, i, 2);
-        }
-
-        if(target)
-            target->unsetTarget();
-
-        //g_pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &Backbuffer);
-        //hr=g_pd3dDevice->StretchRect(g_pd3dSurface, 0, Backbuffer, 0, D3DTEXF_NONE);
-
-        pD3DDevice->EndScene();
-    }
+	pD3DDevice->EndScene();
 
 }
 
