@@ -8,10 +8,12 @@ void NoteScene::load()
 {
     //Note::texNote.load("data/image/note/note.png");
 
-    texPanelB.load("data/image/note/panel_bottom.png");
-    texPanelO.load("data/image/note/panel_overlay.png");
+    panelBg.load("data/image/note/panel_bg.png");
+    panelIcon.load("data/image/note/panel_icon.png");
 
     track.load("data/image/note/track.png", 0.25, 0, 0.75, 1);
+    trackLight.load("data/image/note/track_light.png");
+
     title.load("data/image/note/title.png");
 
     comboNum.loadImage("data/image/number/num.png", 3, 4);
@@ -58,21 +60,28 @@ void NoteScene::render()
     track.vertice(0.5, 0.5, 800, 80);
 
     d3d.pushMatrix();
-    scale = 1-0.05*exp(-10*beatTime.sec);
-    d3d.scale2D(scale, scale);
-    texPanelB.vertice(0.5, 0.5, 160);
-    d3d.popMatrix();
-
-    d3d.pushMatrix();
     noteList.renderAll();
     d3d.scale2D(-1, 1);
     noteList.renderAll();
     d3d.popMatrix();
 
-    texPanelO.vertice(0.5, 0.5, 160);
+    d3d.pushMatrix();
+    d3d.setAlpha(0.0 + 0.8 * exp(-10 * beatTime.sec));
+    trackLight.vertice(0, 0.5, 240, 80);
+    d3d.scale2D(-1, 1);
+    trackLight.vertice(0, 0.5, 240, 80);
+    d3d.popMatrix();
+
+    panelBg.vertice(0.5, 0.5, 160);
 
     d3d.pushMatrix();
-    scale = 1+0.1*exp(-10*beatTime.sec);
+    d3d.translate2D(0, -5);
+    d3d.setAlpha(0.3 + 0.5 * exp(-5 * beatTime.sec));
+    panelIcon.vertice(0.5, 0.5, 140);
+    d3d.popMatrix();
+
+    d3d.pushMatrix();
+    scale = 1+0.15*exp(-10*beatTime.sec);
     d3d.translate2D(0, -10);
     d3d.scale2D(1.0, scale);
     comboNum.render();

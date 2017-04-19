@@ -14,6 +14,8 @@ public:
     void setTickRate(double ticksPerSec);
     void setTickSec(double secsPerTick);
 
+    void singleTick(double interval);
+    
     inline int getTick() const
     {
         return tick;
@@ -28,10 +30,10 @@ public:
     void update(double deltaSec);
 
     // only update appropiate time and do next tick
-    void singleTick();
-    double singleTick(double deltaSec);
+    void doNextTick();
+    double doNextTick(double deltaSec);
 
-    // only update appropiate time and not do next tick, normally use seekNextTick() and singleTick() as a pair;
+    // only update appropiate time and not do next tick, normally use seekNextTick() and doNextTick() as a pair;
     void seekNextTick();
     double seekNextTick(double deltaSec);
 

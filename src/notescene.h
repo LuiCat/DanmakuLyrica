@@ -40,10 +40,12 @@ protected:
     NoteList noteList;
     NoteMap* noteMap;
 
-    TexturePiece texPanelB;
-    TexturePiece texPanelO;
+    TexturePiece panelBg;
+    TexturePiece panelIcon;
 
     TexturePiece track;
+    TexturePiece trackLight;
+
     TexturePiece title;
 
     BeatTime beatTime;

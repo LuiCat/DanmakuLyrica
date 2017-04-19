@@ -42,12 +42,12 @@ void Ticking::update(double deltaSec)
     }
 }
 
-void Ticking::singleTick()
+void Ticking::doNextTick()
 {
-    singleTick(M_DINF);
+    doNextTick(M_DINF);
 }
 
-double Ticking::singleTick(double deltaSec)
+double Ticking::doNextTick(double deltaSec)
 {
     if(isDead)return deltaSec;
     if(processSec<deltaSec)
@@ -128,6 +128,11 @@ void Ticking::setTickSec(double secsPerTick)
     if(secsPerTick<0.01)secsPerTick=0.01;
     tickSec=secsPerTick;
     tickRate=1.0/tickSec;
+}
+
+void Ticking::singleTick(double interval)
+{
+    processSec = interval;
 }
 
 void Ticking::onTick() {}

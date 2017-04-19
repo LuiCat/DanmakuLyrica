@@ -9,8 +9,8 @@ TexturePiece Note::texNote("data/image/note/note.png");
 double Note::moveSpeed = 110;
 
 Note::Note(double _hitTime, double _hitBeat)
-    :scrollSpeed(1.0)
-    ,noteType(none)
+    :noteType(none)
+    ,scrollSpeed(1.0)
     ,judgeTime(-1e7)
     ,judgeResult(Judge_Miss)
 {
@@ -19,8 +19,8 @@ Note::Note(double _hitTime, double _hitBeat)
 }
 
 Note::Note(const NoteInfo& info, double forwardBeat)
-    :scrollSpeed(info.hs)
-    ,noteType(info.noteType)
+    :noteType(info.noteType)
+    ,scrollSpeed(info.hs)
     ,judgeTime(-1e7)
     ,judgeResult(Judge_Miss)
 {
@@ -63,20 +63,34 @@ bool Note::isJudged() const
     return judgeResult!=Judge_Miss;
 }
 
+void Note::onDestroy()
+{
+    setSpeed(0);
+    singleTick(0.5);
+}
+
 void Note::onTick()
 {
     //if(!isJudged() && hitTime<getTimeSec()+0.01)
         //setJudgeResult(0, great);
+    if(isDestroyed)
+        setDead();
 }
 
 void Note::onRender()
 {
     //d3d.setColor(judgeResult==miss?0xffffff:judgeResult==bad?0xff0000:judgeResult==good?0xffff00:0x00ff00);
 
+    if(isDestroyed)
+    {
+        d3d.setAlpha(1-2*(timeSec-destroyTime));
+        //if(timeSec > destroyTime + 0.5)
+            //setDead();
+    }
     if(getX()<0)
     {
         d3d.setAlpha(1+getX()*0.02);
     }
 
-    texNote.vertice(0, 0.5, 80);
+    texNote.vertice(0, 0.5, 90, 100);
 }

@@ -31,17 +31,16 @@ public:
 
 protected:
 
+    NoteType noteType;
+    double scrollSpeed;
+
     double hitTime;
     double hitBeat;
 
-    double scrollSpeed;
-
-    NoteType noteType;
-
     double judgeTime;
-
     JudgeResult judgeResult;
 
+    virtual void onDestroy();
     virtual void onTick();
     virtual void onRender();
 
