@@ -8,11 +8,12 @@
 #include <vector>
 using namespace std;
 
-#define D3D_VERTEXBUFFERSIZE 120000
-#define D3D_VERTEXCHUNKSIZE 10000
-
-#define INITSIZE_STACK_MATRIX 64
-#define INITSIZE_PENDING_VERTEX 1024
+enum ShapeType
+{
+    Shape_None = 0,
+    Shape_Lines = D3DPT_LINELIST,
+    Shape_Triangles = D3DPT_TRIANGLESTRIP
+};
 
 class VertexBuffer : public GFXCore
 {
@@ -32,6 +33,7 @@ private:
         Vertex vertex;
         Texture texture;
         bool isAddBlend;
+        ShapeType shape;
     };
 
     struct MatrixInfo
@@ -42,7 +44,7 @@ private:
         bool isAddBlend;
     };
 
-    vector<VertexInfo> pendingVertex;
+    vector<VertexInfo> pendingVertices;
     vector<MatrixInfo> stackMatrix;
 
     MatrixInfo currentMatrix;
@@ -61,6 +63,8 @@ private:
     void renderResetState();
     void renderSetTexture(Texture texture);
     void renderSetBlendDest(DWORD blend);
+
+    int primitiveCount(int vertexCount, ShapeType shape);
 
 protected:
 
@@ -89,6 +93,8 @@ public:
 
     void vertex(float x, float y, float u, float v);
     void vertex(float x, float y, float z, float u, float v);
+    // make a shape depend on vertices pushed before, 
+    void shape(ShapeType shape = Shape_Triangles);
 
     void translate2D(float x, float y);
     void rotate2D(float angle);
