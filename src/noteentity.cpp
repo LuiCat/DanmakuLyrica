@@ -34,6 +34,7 @@ void Note::setJudgeTime(double _hitTime, double _hitBeat)
     hitBeat=_hitBeat;
     setPosition(_hitBeat*moveSpeed*scrollSpeed, 0);
     setSpeedRotation(moveSpeed*scrollSpeed, rad(-90));
+    singleTick(_hitBeat);
 }
 
 void Note::setScrollSpeed(double hs)
@@ -74,7 +75,13 @@ void Note::onTick()
     //if(!isJudged() && hitTime<getTimeSec()+0.01)
         //setJudgeResult(0, great);
     if(isDestroyed)
+    {
         setDead();
+    }
+    else
+    {
+        setSpeed(speed * 0.3);
+    }
 }
 
 void Note::onRender()
