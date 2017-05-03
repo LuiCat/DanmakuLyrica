@@ -6,12 +6,12 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include "graphics/gfxdef.h"
-#include "graphics/gfxcore.h"
-#include "graphics/vertexbuffer.h"
-#include "graphics/rendersurface.h"
-#include "graphics/rendertexture.h"
-#include "graphics/textrenderer.h"
+#include "gfxdef.h"
+#include "gfxcore.h"
+#include "vertexbuffer.h"
+#include "rendersurface.h"
+#include "rendertexture.h"
+#include "textrenderer.h"
 
 inline HRESULT D3D_Init(HWND hWnd)
 {
