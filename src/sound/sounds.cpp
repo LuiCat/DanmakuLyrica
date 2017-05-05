@@ -29,9 +29,9 @@ void Sound_Cleanup()
         lpDirectSound->Release();
 }
 
-//=============SoundBuffer Members============================
+//=============Sound Members============================
 
-bool SoundBuffer::loadWavFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format)
+bool Sound::loadWavFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format)
 {
     if(!memout)
         return false;
@@ -110,7 +110,7 @@ bool SoundBuffer::loadWavFile(const char *filename, char **memout, DWORD *memsiz
     return true;
 }
 
-bool SoundBuffer::loadOggFile(const char* filename, char** memout, DWORD* memsize, WAVEFORMATEX* format)
+bool Sound::loadOggFile(const char* filename, char** memout, DWORD* memsize, WAVEFORMATEX* format)
 {
     if(!memout)
         return false;
@@ -166,7 +166,7 @@ bool SoundBuffer::loadOggFile(const char* filename, char** memout, DWORD* memsiz
     return true;
 }
 
-bool SoundBuffer::load(const char *filename)
+bool Sound::load(const char *filename)
 {
     if(isAvailable())
         release();
@@ -211,13 +211,13 @@ bool SoundBuffer::load(const char *filename)
     return true;
 }
 
-bool SoundBuffer::onLoad(LPDIRECTSOUNDBUFFER)
+bool Sound::onLoad(LPDIRECTSOUNDBUFFER)
 {
     prepareBuffer();
     return true;
 }
 
-void SoundBuffer::prepareBuffer()
+void Sound::prepareBuffer()
 {
     void* buffer1;
     DWORD bufferSize1;
@@ -229,7 +229,7 @@ void SoundBuffer::prepareBuffer()
     }
 }
 
-SoundBuffer::SoundBuffer()
+Sound::Sound()
     :m_buffer(0)
     ,m_size(0)
     ,buffer(0)
@@ -241,18 +241,18 @@ SoundBuffer::SoundBuffer()
     memset(&waveFormat, 0, sizeof(waveFormat));
 }
 
-SoundBuffer::~SoundBuffer()
+Sound::~Sound()
 {
 
 }
 
-SoundBuffer::SoundBuffer(const char* filename, float volume)
-    : SoundBuffer()
+Sound::Sound(const char* filename, float volume)
+    : Sound()
 {
     loadVol(filename, volume);
 }
 
-void SoundBuffer::release()
+void Sound::release()
 {
     if(buffer)
     {
@@ -266,7 +266,7 @@ void SoundBuffer::release()
     }
 }
 
-void SoundBuffer::setLoop(bool loop)
+void Sound::setLoop(bool loop)
 {
     if(loop)
         playFlag|=DSBPLAY_LOOPING;
@@ -274,7 +274,7 @@ void SoundBuffer::setLoop(bool loop)
         playFlag&=~DSBPLAY_LOOPING;
 }
 
-void SoundBuffer::play(bool restart)
+void Sound::play(bool restart)
 {
     if(!isAvailable())return;
     if(restart)
@@ -282,27 +282,33 @@ void SoundBuffer::play(bool restart)
     buffer->Play(0, 0, playFlag);
 }
 
-void SoundBuffer::stop()
+void Sound::stop()
 {
     if(!isAvailable())return;
     buffer->Stop();
     buffer->SetCurrentPosition(0);
 }
 
-void SoundBuffer::pause()
+void Sound::pause()
 {
     if(!isAvailable())return;
     buffer->Stop();
 }
 
-void SoundBuffer::setPos(DWORD npos)
+bool Sound::isPlaying()
+{
+    return getPos() == 0;
+}
+
+void Sound::setPos(long npos)
 {
     if(!isAvailable())return;
+    if(npos<0)npos=0;
     npos=npos/waveFormat.wBitsPerSample*waveFormat.wBitsPerSample;
     buffer->SetCurrentPosition(npos);
 }
 
-DWORD SoundBuffer::getPos() const
+long Sound::getPos() const
 {
     if (!isAvailable())return 0;
     DWORD playPos;
@@ -310,24 +316,24 @@ DWORD SoundBuffer::getPos() const
     return playPos;
 }
 
-void SoundBuffer::setTime(double timeSec)
+void Sound::setTime(double timeSec)
 {
     setPos(static_cast<DWORD>(timeSec * waveFormat.nAvgBytesPerSec));
 }
 
-double SoundBuffer::getTime() const
+double Sound::getTime() const
 {
     return (double)getPos() / waveFormat.nAvgBytesPerSec;
 }
 
-void SoundBuffer::setPitch(double pitch)
+void Sound::setPitch(double pitch)
 {
     if(!isAvailable())return;
     buffer->SetFrequency(static_cast<DWORD>(waveFormat.nSamplesPerSec * pitch));
     pitchChanged = true;
 }
 
-void SoundBuffer::resetPitch()
+void Sound::resetPitch()
 {
     if(pitchChanged)
     {
@@ -336,34 +342,35 @@ void SoundBuffer::resetPitch()
     }
 }
 
-void SoundBuffer::setVolume(long volume)
+void Sound::setVolume(long volume)
 {
     if(!isAvailable())return;
     buffer->SetVolume(volume);
 }
 
-void SoundBuffer::setVolume(float volume)
+void Sound::setVolume(float volume)
 {
     if(!isAvailable())return;
     buffer->SetVolume(static_cast<DWORD>(2000.0 * log10(volume)));
 }
 
-void SoundBuffer::setPan(long pan)
+void Sound::setPan(long pan)
 {
     if(!isAvailable())return;
     buffer->SetPan(pan);
 }
 
-//=====================StreamBuffer Members=============================================
+//=====================StreamSound Members=============================================
 
-DWORD StreamBuffer::streamBufSize=88200;
+DWORD StreamSound::streamBufSize=88200;
 
-StreamBuffer::StreamBuffer()
-    :SoundBuffer()
+StreamSound::StreamSound()
+    :Sound()
     ,currentMemPos(0)
     ,lastWrittenPos(0)
-    ,isPlaying(false)
+    ,playing(false)
     ,paused(false)
+    ,ended(false)
     ,loopPosA(0)
     ,loopPosB(0)
 {
@@ -373,19 +380,19 @@ StreamBuffer::StreamBuffer()
     loadFlag|=DSBCAPS_CTRLPOSITIONNOTIFY;
 }
 
-StreamBuffer::~StreamBuffer()
+StreamSound::~StreamSound()
 {
 
 }
 
-StreamBuffer::StreamBuffer(const char* filename, float volume)
+StreamSound::StreamSound(const char* filename, float volume)
 {
     loadVol(filename, volume);
 }
 
-void StreamBuffer::release()
+void StreamSound::release()
 {
-    if(isPlaying)
+    if(playing)
         stop();
     for(int i=0;i<MAX_NOTIFY_NUM;++i)
     {
@@ -394,23 +401,23 @@ void StreamBuffer::release()
         CloseHandle(event[i]);
         event[i]=0;
     }
-    SoundBuffer::release();
+    Sound::release();
 }
 
-void StreamBuffer::setLoopPos(DWORD posA, DWORD posB)
+void StreamSound::setLoopPos(long posA, long posB)
 {
     loopPosA=posA;
     loopPosB=posB;
 }
 
-DWORD WINAPI StreamBuffer::PlayThread(LPVOID lpParam)
+DWORD WINAPI StreamSound::PlayThread(LPVOID lpParam)
 {
-    StreamBuffer* instance=(StreamBuffer*)lpParam;
+    StreamSound* instance=(StreamSound*)lpParam;
 
     instance->buffer->Play(0, 0, DSBPLAY_LOOPING);
 
     WaitForSingleObject(instance->event[0], INFINITE);
-    while(instance->isPlaying)
+    while(instance->playing)
     {
         WaitForMultipleObjects(MAX_NOTIFY_NUM, instance->event, false, INFINITE);
         instance->prepareBuffer();
@@ -419,7 +426,7 @@ DWORD WINAPI StreamBuffer::PlayThread(LPVOID lpParam)
     return 0;
 }
 
-bool StreamBuffer::onLoad(LPDIRECTSOUNDBUFFER primaryBuffer)
+bool StreamSound::onLoad(LPDIRECTSOUNDBUFFER primaryBuffer)
 {
     DSBPOSITIONNOTIFY     posNotify[MAX_NOTIFY_NUM];
     LPDIRECTSOUNDNOTIFY   notify = 0;
@@ -441,9 +448,9 @@ bool StreamBuffer::onLoad(LPDIRECTSOUNDBUFFER primaryBuffer)
     return true;
 }
 
-void StreamBuffer::prepareBuffer()
+void StreamSound::prepareBuffer()
 {
-    // This has moved into StreamBuffer::copyBuffer
+    // This has moved into StreamSound::copyBuffer
     /*
     if(currentMemPos>=m_size)
     {
@@ -464,7 +471,7 @@ void StreamBuffer::prepareBuffer()
     buffer->GetCurrentPosition(&currentPos, 0);
 
     DWORD pendingIndex=lastWrittenPos;
-    DWORD pendingSize=(isPlaying?(currentPos+streamBufSize-lastWrittenPos)%streamBufSize:streamBufSize);
+    DWORD pendingSize=(playing?(currentPos+streamBufSize-lastWrittenPos)%streamBufSize:streamBufSize);
 
     if(pendingSize==0)
         return;
@@ -494,12 +501,15 @@ void StreamBuffer::prepareBuffer()
 
 }
 
-void StreamBuffer::copyBuffer(void* buffer, DWORD size)
+void StreamSound::copyBuffer(void* buffer, DWORD size)
 {
     ZeroMemory(buffer, size);
 
-    if(currentMemPos >= m_size)
+    if (currentMemPos >= (long)m_size)
+    {
+        ended = true;
         return;
+    }
 
     DWORD tempBufferSize;
     char* cBuffer=(char*)buffer;
@@ -510,7 +520,15 @@ void StreamBuffer::copyBuffer(void* buffer, DWORD size)
         if(tempBufferSize>size)
             tempBufferSize=size;
 
-        memcpy(cBuffer, m_buffer+currentMemPos, tempBufferSize);
+        if(currentMemPos<0)
+        {
+            if((long)tempBufferSize+currentMemPos>0)
+                memcpy(cBuffer-currentMemPos, m_buffer, tempBufferSize+currentMemPos);
+        }
+        else
+        {
+            memcpy(cBuffer, m_buffer+currentMemPos, tempBufferSize);
+        }
 
         size-=tempBufferSize;
         cBuffer+=tempBufferSize;
@@ -530,7 +548,7 @@ void StreamBuffer::copyBuffer(void* buffer, DWORD size)
 
 }
 
-void StreamBuffer::play(bool restart)
+void StreamSound::play(bool restart)
 {
     if(!isAvailable())return;
     if(restart)
@@ -538,12 +556,14 @@ void StreamBuffer::play(bool restart)
         stop();
     }
 
+    ended = false;
+
     prepareBuffer();
 
-    if(!isPlaying)
+    if(!playing)
     {
-        CloseHandle(CreateThread(0, 0, StreamBuffer::PlayThread, this, 0, 0));
-        isPlaying=true;
+        CloseHandle(CreateThread(0, 0, StreamSound::PlayThread, this, 0, 0));
+        playing=true;
         paused=false;
     }
     else
@@ -553,44 +573,51 @@ void StreamBuffer::play(bool restart)
     }
 }
 
-void StreamBuffer::stop()
+void StreamSound::stop()
 {
     if(!isAvailable())return;
     buffer->SetCurrentPosition(0);
-    isPlaying=false;
+    playing=false;
     paused=false;
     currentMemPos=0;
     lastWrittenPos=0;
     //processedMemLen=0;
 }
 
-void StreamBuffer::pause()
+void StreamSound::pause()
 {
     if(!isAvailable())return;
     buffer->Stop();
     paused=true;
 }
 
-void StreamBuffer::setPos(DWORD npos)
+bool StreamSound::isPlaying()
+{
+    return playing && !ended;
+}
+
+void StreamSound::setPos(long npos)
 {
     if(!isAvailable())return;
     npos=npos/waveFormat.wBitsPerSample*waveFormat.wBitsPerSample;
-    bool flag=(isPlaying&&!paused);
+    bool flag=(playing&&!paused);
     if(flag)
         pause();
     currentMemPos=npos;
     lastWrittenPos=0;
-    isPlaying=false;
-    prepareBuffer();
-    isPlaying=true;
     if(flag)
+    {
+        playing=false;
+        prepareBuffer();
+        playing=true;
         play();
+    }
 }
 
-DWORD StreamBuffer::getPos() const
+long StreamSound::getPos() const
 {
-    if(currentMemPos==0)
-        return 0;
+    if(!playing)
+        return currentMemPos;
     DWORD pos;
     buffer->GetCurrentPosition(&pos, 0);
     return currentMemPos-(lastWrittenPos>pos?lastWrittenPos-pos:lastWrittenPos+streamBufSize-pos);

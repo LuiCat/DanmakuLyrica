@@ -8,7 +8,9 @@
 #include "keybinding.h"
 #include "enemy.h"
 
-#include "timeline.h"
+#include "smoothtimer.h"
+#include "timemanager.h"
+#include "notemapbeatprovider.h"
 
 #include "texturestrip.h"
 
@@ -40,18 +42,21 @@ private:
 
     MapState mapState;
 
-    StreamBuffer bgm;
+    StreamSound bgm;
 
     BulletScene bulletScene;
 
     SceneManager sceneManager;
 
+    TimeManager timeManager;
+    SoundTimeProvider timeProvider;
+    NotemapBeatProvider beatProvider;
+
     BulletScript script;
 
-    double bgmTimeStamp;
-    TimeLine timeLine;
-
     Score score;
+
+    bool isPaused;
 
     KeyBinding buttonA;
     KeyBinding buttonB;

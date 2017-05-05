@@ -23,7 +23,7 @@ bool NoteMap::loadTjaFile(const char *filename)
     return true;
 }
 
-BeatTime NoteMap::offsetMapState(MapState &state, double deltaSec) const
+BeatTimeVec NoteMap::offsetMapState(MapState &state, double deltaSec) const
 {
     double originBeat=state.beatOffset;
     double originDeltaSec=deltaSec;
@@ -44,12 +44,12 @@ BeatTime NoteMap::offsetMapState(MapState &state, double deltaSec) const
         state.beatOffset+=state.calcBeatOffset(deltaSec);
     }
 
-    return std::move(BeatTime(originDeltaSec, state.beatOffset-originBeat));
+    return BeatTimeVec(originDeltaSec, state.beatOffset-originBeat);
 }
 
-BeatTime NoteMap::offsetMapStateSingle(MapState& state, double deltaSec) const
+BeatTimeVec NoteMap::offsetMapStateSingle(MapState& state, double deltaSec) const
 {
-    BeatTime originTime=state.toBeatTime();
+    BeatTimeVec originTime=state.toBeatTime();
 
     if(state.currentSegment<(int)segments.size())
     {
@@ -61,7 +61,7 @@ BeatTime NoteMap::offsetMapStateSingle(MapState& state, double deltaSec) const
         state.beatOffset+=state.calcBeatOffset(deltaSec);
     }
 
-    return std::move(BeatTime(state.timeOffset-originTime.sec, state.beatOffset-originTime.beat));
+    return BeatTimeVec(state.timeOffset-originTime.time, state.beatOffset-originTime.beat);
 }
 
 int NoteMap::getNoteInfo(list<NoteInfo>& infoList, int maxinum)
@@ -84,10 +84,24 @@ const MapState& NoteMap::getBeginState()
 
 MapState NoteMap::getBgmBeginState()
 {
-    MapState tempState=beginState;
-    tempState.beatOffset-=tempState.calcBeatOffset(tempState.timeOffset);
-    tempState.timeOffset=0.0;
-    return std::move(tempState);
+    MapState result=beginState;
+    result.beatOffset-=result.calcBeatOffset(result.timeOffset);
+    result.timeOffset=0.0;
+    return std::move(result);
+}
+
+MapState NoteMap::getStateByOffset(double offset)
+{
+    if(offset<beginState.timeOffset)
+    {
+        MapState result=beginState;
+        result.beatOffset-=result.calcBeatOffset(result.timeOffset-offset);
+        result.timeOffset=offset;
+        return std::move(result);
+    }
+    MapState result=beginState;
+    offsetMapState(result, offset-result.timeOffset);
+    return std::move(result);
 }
 
 const char* NoteMap::getWavFilename()

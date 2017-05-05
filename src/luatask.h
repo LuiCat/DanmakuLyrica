@@ -10,7 +10,7 @@
 #include <list>
 using namespace std;
 
-class SoundBuffer;
+class Sound;
 
 struct LuaTask
 {
@@ -24,7 +24,7 @@ struct LuaTask
     double angle;
     int bulletType;
 
-    SoundBuffer* sound;
+    Sound* sound;
 
     double deltaX, deltaY;
     int centerObj;

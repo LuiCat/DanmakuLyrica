@@ -13,6 +13,9 @@
 #include "commondef.h"
 #include "debug.h"
 
+#ifdef _DEBUG
+#define USE_DEBUG_CONSOLE
+#endif
 
 HWND       hWnd       = 0;
 HINSTANCE  hInstance  = 0;
@@ -24,6 +27,10 @@ void Main_Init()
     if(FAILED(D3D_Init(hWnd)))throw "Can't init d3d";
     if(FAILED(Sound_Init(hWnd)))throw "Can't init sound";
     if(FAILED(DInput_Init(hWnd, hInstance)))throw "Can't init dinput";
+#ifdef USE_DEBUG_CONSOLE
+    AllocConsole();
+    freopen("conout$", "w", stdout);
+#endif
 }
 
 void Main_Cleanup()

@@ -1,20 +1,20 @@
 #include "soundregistry.h"
 
-Registry<SoundBuffer> SoundRegistry::reg;
+Registry<Sound> SoundRegistry::reg;
 
 int SoundRegistry::createSound(const char *name, bool isStream, const char *filename, float volume)
 {
     if(isStream)
     {
-        return reg.registerName<StreamBuffer>(name, filename, volume);
+        return reg.registerName<StreamSound>(name, filename, volume);
     }
     else
     {
-        return reg.registerName<SoundBuffer>(name, filename, volume);
+        return reg.registerName<Sound>(name, filename, volume);
     }
 }
 
 void SoundRegistry::releaseAll()
 {
-    reg.releaseAll([](SoundBuffer* p){p->release();});
+    reg.releaseAll([](Sound* p){p->release();});
 }

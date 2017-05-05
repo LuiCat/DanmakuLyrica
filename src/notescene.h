@@ -48,7 +48,7 @@ protected:
 
     TexturePiece title;
 
-    BeatTime beatTime;
+    BeatTimeVec beatTime;
 
     int combo;
     NumberSprite comboNum;

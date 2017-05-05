@@ -10,7 +10,7 @@ class SoundRegistry
 {
 private:
 
-    static Registry<SoundBuffer> reg;
+    static Registry<Sound> reg;
 
 public:
 
@@ -19,20 +19,20 @@ public:
     template <typename SoundType>
     static int createSound(const char* name, const char* filename, float volume)
     {
-        static_assert(is_base_of<SoundBuffer, SoundType>::value,
-                      "SoundType does not implement SoundBuffer in \
+        static_assert(is_base_of<Sound, SoundType>::value,
+                      "SoundType does not implement Sound in \
                        SoundRegistry::createSound<typename SoundType>");
         return reg.registerName<SoundType>(name, filename, volume);
     }
 
     static void releaseAll();
 
-    inline static SoundBuffer* get(int id)
+    inline static Sound* get(int id)
     {
         return SoundRegistry::reg.getInfo(id);
     }
 
-    inline static SoundBuffer* get(const char* name)
+    inline static Sound* get(const char* name)
     {
         return SoundRegistry::reg.getInfo(SoundRegistry::reg.getId(name));
     }

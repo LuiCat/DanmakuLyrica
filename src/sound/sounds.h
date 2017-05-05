@@ -12,7 +12,7 @@
 HRESULT Sound_Init(HWND hWnd);
 void Sound_Cleanup();
 
-class SoundBuffer
+class Sound
 {
 protected:
 
@@ -38,10 +38,10 @@ protected:
 
 public:
 
-    explicit SoundBuffer();
-    virtual ~SoundBuffer();
+    explicit Sound();
+    virtual ~Sound();
 
-    SoundBuffer(const char *filename, float volume=1.0f);
+    Sound(const char *filename, float volume=1.0f);
 
     virtual void release();
 
@@ -56,8 +56,10 @@ public:
     virtual void stop();
     virtual void pause();
 
-    virtual void setPos(DWORD npos);
-    virtual DWORD getPos() const;
+    virtual bool isPlaying();
+
+    virtual void setPos(long npos);
+    virtual long getPos() const;
 
     virtual void setTime(double timeSec);
     virtual double getTime() const;
@@ -80,7 +82,7 @@ public:
 
 };
 
-class StreamBuffer : public SoundBuffer
+class StreamSound : public Sound
 {
 protected:
 
@@ -88,14 +90,15 @@ protected:
 
     HANDLE event[MAX_NOTIFY_NUM];
 
-    DWORD currentMemPos; // copy processing position in wav data
+    long currentMemPos; // copy processing position in wav data
     DWORD lastWrittenPos; // the position in buffer to continue copying at
     //DWORD processedMemLen;
 
-    volatile bool isPlaying;
+    volatile bool playing;
     volatile bool paused;
+    volatile bool ended;
 
-    DWORD loopPosA, loopPosB;
+    long loopPosA, loopPosB;
 
     bool onLoad(LPDIRECTSOUNDBUFFER primaryBuffer);
 
@@ -107,23 +110,25 @@ protected:
 
 public:
 
-    explicit StreamBuffer();
-    ~StreamBuffer();
+    explicit StreamSound();
+    ~StreamSound();
 
-    StreamBuffer(const char *filename, float volume=1.0f);
+    StreamSound(const char *filename, float volume=1.0f);
 
     void release();
 
-    void setLoopPos(DWORD posA, DWORD posB);
+    void setLoopPos(long posA, long posB);
 
     void play(bool restart=false);
     void stop();
     void pause();
 
+    bool isPlaying();
+
     static DWORD WINAPI PlayThread(LPVOID lpParam);
 
-    void setPos(DWORD npos);
-    DWORD getPos() const;
+    void setPos(long npos);
+    long getPos() const;
 
 };
 

@@ -94,7 +94,7 @@ void Note::onRender()
         //if(timeSec > destroyTime + 0.5)
             //setDead();
     }
-    if(getX()<0)
+    else if(getX()<0)
     {
         d3d.setAlpha(1+getX()*0.02);
     }

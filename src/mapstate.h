@@ -22,9 +22,9 @@ struct MapState
 
     MapState(double _offset=0.0, double _bpm=120.0);
 
-    inline BeatTime toBeatTime() const
+    inline BeatTimeVec toBeatTime() const
     {
-        return BeatTime(timeOffset, beatOffset);
+        return BeatTimeVec(timeOffset, beatOffset);
     }
 
     inline double calcOffset_segment(double deltaSegment) const

@@ -54,9 +54,6 @@
     <ClCompile Include="core\accuratetimer.cpp">
       <Filter>0Core\Time</Filter>
     </ClCompile>
-    <ClCompile Include="core\beatticking.cpp">
-      <Filter>0Core\Time</Filter>
-    </ClCompile>
     <ClCompile Include="animatedtexture.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -148,9 +145,6 @@
     <ClCompile Include="core\ticking.cpp">
       <Filter>0Core\Time</Filter>
     </ClCompile>
-    <ClCompile Include="core\timeline.cpp">
-      <Filter>0Core\Time</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\vertexbuffer.cpp">
       <Filter>0Core\Graphics</Filter>
     </ClCompile>
@@ -221,12 +215,24 @@
     <ClCompile Include="graphics\texturepiece.cpp">
       <Filter>0Core\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="timemanager.cpp">
+      <Filter>0Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="beatprovider.cpp">
+      <Filter>0Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="core\smoothtimer.cpp">
+      <Filter>0Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="timeprovider.cpp">
+      <Filter>0Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="notemapbeatprovider.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\accuratetimer.h">
-      <Filter>0Core\Time</Filter>
-    </ClInclude>
-    <ClInclude Include="core\beatticking.h">
       <Filter>0Core\Time</Filter>
     </ClInclude>
     <ClInclude Include="animatedtexture.h">
@@ -334,9 +340,6 @@
     <ClInclude Include="core\ticking.h">
       <Filter>0Core\Time</Filter>
     </ClInclude>
-    <ClInclude Include="core\timeline.h">
-      <Filter>0Core\Time</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\vertexbuffer.h">
       <Filter>0Core\Graphics</Filter>
     </ClInclude>
@@ -417,6 +420,21 @@
       <Filter>0Core\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="version.h" />
+    <ClInclude Include="timemanager.h">
+      <Filter>0Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="beatprovider.h">
+      <Filter>0Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="core\smoothtimer.h">
+      <Filter>0Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="timeprovider.h">
+      <Filter>0Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="notemapbeatprovider.h">
+      <Filter>Notemap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="DanmakuLyrica\data\stage\stage.txt" />

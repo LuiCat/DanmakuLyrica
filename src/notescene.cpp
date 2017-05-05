@@ -66,7 +66,7 @@ void NoteScene::render()
     d3d.popMatrix();
 
     d3d.pushMatrix();
-    d3d.setAlpha(0.0 + 0.8 * exp(-10 * beatTime.sec));
+    d3d.setAlpha(0.0 + 0.8 * exp(-10 * beatTime.time));
     trackLight.vertice(0, 0.5, 240, 80);
     d3d.scale2D(-1, 1);
     trackLight.vertice(0, 0.5, 240, 80);
@@ -76,12 +76,12 @@ void NoteScene::render()
 
     d3d.pushMatrix();
     d3d.translate2D(0, -5);
-    d3d.setAlpha(0.3 + 0.5 * exp(-5 * beatTime.sec));
+    d3d.setAlpha(0.3 + 0.5 * exp(-5 * beatTime.time));
     panelIcon.vertice(0.5, 0.5, 140);
     d3d.popMatrix();
 
     d3d.pushMatrix();
-    scale = 1+0.15*exp(-10*beatTime.sec);
+    scale = 1+0.15*exp(-10*beatTime.time);
     d3d.translate2D(0, -10);
     d3d.scale2D(1.0, scale);
     comboNum.render();
@@ -104,7 +104,7 @@ void NoteScene::setNoteMap(NoteMap* m)
 
 JudgeResult NoteScene::judgeSingleNote(double timeSec)
 {
-    beatTime = BeatTime::zero;
+    beatTime = BeatTimeVec::zero;
     auto res = noteList.judgeSingleNote(timeSec);
     if(res>Judge_Miss)
         combo+=1;

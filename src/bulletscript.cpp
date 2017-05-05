@@ -66,7 +66,7 @@ int BulletScript::lua_loadStream(lua_State* L)
     double vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0);
     const char* name=(lua_isstring(L, 2) ? lua_tostring(L, 2) : 0);
 
-    int id=SoundRegistry::createSound<StreamBuffer>(name, buffer, vol);
+    int id=SoundRegistry::createSound<StreamSound>(name, buffer, vol);
     lua_pushinteger(L, id);
 
     return 1;
@@ -85,7 +85,7 @@ int BulletScript::lua_loadSound(lua_State* L)
     float vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0f);
     const char* name=(lua_isstring(L, 2) ? lua_tostring(L, 2) : 0);
 
-    int id=SoundRegistry::createSound<SoundBuffer>(name, buffer, vol);
+    int id=SoundRegistry::createSound<Sound>(name, buffer, vol);
     lua_pushinteger(L, id);
 
     return 1;
@@ -93,7 +93,7 @@ int BulletScript::lua_loadSound(lua_State* L)
 
 int BulletScript::lua_playSound(lua_State* L)
 {
-    SoundBuffer* sound=0;
+    Sound* sound=0;
     if(lua_gettop(L)==0)
     {
         sound=inst()->currentTask->sound;
@@ -120,7 +120,7 @@ int BulletScript::lua_playSoundPitch(lua_State* L)
     if(!lua_isnumber(L, -1))
         return 0;
 
-    SoundBuffer* sound=0;
+    Sound* sound=0;
     int top = lua_gettop(L);
     if(top==1)
     {
@@ -296,7 +296,7 @@ int BulletScript::lua_setSound(lua_State* L)
         task->sound=0;
         return 0;
     }
-    SoundBuffer* sound=0;
+    Sound* sound=0;
     if(lua_isnumber(L, 1))
     {
         sound=SoundRegistry::get(lua_tointeger(L, 1));

@@ -19,13 +19,14 @@ public:
 
     bool loadTjaFile(const char* filename);
 
-    BeatTime offsetMapState(MapState &state, double deltaSec) const;
-    BeatTime offsetMapStateSingle(MapState &state, double deltaSec) const;
+    BeatTimeVec offsetMapState(MapState &state, double deltaSec) const;
+    BeatTimeVec offsetMapStateSingle(MapState &state, double deltaSec) const;
 
     int getNoteInfo(list<NoteInfo> &infoList, int maxinum=-1);
 
     const MapState& getBeginState();
     MapState getBgmBeginState();
+    MapState getStateByOffset(double offset);
 
     const char* getWavFilename();
 

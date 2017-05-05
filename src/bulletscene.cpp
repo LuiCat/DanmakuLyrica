@@ -181,7 +181,7 @@ void BulletScene::update(rtime_t deltaTime)
         player->setTarget(nearestSpiritToPlayer());
     }
 
-    player->update(deltaTime.sec);
+    player->update(deltaTime.time);
 }
 
 void BulletScene::render()

@@ -29,6 +29,7 @@ DanmakuLyrica::DanmakuLyrica()
     ,buttonDown(DIK_DOWN, 0)
     ,buttonLeft(DIK_LEFT, 0)
     ,buttonRight(DIK_RIGHT, 0)
+    ,isPaused(true)
 {
     instance=this;
 }
@@ -61,9 +62,12 @@ void DanmakuLyrica::mainInit()
     bgm.load((stagename + noteMap.getWavFilename()).c_str());
     bgm.setVolume(0.5f);
 
-    bgmTimeStamp = 0.0;
+    timeProvider.setSound(&bgm);
+    timeProvider.setSeekDelay(0.03);
+    beatProvider.setNoteMap(&noteMap);
 
-    mapState=noteMap.getBgmBeginState();
+    timeManager.setTimeProvider(&timeProvider);
+    timeManager.setBeatProvider(&beatProvider);
 
     noteScene.setNoteMap(&noteMap);
 
@@ -75,8 +79,9 @@ void DanmakuLyrica::mainInit()
 
     bulletScene.getPlayer()->setNoteScene(&noteScene);
 
+    auto beginState = noteMap.getBgmBeginState();
     stagename = stagename + "main.lua";
-    script.setTime(mapState.beatOffset);
+    script.setTime(beginState.beatOffset);
     script.loadScriptFile(stagename.c_str());
 
     TexturePiece::loadPending();
@@ -91,134 +96,81 @@ void DanmakuLyrica::mainCleanup()
 
 void DanmakuLyrica::mainUpdate()
 {
-    static bool isPaused=true;
-    static double timeTotal=0;
-    //static int hits=0;
-
     JudgeResult judgeResult;
 
     // do player motion first
     int flagDir = Dir_None;
-    if(buttonUp.isDown())
-        flagDir^=Dir_Up;
-    if(buttonDown.isDown())
-        flagDir^=Dir_Down;
-    if(buttonLeft.isDown())
-        flagDir^=Dir_Left;
-    if(buttonRight.isDown())
-        flagDir^=Dir_Right;
+    if (buttonUp.isDown())
+        flagDir ^= Dir_Up;
+    if (buttonDown.isDown())
+        flagDir ^= Dir_Down;
+    if (buttonLeft.isDown())
+        flagDir ^= Dir_Left;
+    if (buttonRight.isDown())
+        flagDir ^= Dir_Right;
     bulletScene.setPlayerMotion((PlayerDirection)flagDir);
 
-    bool fA = buttonA.isPushed();
-    bool fB = false; //buttonB.isPushed();
-    if(fA || fB)
+    //1: update time manager
+    //2: update scenes by single lua event
+    //2.1: get elapsed time from lua events
+    //2.2: update scenes
+    //2.3: update lua events
+    //2.4: if elapsed time remaining, repeat 2
+
+    if (!isPaused)
     {
-        judgeResult=noteScene.judgeSingleNote(bgmTimeStamp-0.015);
-        if(judgeResult>Judge_Miss)
+        bool continueUpdate = true;
+        while (continueUpdate)
         {
-            SOUND("hit1")->play(true);
-            if(fB)
+            continueUpdate = timeManager.updateTime(true);
+            BeatTime& beatTime = timeManager.beatTime;
+            while (beatTime.getDeltaBeat() > M_DINFS)
             {
-                SOUND("tan1")->play(true);
-                bulletScene.triggerBomb();
+                double taskElapsed = beatTime.getDeltaBeat() - script.seekNextTask(beatTime.getDeltaBeat());
+                BeatTime taskTime = beatTime.splitBeat(taskElapsed);
+                BeatTimeVec deltaDelta(taskTime.getDeltaTime(), taskTime.getDeltaBeat());
+                sceneManager.updateScene(deltaDelta);
+                beatTime.proceedBeat(taskElapsed);
+                script.updateSingleTask(beatTime.getDeltaBeat());
+            }
+        }
+
+        if (buttonA.isPushed())
+        {
+            double bgmTime = timeManager.beatTime.getTime() + inputOffset;
+            judgeResult = noteScene.judgeSingleNote(bgmTime);
+            if (judgeResult>Judge_Miss)
+            {
+                SOUND("hit1")->play(true);
+                bulletScene.hitPlayerTargetSpirit();
             }
             else
             {
-                /*
-                auto spirit = bulletScene.nearestSpiritToPlayer();
-                if(spirit && spirit->hit())
-                {
-                    if(hits>0)
-                        hits=0;
-                    bulletScene.getBulletList()->destroyBulletInCircle(
-                                spirit->getX(), spirit->getY(), 80);
-                    ++hits;
-                }*/
-                bulletScene.hitPlayerTargetSpirit();
+                SOUND("hit0")->play(true);
             }
         }
-        else
-        {
-            SOUND("hit0")->play(true);
-        }
-    }
-
-    //1: do time line
-    //2: update scenes
-    //2.1: get process time from lua events
-    //2.2: update note scene
-    //2.3: update bullet scene and lua events
-    //2.4: if still have processing time left, repeat 2
-
-    if(!isPaused)
-    {
-        double newTime=bgm.getTime()+inputOffset;
-        double deltaSec=timeLine.getDeltaTimeFixed(newTime-bgmTimeStamp);
-
-        if(buttonSkip.isPushed())
-        {
-            double t = bulletScene.getJump();
-            if(t>newTime)
-            {
-                bgm.pause();
-                bgm.setTime(t-inputOffset);
-                bgm.play();
-                newTime = t;
-                deltaSec = t-bgmTimeStamp;
-                timeLine.reset();
-            }
-        }
-
-        bgmTimeStamp = newTime;
-
-        timeTotal+=deltaSec;
-
-        while(deltaSec>=M_DINFS)
-        {
-            BeatTime deltaTime=noteMap.offsetMapStateSingle(mapState, deltaSec);
-            deltaSec -= deltaTime.sec;
-
-            double newDelta;
-
-            while(deltaTime.beat>=M_DINFS)
-            {
-                newDelta=script.seekNextTask(deltaTime.beat);
-                BeatTime deltaDelta = deltaTime;
-                deltaDelta.offsetBeat(-newDelta);
-                sceneManager.updateScene(deltaDelta);
-                if(newDelta<=0.0)
-                    break;
-                deltaTime.resizeByBeat(newDelta);
-                script.updateSingleTask(deltaTime.beat);
-            }
-
-        }
-
 
     }
 
-    if(buttonPause.isPushed())
+    if (buttonSkip.isPushed())
     {
-        //*/
-        if(isPaused)
+        double jumpTime = bulletScene.getJump();
+        if (timeManager.beatTime.getTime() < jumpTime)
         {
-            isPaused=!isPaused;
-            timeLine.resume();
-            bgm.play();
-        }
-        /*/
-        isPaused=!isPaused;
-        if(isPaused)
-        {
-            timeLine.pause();
             bgm.pause();
-        }
-        else
-        {
-            timeLine.resume();
+            timeManager.seekTime(jumpTime);
             bgm.play();
         }
-        //*/
+    }
+
+    if (buttonPause.isPushed())
+    {
+        if (isPaused)
+        {
+            isPaused = !isPaused;
+            timeManager.seekTime(0);
+            bgm.play();
+        }
     }
 
 }

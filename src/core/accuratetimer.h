@@ -17,6 +17,7 @@ public:
     {
         total = 0.0;
         last = Clock::now();
+        paused = false;
     }
 
     void pause()
@@ -63,7 +64,7 @@ protected:
     void update()
     {
         TimePoint now = Clock::now();
-        total += std::chrono::duration_cast<duration_double>(now-last).count()*1e-9;
+        total += std::chrono::duration_cast<duration_double>(now-last).count();
         last = now;
     }
 

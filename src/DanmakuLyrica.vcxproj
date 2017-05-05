@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClCompile Include="animatedtexture.cpp" />
     <ClCompile Include="attacktrail.cpp" />
+    <ClCompile Include="beatprovider.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="bulletattachlist.cpp" />
     <ClCompile Include="bulletbase.cpp" />
@@ -128,11 +129,10 @@
     <ClCompile Include="bulletscene.cpp" />
     <ClCompile Include="bulletscript.cpp" />
     <ClCompile Include="core\accuratetimer.cpp" />
-    <ClCompile Include="core\beatticking.cpp" />
     <ClCompile Include="core\beattime.cpp" />
     <ClCompile Include="core\registry.cpp" />
     <ClCompile Include="core\ticking.cpp" />
-    <ClCompile Include="core\timeline.cpp" />
+    <ClCompile Include="core\smoothtimer.cpp" />
     <ClCompile Include="danmakulyrica.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="entity\entity.cpp" />
@@ -163,6 +163,7 @@
     <ClCompile Include="notejudge.cpp" />
     <ClCompile Include="notelist.cpp" />
     <ClCompile Include="notemap.cpp" />
+    <ClCompile Include="notemapbeatprovider.cpp" />
     <ClCompile Include="notescene.cpp" />
     <ClCompile Include="numbersprite.cpp" />
     <ClCompile Include="player.cpp" />
@@ -176,10 +177,13 @@
     <ClCompile Include="splash.cpp" />
     <ClCompile Include="textureregistry.cpp" />
     <ClCompile Include="texturestrip.cpp" />
+    <ClCompile Include="timemanager.cpp" />
+    <ClCompile Include="timeprovider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animatedtexture.h" />
     <ClInclude Include="attacktrail.h" />
+    <ClInclude Include="beatprovider.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="bulletattachlist.h" />
     <ClInclude Include="bulletbase.h" />
@@ -190,14 +194,13 @@
     <ClInclude Include="bulletscript.h" />
     <ClInclude Include="bullettype.h" />
     <ClInclude Include="core\accuratetimer.h" />
-    <ClInclude Include="core\beatticking.h" />
     <ClInclude Include="core\beattime.h" />
     <ClInclude Include="core\commondef.h" />
     <ClInclude Include="core\debug.h" />
     <ClInclude Include="core\mathhelper.h" />
     <ClInclude Include="core\registry.h" />
     <ClInclude Include="core\ticking.h" />
-    <ClInclude Include="core\timeline.h" />
+    <ClInclude Include="core\smoothtimer.h" />
     <ClInclude Include="danmakulyrica.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="entity\entity.h" />
@@ -230,6 +233,7 @@
     <ClInclude Include="notejudge.h" />
     <ClInclude Include="notelist.h" />
     <ClInclude Include="notemap.h" />
+    <ClInclude Include="notemapbeatprovider.h" />
     <ClInclude Include="notescene.h" />
     <ClInclude Include="numbersprite.h" />
     <ClInclude Include="player.h" />
@@ -243,6 +247,8 @@
     <ClInclude Include="splash.h" />
     <ClInclude Include="textureregistry.h" />
     <ClInclude Include="texturestrip.h" />
+    <ClInclude Include="timemanager.h" />
+    <ClInclude Include="timeprovider.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
