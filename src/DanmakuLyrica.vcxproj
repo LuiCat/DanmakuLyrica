@@ -80,7 +80,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -99,7 +99,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -146,12 +146,13 @@
     <ClCompile Include="entity\sprite.cpp" />
     <ClCompile Include="graphics\gfxcore.cpp" />
     <ClCompile Include="graphics\gfxresource.cpp" />
+    <ClCompile Include="graphics\shape3d.cpp" />
     <ClCompile Include="graphics\texturepiece.cpp" />
     <ClCompile Include="graphics\rendertarget.cpp" />
     <ClCompile Include="graphics\rendertexture.cpp" />
     <ClCompile Include="graphics\textrenderer.cpp" />
     <ClCompile Include="graphics\texturecache.cpp" />
-    <ClCompile Include="graphics\vertexbuffer.cpp" />
+    <ClCompile Include="graphics\shape2d.cpp" />
     <ClCompile Include="keybinding\keybinding.cpp" />
     <ClCompile Include="luascript.cpp" />
     <ClCompile Include="luatask.cpp" />
@@ -216,12 +217,13 @@
     <ClInclude Include="graphics\gfxdef.h" />
     <ClInclude Include="graphics\gfxresource.h" />
     <ClInclude Include="graphics\graphics.h" />
+    <ClInclude Include="graphics\shape3d.h" />
     <ClInclude Include="graphics\texturepiece.h" />
     <ClInclude Include="graphics\rendertarget.h" />
     <ClInclude Include="graphics\rendertexture.h" />
     <ClInclude Include="graphics\textrenderer.h" />
     <ClInclude Include="graphics\texturecache.h" />
-    <ClInclude Include="graphics\vertexbuffer.h" />
+    <ClInclude Include="graphics\shape2d.h" />
     <ClInclude Include="keybinding\keybinding.h" />
     <ClInclude Include="luascript.h" />
     <ClInclude Include="luatask.h" />
@@ -252,7 +254,7 @@
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="DanmakuLyrica\data\stage\stage.txt" />
+    <Text Include="..\DanmakuLyrica\data\stage\stage.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

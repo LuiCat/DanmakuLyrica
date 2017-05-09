@@ -90,13 +90,13 @@ void Note::onRender()
 
     if(isDestroyed)
     {
-        d3d.setAlpha(1-2*(timeSec-destroyTime));
+        d2d.setAlpha(1-2*(timeSec-destroyTime));
         //if(timeSec > destroyTime + 0.5)
             //setDead();
     }
     else if(getX()<0)
     {
-        d3d.setAlpha(1+getX()*0.02);
+        d2d.setAlpha(1+getX()*0.02);
     }
 
     texNote.vertice(0, 0.5, 90, 100);

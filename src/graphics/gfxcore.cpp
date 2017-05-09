@@ -3,12 +3,14 @@
 #include "commondef.h"
 #include "debug.h"
 
+HWND                    GFXCore::hWnd = NULL;
+
 LPDIRECT3D9             GFXCore::pD3D = NULL; // Used to create the D3DDevice
 LPDIRECT3DDEVICE9       GFXCore::pD3DDevice = NULL; // Our rendering device
 
 D3DPRESENT_PARAMETERS   GFXCore::d3dpp;
 
-void GFXCore::setDeviceStates()
+void GFXCore::initDeviceStates()
 {
     pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
     pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
@@ -17,6 +19,7 @@ void GFXCore::setDeviceStates()
 
     pD3DDevice->SetRenderState(D3DRS_MULTISAMPLEANTIALIAS, TRUE);
     pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+    pD3DDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
     pD3DDevice->SetSamplerState(0,   D3DSAMP_MAGFILTER,   D3DTEXF_LINEAR );//D3DTEXF_LINEAR
     pD3DDevice->SetSamplerState(0,   D3DSAMP_MINFILTER,   D3DTEXF_LINEAR );//
@@ -43,6 +46,8 @@ DWORD GFXCore::createTexture(const char* filename, Texture* tex, DWORD w, DWORD 
 HRESULT GFXCore::initDevice(HWND hWnd)
 {
     HRESULT hr;
+
+    GFXCore::hWnd = hWnd;
 
     pD3D = Direct3DCreate9(D3D_SDK_VERSION);
     if(!pD3D)
@@ -100,7 +105,7 @@ HRESULT GFXCore::initDevice(HWND hWnd)
         return hr;
     }
 
-    setDeviceStates();
+    initDeviceStates();
 
     /*
     if(FAILED(hr=g_pd3dDevice->CreateRenderTarget(WIDTH, HEIGHT, d3dpp.BackBufferFormat,
@@ -143,6 +148,24 @@ HRESULT GFXCore::resetDevice()
     HRESULT hr;
     if(FAILED(hr=pD3DDevice->Reset(&d3dpp)))
         return hr;
-    setDeviceStates();
+    initDeviceStates();
     return S_OK;
+}
+
+void GFXCore::present()
+{
+    HRESULT hr;
+
+    hr = pD3DDevice->Present(NULL, NULL, NULL, NULL);
+
+    if (FAILED(hr))
+    {
+        if (hr == D3DERR_DEVICELOST || hr == D3DERR_DEVICENOTRESET)
+            SendMessage(hWnd, WM_RESETDEVICE, 0, 0);
+        else
+            PostQuitMessage(hr);
+    }
+
+    pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
+
 }

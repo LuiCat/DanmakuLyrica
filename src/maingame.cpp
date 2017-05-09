@@ -40,25 +40,6 @@ void MainGame::exit()
     isExiting=true;
 }
 
-void MainGame::mainInit()
-{
-}
-
-void MainGame::mainCleanup()
-{
-}
-
-void MainGame::mainUpdate()
-{
-    // ...
-}
-
-void MainGame::mainRender()
-{
-    // ...
-    d3d.present();
-}
-
 void MainGame::updateTick()
 {
     ReleaseSemaphore(hTickSema, 1, 0);

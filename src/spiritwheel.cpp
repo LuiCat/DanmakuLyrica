@@ -38,19 +38,19 @@ void SpiritWheel::onTick()
 
 void SpiritWheel::onRender()
 {
-    d3d.rotate2D(timeSec*M_PI_2);
-    d3d.setAlpha(0.6);
+    d2d.rotate(timeSec*M_PI_2);
+    d2d.setAlpha(0.6);
     if(isDestroyed)
     {
         double scale = timeSec-destroyTime+1.0;
-        d3d.scale2D(scale, scale);
-        d3d.setAlpha(0.6-(timeSec-destroyTime)*0.6);
+        d2d.scale(scale, scale);
+        d2d.setAlpha(0.6-(timeSec-destroyTime)*0.6);
     }
     else if(timeSec<0.5)
     {
-        d3d.setAlpha(timeSec*2);
+        d2d.setAlpha(timeSec*2);
     }
-    d3d.setColor(MAKE_RGB(255, 255-currHit*50/maxHp, 240-currHit*200/maxHp));
+    d2d.setColor(MAKE_RGB(255, 255-currHit*50/maxHp, 240-currHit*200/maxHp));
     imgWheel.vertice(0.5, 0.5, 120.0);
 }
 

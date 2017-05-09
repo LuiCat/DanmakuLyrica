@@ -1,6 +1,6 @@
 #include "rendertexture.h"
 
-#include "vertexbuffer.h"
+#include "shape2d.h"
 #include "commondef.h"
 
 RenderTexture::RenderTexture()
@@ -26,17 +26,19 @@ RenderTexture::~RenderTexture()
 
 void RenderTexture::pushVertices()
 {
-    d3d.setTexture(texture);
-    d3d.rect(0, 0, 1, 1);
+    d2d.setTexture(texture);
+    d2d.rect(0, 0, 1, 1);
 }
 
 void RenderTexture::draw(int x, int y, RenderTarget* target)
 {
-    d3d.beginScene(target);
-    d3d.translate2D(x, y);
-    d3d.scale2D(width, height);
+    d2d.beginScene();
+    d2d.resetMatrix();
+    d2d.translate(x, y);
+    d2d.scale(width, height);
     pushVertices();
-    d3d.endScene();
+    d2d.drawScene(target);
+    d2d.endScene();
 }
 
 Surface RenderTexture::surface()

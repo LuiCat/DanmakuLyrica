@@ -22,6 +22,6 @@ void Splash::onTick()
 
 void Splash::onRender()
 {
-    d3d.setAlpha(1-timeSec);
+    d2d.setAlpha(1-timeSec);
     img.vertice(0.5, 0.5, timeSec*400);
 }

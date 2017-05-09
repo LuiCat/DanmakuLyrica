@@ -85,13 +85,13 @@ void NumberSprite::onRender()
     else if(align == AlignCenter)
         left = -totalw*0.5;
 
-    d3d.translate2D(left, 0);
+    d2d.translate(left, 0);
     for(int i=0; i<size; ++i)
     {
         int digit = content[i]-'0';
         if(digit>=0 && digit<static_cast<int>(imageNum.size()))
             imageNum[digit].vertice(0.5, 0.5, w, h);
-        d3d.translate2D(w*k, 0);
+        d2d.translate(w*k, 0);
     }
 
 }

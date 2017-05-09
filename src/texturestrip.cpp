@@ -44,8 +44,8 @@ void TextureStrip::pushVertices(int i, int j)
     umax=umin+sizeX;
     vmax=vmin+sizeY;
 
-    d3d.setTexture(texture);
-    d3d.rect(umin, vmin, umax, vmax);
+    d2d.setTexture(texture);
+    d2d.rect(umin, vmin, umax, vmax);
 }
 
 void TextureStrip::pushVerticesFlip(int i, int j)
@@ -57,6 +57,6 @@ void TextureStrip::pushVerticesFlip(int i, int j)
     umax=umin+sizeX;
     vmax=vmin+sizeY;
 
-    d3d.setTexture(texture);
-    d3d.rect(umax, vmin, umin, vmax);
+    d2d.setTexture(texture);
+    d2d.rect(umax, vmin, umin, vmax);
 }

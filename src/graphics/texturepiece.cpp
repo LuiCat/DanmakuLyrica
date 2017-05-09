@@ -1,6 +1,6 @@
 #include "texturepiece.h"
 #include "texturecache.h"
-#include "vertexbuffer.h"
+#include "shape2d.h"
 
 #include <cstring>
 
@@ -208,32 +208,37 @@ void TexturePiece::setRenderRange(double minU, double minV, double maxU, double 
 
 void TexturePiece::vertice()
 {
-    d3d.setTexture(tex);
-    d3d.rect(umin, vmin, umax, vmax);
+    d2d.setTexture(tex);
+    d2d.rect(umin, vmin, umax, vmax);
 }
 
 void TexturePiece::vertice(double centerXRatio, double centerYRatio, double size)
 {
-    d3d.pushMatrix();
+    d2d.pushMatrix();
 
-    d3d.scale2D(size, size);
-    d3d.translate2D(-centerXRatio, -centerYRatio);
+    //d2d.scale(size, size);
+    //d2d.translate(-centerXRatio, -centerYRatio);
+    double offsetX = -size*centerXRatio;
+    double offsetY = -size*centerYRatio;
 
-    d3d.setTexture(tex);
-    d3d.rect(umin, vmin, umax, vmax);
+    d2d.setTexture(tex);
+    d2d.rect(offsetX, offsetY, size + offsetX, size + offsetY, umin, vmin, umax, vmax);
 
-    d3d.popMatrix();
+    d2d.popMatrix();
 }
 
 void TexturePiece::vertice(double centerXRatio, double centerYRatio, double sizeX, double sizeY)
 {
-    d3d.pushMatrix();
+    d2d.pushMatrix();
 
-    d3d.scale2D(sizeX, sizeY);
-    d3d.translate2D(-centerXRatio, -centerYRatio);
+    //d2d.scale(sizeX, sizeY);
+    //d2d.translate(-centerXRatio, -centerYRatio);
 
-    d3d.setTexture(tex);
-    d3d.rect(umin, vmin, umax, vmax);
+    double offsetX = -sizeX*centerXRatio;
+    double offsetY = -sizeY*centerYRatio;
 
-    d3d.popMatrix();
+    d2d.setTexture(tex);
+    d2d.rect(offsetX, offsetY, sizeX + offsetX, sizeY + offsetY, umin, vmin, umax, vmax);
+
+    d2d.popMatrix();
 }

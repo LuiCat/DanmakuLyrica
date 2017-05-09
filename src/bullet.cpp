@@ -61,19 +61,19 @@ void Bullet::onRender()
 {
     if(typeInfo == nullptr)
         return;
-    d3d.pushMatrix();
+    d2d.pushMatrix();
     if(isDestroyed)
     {
-        d3d.setAlpha((deadTime-timeSec)*0.7); // alpha: 1.0 -> 0.8~0.0
+        d2d.setAlpha((deadTime-timeSec)*0.7); // alpha: 1.0 -> 0.8~0.0
     }
     else if(timeSec<0.5)
     {
-        d3d.scale2D(timeSec+0.5, timeSec+0.5);
-        d3d.setAlpha(timeSec*2);
+        d2d.scale(timeSec+0.5, timeSec+0.5);
+        d2d.setAlpha(timeSec*2);
     }
 
     typeInfo->image.vertice(typeInfo->centerX, typeInfo->centerY, typeInfo->sizeX, typeInfo->sizeY);
-    d3d.popMatrix();
+    d2d.popMatrix();
 }
 
 bool Bullet::onJudge(Entity* entity, double span)

@@ -50,8 +50,11 @@ void DanmakuLyrica::mainInit()
     string stagename;
     string tjaname;
     ifstream fin("data/stage/stage.txt");
-    getline(fin, stagename);
-    getline(fin, tjaname);
+    for (int i = 0; i < 1; ++i)
+    {
+        getline(fin, stagename);
+        getline(fin, tjaname);
+    }
     fin.close();
 
     stagename = "data/stage/" + stagename + "/";
@@ -178,14 +181,27 @@ void DanmakuLyrica::mainUpdate()
 void DanmakuLyrica::mainRender()
 {
     // render scenes
-    d3d.beginScene();
+    d2d.beginScene();
+    d2d.resetMatrix();
 
-    d3d.pushMatrix();
+    //d2d.pushMatrix();
     sceneManager.renderScene();
-    d3d.popMatrix();
+    //d2d.popMatrix();
 
+    d2d.drawScene();
+    d2d.endScene();
+
+    d3d.beginScene();
+    d3d.resetMatrix();
+
+    d3d.vertex(0, 100, 0);
+    d3d.vertex(0, 0, 0);
+    d3d.vertex(100, 0, 0);
+    d3d.shape();
+
+    d3d.drawScene();
     d3d.endScene();
 
-    d3d.present();
+    d2d.present();
 
 }

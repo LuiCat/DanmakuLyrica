@@ -1,25 +1,16 @@
-#ifndef VERTEXBUFFER_H
-#define VERTEXBUFFER_H
+#ifndef _SHAPE2D_H_
+#define _SHAPE2D_H_
 
 #include "gfxresource.h"
 #include "gfxdef.h"
 #include "rendertarget.h"
 
 #include <vector>
-using namespace std;
+#include <mutex>
 
-enum ShapeType
-{
-    Shape_None = 0,
-    Shape_Lines = D3DPT_LINELIST,
-    Shape_Triangles = D3DPT_TRIANGLESTRIP
-};
-
-class VertexBuffer : public GFXCore
+class Shape2D : public GFXCore
 {
 private:
-
-    HWND hWnd;
 
     struct Vertex
     {
@@ -28,12 +19,18 @@ private:
         float u, v;
     };
 
+    struct ShapeInfo
+    {
+        ShapeType shape;
+        Matrix matrix;
+    };
+
     struct VertexInfo
     {
         Vertex vertex;
         Texture texture;
         bool isAddBlend;
-        ShapeType shape;
+        ShapeInfo* shape;
     };
 
     struct MatrixInfo
@@ -44,16 +41,15 @@ private:
         bool isAddBlend;
     };
 
-    vector<VertexInfo> pendingVertices;
-    vector<MatrixInfo> stackMatrix;
+    std::vector<VertexInfo> pendingVertices;
+    std::vector<MatrixInfo> stackMatrix;
+    std::vector<ShapeInfo> listShapes;
 
     MatrixInfo currentMatrix;
 
     LPDIRECT3DVERTEXBUFFER9 pD3DVertexBuffer;
 
-    HANDLE mutex;
-
-    RenderTarget* currentTarget;
+    std::mutex mutex;
 
     UINT currentChunkOffset;
 
@@ -64,45 +60,39 @@ private:
     void renderSetTexture(Texture texture);
     void renderSetBlendDest(DWORD blend);
 
+    void clearVertices();
+
     int primitiveCount(int vertexCount, ShapeType shape);
-
-protected:
-
-    void drawScene(RenderTarget* target=0);
 
 public:
 
-    VertexBuffer();
-    ~VertexBuffer();
+    Shape2D();
+    ~Shape2D();
 
-    HRESULT init(HWND hWnd=0);
+    HRESULT init();
     void cleanup();
 
-    void present();
-
-    void beginScene(RenderTarget* target=0);
+    void beginScene();
     void endScene();
 
+    void drawScene(RenderTarget* target = 0);
+
     void resetMatrix();
+    void identityMatrix();
 
     void pushMatrix();
     void popMatrix();
 
     void rect(float u1, float v1, float u2, float v2);
-    void rect(float x, float y, float w, float h, float u1, float v1, float u2, float v2);
+    void rect(float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2);
 
     void vertex(float x, float y, float u, float v);
-    void vertex(float x, float y, float z, float u, float v);
     // make a shape depend on vertices pushed before, 
     void shape(ShapeType shape = Shape_Triangles);
 
-    void translate2D(float x, float y);
-    void rotate2D(float angle);
-    void scale2D(float scaleX, float scaleY);
-
-    void translate3D(float x, float y, float z);
-    void rotate3D(float axisX, float axisY, float axisZ, float angle);
-    void scale3D(float scaleX, float scaleY, float scaleZ);
+    void translate(float x, float y);
+    void rotate(float angle);
+    void scale(float scaleX, float scaleY);
 
     void setBlend(bool add);
     void setTexture(Texture tex);
@@ -111,6 +101,6 @@ public:
 
 };
 
-extern VertexBuffer d3d;
+extern Shape2D d2d;
 
-#endif // VERTEXBUFFER_H
+#endif // _SHAPE2D_H_

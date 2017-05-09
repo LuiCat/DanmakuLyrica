@@ -54,47 +54,47 @@ void NoteScene::render()
 {
     double scale;
 
-    d3d.pushMatrix();
-    d3d.translate2D(400, 572);
+    d2d.pushMatrix();
+    d2d.translate(400, 572);
 
     track.vertice(0.5, 0.5, 800, 80);
 
-    d3d.pushMatrix();
+    d2d.pushMatrix();
     noteList.renderAll();
-    d3d.scale2D(-1, 1);
+    d2d.scale(-1, 1);
     noteList.renderAll();
-    d3d.popMatrix();
+    d2d.popMatrix();
 
-    d3d.pushMatrix();
-    d3d.setAlpha(0.0 + 0.8 * exp(-10 * beatTime.time));
+    d2d.pushMatrix();
+    d2d.setAlpha(0.0 + 0.8 * exp(-10 * beatTime.time));
     trackLight.vertice(0, 0.5, 240, 80);
-    d3d.scale2D(-1, 1);
+    d2d.scale(-1, 1);
     trackLight.vertice(0, 0.5, 240, 80);
-    d3d.popMatrix();
+    d2d.popMatrix();
 
     panelBg.vertice(0.5, 0.5, 160);
 
-    d3d.pushMatrix();
-    d3d.translate2D(0, -5);
-    d3d.setAlpha(0.3 + 0.5 * exp(-5 * beatTime.time));
+    d2d.pushMatrix();
+    d2d.translate(0, -5);
+    d2d.setAlpha(0.3 + 0.5 * exp(-5 * beatTime.time));
     panelIcon.vertice(0.5, 0.5, 140);
-    d3d.popMatrix();
+    d2d.popMatrix();
 
-    d3d.pushMatrix();
+    d2d.pushMatrix();
     scale = 1+0.15*exp(-10*beatTime.time);
-    d3d.translate2D(0, -10);
-    d3d.scale2D(1.0, scale);
+    d2d.translate(0, -10);
+    d2d.scale(1.0, scale);
     comboNum.render();
-    d3d.popMatrix();
+    d2d.popMatrix();
 
-    d3d.pushMatrix();
-    d3d.translate2D(-400, -55);
+    d2d.pushMatrix();
+    d2d.translate(-400, -55);
     title.vertice(0, 0.5, 400, 30);
-    d3d.popMatrix();
+    d2d.popMatrix();
 
     scoreNum.render();
 
-    d3d.popMatrix();
+    d2d.popMatrix();
 }
 
 void NoteScene::setNoteMap(NoteMap* m)

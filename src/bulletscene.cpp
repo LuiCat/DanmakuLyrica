@@ -186,12 +186,12 @@ void BulletScene::update(rtime_t deltaTime)
 
 void BulletScene::render()
 {
-    d3d.pushMatrix();
-    d3d.translate2D(sceneCenterX, sceneCenterY);
+    d2d.pushMatrix();
+    d2d.translate(sceneCenterX, sceneCenterY);
     player->render();
     boss->render();
     bulletList->renderAll();
     player->renderOverlay();
-    d3d.popMatrix();
+    d2d.popMatrix();
 }
 

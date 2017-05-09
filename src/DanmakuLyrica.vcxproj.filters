@@ -145,9 +145,6 @@
     <ClCompile Include="core\ticking.cpp">
       <Filter>0Core\Time</Filter>
     </ClCompile>
-    <ClCompile Include="graphics\vertexbuffer.cpp">
-      <Filter>0Core\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="score.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
@@ -229,6 +226,12 @@
     </ClCompile>
     <ClCompile Include="notemapbeatprovider.cpp">
       <Filter>Notemap</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\shape3d.cpp">
+      <Filter>0Core\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\shape2d.cpp">
+      <Filter>0Core\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -340,9 +343,6 @@
     <ClInclude Include="core\ticking.h">
       <Filter>0Core\Time</Filter>
     </ClInclude>
-    <ClInclude Include="graphics\vertexbuffer.h">
-      <Filter>0Core\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="score.h">
       <Filter>Objects</Filter>
     </ClInclude>
@@ -435,8 +435,14 @@
     <ClInclude Include="notemapbeatprovider.h">
       <Filter>Notemap</Filter>
     </ClInclude>
+    <ClInclude Include="graphics\shape3d.h">
+      <Filter>0Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics\shape2d.h">
+      <Filter>0Core\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="DanmakuLyrica\data\stage\stage.txt" />
+    <Text Include="..\DanmakuLyrica\data\stage\stage.txt" />
   </ItemGroup>
 </Project>

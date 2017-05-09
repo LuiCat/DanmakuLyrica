@@ -199,9 +199,9 @@ void Player::onRender()
 
 void Player::renderOverlay()
 {
-    d3d.pushMatrix();
+    d2d.pushMatrix();
 
-    d3d.translate2D(x, y);
+    d2d.translate(x, y);
     tex.vertice(0.5, 0.5, 60);
 
     double dx = targetPos.getX()-x;
@@ -212,12 +212,12 @@ void Player::renderOverlay()
     double size = 128;
     bool isTargeted = false;
 
-    d3d.pushMatrix();
+    d2d.pushMatrix();
 
     if(dis<200)
     {
         isTargeted = true;
-        d3d.translate2D(dx, dy);
+        d2d.translate(dx, dy);
         rot = timeSec*M_PI_2;
         size *= 1-0.25*exp(-5*(timeSec-lastHitTime));
     }
@@ -225,20 +225,20 @@ void Player::renderOverlay()
     {
         rot = timeSec*M_PI_2*0.2;
         dis = 50+150*exp((200-dis)*0.01);
-        d3d.translate2D(dis*sin(angle), dis*cos(angle));
-        d3d.setAlpha(0.5);
+        d2d.translate(dis*sin(angle), dis*cos(angle));
+        d2d.setAlpha(0.5);
         size = 80;
     }
 
-    d3d.pushMatrix();
-    d3d.rotate2D(rot);
+    d2d.pushMatrix();
+    d2d.rotate(rot);
     plotInner.vertice(0.5, 0.5, size);
-    d3d.popMatrix();
+    d2d.popMatrix();
 
-    d3d.pushMatrix();
-    d3d.rotate2D(-rot);
+    d2d.pushMatrix();
+    d2d.rotate(-rot);
     plotOuter.vertice(0.5, 0.5, size);
-    d3d.popMatrix();
+    d2d.popMatrix();
 
     if(isTargeted && target!=nullptr)
     {
@@ -246,9 +246,9 @@ void Player::renderOverlay()
         number.render();
     }
 
-    d3d.popMatrix();
+    d2d.popMatrix();
 
-    d3d.popMatrix();
+    d2d.popMatrix();
 }
 
 void Player::setNoteScene(NoteScene* scene)

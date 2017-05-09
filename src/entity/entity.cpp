@@ -291,7 +291,7 @@ void Entity::onTick(){}
 
 void Entity::onRender()
 {
-    d3d.rect(0, 0, 1, 1);
+    d2d.rect(0, 0, 1, 1);
 }
 
 void Entity::onDestroy()
@@ -313,12 +313,12 @@ void Entity::destroy()
 void Entity::render()
 {
     if(isDead)return;
-    d3d.pushMatrix();
+    d2d.pushMatrix();
     if(fabs(facingAngle)<M_DINFS)
-        d3d.translate2D(round(x), round(y));
+        d2d.translate(round(x), round(y));
     else
-        d3d.translate2D(x, y);
-    d3d.rotate2D(-facingAngle);
+        d2d.translate(x, y);
+    d2d.rotate(-facingAngle);
     onRender();
-    d3d.popMatrix();
+    d2d.popMatrix();
 }

@@ -16,13 +16,13 @@ RenderObject::RenderObject(double posX, double posY)
 void RenderObject::render()
 {
     if(isDead)return;
-    d3d.pushMatrix();
-    d3d.translate2D(x, y);
+    d2d.pushMatrix();
+    d2d.translate(x, y);
     onRender();
-    d3d.popMatrix();
+    d2d.popMatrix();
 }
 
 void RenderObject::onRender()
 {
-    d3d.rect(0, 0, 1, 1);
+    d2d.rect(0, 0, 1, 1);
 }

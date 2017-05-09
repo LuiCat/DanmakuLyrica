@@ -20,5 +20,12 @@ inline DWORD ColorBlend(DWORD col1, DWORD col2, double weight)
     return res;
 }
 
+enum ShapeType
+{
+    Shape_None = 0,
+    Shape_Lines = D3DPT_LINELIST,
+    Shape_Triangles = D3DPT_TRIANGLESTRIP
+};
+
 #endif // GFXDEF_H
 

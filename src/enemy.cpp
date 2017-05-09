@@ -16,16 +16,16 @@ void Enemy::onTick()
 
 void Enemy::onRender()
 {
-    d3d.pushMatrix();
-    d3d.rotate2D(-timeSec*M_PI*0.2);
-    d3d.setColor(0xBB5555);
+    d2d.pushMatrix();
+    d2d.rotate(-timeSec*M_PI*0.2);
+    d2d.setColor(0xBB5555);
     wheel.vertice(0.5, 0.5, 280);
-    d3d.popMatrix();
+    d2d.popMatrix();
 
-    d3d.pushMatrix();
-    d3d.translate2D(0, 10*sin(timeSec*M_PI*0.25));
+    d2d.pushMatrix();
+    d2d.translate(0, 10*sin(timeSec*M_PI*0.25));
     img[((int)round(timeSec))%3].vertice(0.5, 0.5, 128);
-    d3d.popMatrix();
+    d2d.popMatrix();
 }
 
 void Enemy::onDestroy()

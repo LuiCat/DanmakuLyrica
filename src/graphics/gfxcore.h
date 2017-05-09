@@ -7,9 +7,11 @@ class GFXCore
 {
 private:
 
-    static void setDeviceStates();
+    static void initDeviceStates();
 
 protected:
+
+    static HWND hWnd;
 
     static LPDIRECT3D9             pD3D;
     static LPDIRECT3DDEVICE9       pD3DDevice;
@@ -24,6 +26,8 @@ public:
 
     static HRESULT restoreDevice();
     static HRESULT resetDevice();
+
+    static void present();
 
 };
 

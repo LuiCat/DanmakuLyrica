@@ -35,24 +35,24 @@ void AttackTrail::onRender()
         return 1-16*x*x;
     };
 
-    d3d.setColor(0xFFFFFF);
-    d3d.setAlpha(0.5-timeSec);
+    d2d.setColor(0xFFFFFF);
+    d2d.setAlpha(0.5-timeSec);
 
     double pos;
     for(pos = timeSec; pos+0.005<0.5; pos+=0.005)
     {
         double npos = pos+0.02;
-        d3d.vertex(f(pos)*(w-2.5),  pos*len*2,  0, 0);
-        d3d.vertex(f(npos)*(w-2.5), npos*len*2, 0, 0);
-        d3d.vertex(f(pos)*(w+2.5),  pos*len*2,  0, 0);
-        d3d.vertex(f(npos)*(w+2.5), npos*len*2, 0, 0);
-        d3d.shape(Shape_Triangles);
+        d2d.vertex(f(pos)*(w-2.5),  pos*len*2,  0, 0);
+        d2d.vertex(f(npos)*(w-2.5), npos*len*2, 0, 0);
+        d2d.vertex(f(pos)*(w+2.5),  pos*len*2,  0, 0);
+        d2d.vertex(f(npos)*(w+2.5), npos*len*2, 0, 0);
+        d2d.shape(Shape_Triangles);
     }
 
-    d3d.vertex(f(pos)*(w-2.5), pos*len*2, 0, 0);
-    d3d.vertex(0, len, 0, 0);
-    d3d.vertex(f(pos)*(w+2.5), pos*len*2, 0, 0);
-    d3d.vertex(0, len, 0, 0);
-    d3d.shape(Shape_Triangles);
+    d2d.vertex(f(pos)*(w-2.5), pos*len*2, 0, 0);
+    d2d.vertex(0, len, 0, 0);
+    d2d.vertex(f(pos)*(w+2.5), pos*len*2, 0, 0);
+    d2d.vertex(0, len, 0, 0);
+    d2d.shape(Shape_Triangles);
 
 }
