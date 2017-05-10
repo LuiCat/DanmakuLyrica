@@ -36,23 +36,21 @@ void AttackTrail::onRender()
     };
 
     d2d.setColor(0xFFFFFF);
-    d2d.setAlpha(0.5-timeSec);
+    d2d.setAlpha((0.5-timeSec)*2);
 
+    bool shaped=false;
     double pos;
-    for(pos = timeSec; pos+0.005<0.5; pos+=0.005)
+    for(pos = timeSec; pos+0.005<0.5; pos+=0.01)
     {
-        double npos = pos+0.02;
-        d2d.vertex(f(pos)*(w-2.5),  pos*len*2,  0, 0);
-        d2d.vertex(f(npos)*(w-2.5), npos*len*2, 0, 0);
-        d2d.vertex(f(pos)*(w+2.5),  pos*len*2,  0, 0);
-        d2d.vertex(f(npos)*(w+2.5), npos*len*2, 0, 0);
-        d2d.shape(Shape_Triangles);
+        d2d.vertex(f(pos)*(w-2.5), pos*len*2, 0, 0);
+        d2d.vertex(f(pos)*(w+2.5), pos*len*2, 0, 0);
+        shaped=true;
     }
 
-    d2d.vertex(f(pos)*(w-2.5), pos*len*2, 0, 0);
-    d2d.vertex(0, len, 0, 0);
-    d2d.vertex(f(pos)*(w+2.5), pos*len*2, 0, 0);
-    d2d.vertex(0, len, 0, 0);
-    d2d.shape(Shape_Triangles);
+    if(shaped)
+    {
+        d2d.vertex(0, len, 0, 0);
+        d2d.shape(Shape_Triangles);
+    }
 
 }
