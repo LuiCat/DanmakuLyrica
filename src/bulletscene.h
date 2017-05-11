@@ -79,7 +79,7 @@ public:
     void load();
     void unload();
 
-    void update(rtime_t deltaTime);
+    void update();
     void render();
 
     friend class BulletScript;

@@ -160,6 +160,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="maingame.cpp" />
     <ClCompile Include="mapstate.cpp" />
+    <ClCompile Include="noterenderer.cpp" />
     <ClCompile Include="noteentity.cpp" />
     <ClCompile Include="notejudge.cpp" />
     <ClCompile Include="notelist.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="luatimeline.h" />
     <ClInclude Include="maingame.h" />
     <ClInclude Include="mapstate.h" />
+    <ClInclude Include="noterenderer.h" />
     <ClInclude Include="notedef.h" />
     <ClInclude Include="noteentity.h" />
     <ClInclude Include="notejudge.h" />

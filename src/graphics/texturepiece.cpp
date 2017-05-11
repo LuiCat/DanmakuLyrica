@@ -170,8 +170,8 @@ void TexturePiece::loadExistLater(const TexturePiece& other)
     memcpy(this, &other, sizeof(TexturePiece));
     if(shouldLoadLater && pendingList && loadId>=0)
     {
-        loadId = pendingList->size();
         pendingList->emplace_back(this, (*pendingList)[loadId].second);
+        loadId = pendingList->size() - 1;
     }
 }
 

@@ -165,15 +165,15 @@ void BulletScene::unload()
     SAFE_RELEASE(player);
 }
 
-void BulletScene::update(rtime_t deltaTime)
+void BulletScene::update()
 {
-    bulletList->updateAll(deltaTime.beat);
+    bulletList->updateAll(sceneTime.getDeltaBeat());
     bulletList->checkOutsideScene(-sceneWidth*0.5-offsetBorderWidth,
                                   -sceneHeight*0.5-offsetBorderWidth,
                                   sceneWidth*0.5+offsetBorderWidth,
                                   sceneHeight*0.5+offsetBorderWidth);
 
-    boss->update(deltaTime.beat);
+    boss->update(sceneTime.getDeltaBeat());
 
     player->checkTargetDist();
     if(player->getTarget() == nullptr)
@@ -181,7 +181,7 @@ void BulletScene::update(rtime_t deltaTime)
         player->setTarget(nearestSpiritToPlayer());
     }
 
-    player->update(deltaTime.time);
+    player->update(sceneTime.getDeltaTime());
 }
 
 void BulletScene::render()

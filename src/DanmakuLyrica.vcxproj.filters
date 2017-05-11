@@ -233,6 +233,9 @@
     <ClCompile Include="graphics\shape2d.cpp">
       <Filter>0Core\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="noterenderer.cpp">
+      <Filter>Notemap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\accuratetimer.h">
@@ -440,6 +443,9 @@
     </ClInclude>
     <ClInclude Include="graphics\shape2d.h">
       <Filter>0Core\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="noterenderer.h">
+      <Filter>Notemap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

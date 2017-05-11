@@ -81,6 +81,10 @@ void DanmakuLyrica::mainInit()
     sceneManager.pushScene(&noteScene);
 
     bulletScene.getPlayer()->setNoteScene(&noteScene);
+    noteScene.setPlayer(bulletScene.getPlayer());
+
+    TexturePiece bg((stagename + "bg.png").c_str());
+    noteScene.setBackgroundImage(bg);
 
     auto beginState = noteMap.getBgmBeginState();
     stagename = stagename + "main.lua";
@@ -131,8 +135,8 @@ void DanmakuLyrica::mainUpdate()
             {
                 double taskElapsed = beatTime.getDeltaBeat() - script.seekNextTask(beatTime.getDeltaBeat());
                 BeatTime taskTime = beatTime.splitBeat(taskElapsed);
-                BeatTimeVec deltaDelta(taskTime.getDeltaTime(), taskTime.getDeltaBeat());
-                sceneManager.updateScene(deltaDelta);
+                //BeatTimeVec deltaDelta(taskTime.getDeltaTime(), taskTime.getDeltaBeat());
+                sceneManager.updateScene(taskTime);
                 beatTime.proceedBeat(taskElapsed);
                 script.updateSingleTask(beatTime.getDeltaBeat());
             }
@@ -184,23 +188,18 @@ void DanmakuLyrica::mainRender()
     d2d.beginScene();
     d2d.resetMatrix();
 
+    d3d.beginScene();
+    d3d.resetMatrix();
+
     //d2d.pushMatrix();
     sceneManager.renderScene();
     //d2d.popMatrix();
 
-    d2d.drawScene();
-    d2d.endScene();
-
-    d3d.beginScene();
-    d3d.resetMatrix();
-
-    d3d.vertex(0, 100, 0);
-    d3d.vertex(0, 0, 0);
-    d3d.vertex(100, 0, 0);
-    d3d.shape();
-
     d3d.drawScene();
     d3d.endScene();
+
+    d2d.drawScene();
+    d2d.endScene();
 
     d2d.present();
 

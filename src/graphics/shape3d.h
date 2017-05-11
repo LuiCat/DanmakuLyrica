@@ -83,6 +83,8 @@ public:
     void resetMatrix();
     void identityMatrix();
 
+    void resetView();
+
     void pushMatrix();
     void popMatrix();
 

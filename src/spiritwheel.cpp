@@ -39,7 +39,7 @@ void SpiritWheel::onTick()
 void SpiritWheel::onRender()
 {
     d2d.rotate(timeSec*M_PI_2);
-    d2d.setAlpha(0.6);
+    d2d.setAlpha(0.8);
     if(isDestroyed)
     {
         double scale = timeSec-destroyTime+1.0;

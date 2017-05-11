@@ -45,7 +45,7 @@ public:
     void removeScene(Scene* scene);
     void clearAllScene();
 
-    void updateScene(rtime_t deltaTime, bool updateCoveredScene=false);
+    void updateScene(const BeatTime& beatTime, bool updateCoveredScene=false);
     void renderScene();
 
 };

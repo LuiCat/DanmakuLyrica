@@ -7,6 +7,7 @@
 #include "texturepiece.h"
 #include "numbersprite.h"
 #include "score.h"
+#include "noterenderer.h"
 
 class NoteScene : public Scene
 {
@@ -17,7 +18,7 @@ public:
     void load();
     void unload();
 
-    void update(rtime_t deltaTime);
+    void update();
     void render();
 
     void setNoteMap(NoteMap* m);
@@ -35,7 +36,13 @@ public:
 
     void setScoreObj(Score* score);
 
+    void setPlayer(Entity* player);
+
+    void setBackgroundImage(const TexturePiece& bg);
+
 protected:
+
+    list<NoteInfo> noteInfoList;
 
     NoteList noteList;
     NoteMap* noteMap;
@@ -48,6 +55,8 @@ protected:
 
     TexturePiece title;
 
+    TexturePiece bg;
+
     BeatTimeVec beatTime;
 
     int combo;
@@ -55,6 +64,10 @@ protected:
 
     Score* score;
     NumberSprite scoreNum;
+
+    NoteRenderer noteRenderer;
+
+    Entity* entityPlayer;
 
 };
 

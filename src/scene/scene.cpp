@@ -8,6 +8,16 @@ Scene::Scene()
 
 }
 
+void Scene::updateTime(const BeatTime & beatTime)
+{
+    sceneTime = beatTime;
+}
+
+void Scene::proceedTime()
+{
+    sceneTime.proceed();
+}
+
 void Scene::setManager(SceneManager* newManager)
 {
     if(newManager!=0)

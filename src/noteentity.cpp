@@ -37,6 +37,11 @@ void Note::setJudgeTime(double _hitTime, double _hitBeat)
     singleTick(_hitBeat);
 }
 
+double Note::getJudgeBeat() const
+{
+    return hitBeat;
+}
+
 void Note::setScrollSpeed(double hs)
 {
     scrollSpeed=hs;

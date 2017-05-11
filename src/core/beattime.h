@@ -112,8 +112,12 @@ public:
 
     inline double getTime() const { return currTime; }
     inline double getBeat() const { return currBeat; }
+    inline double getNextTime() const { return currTime + deltaTime; }
+    inline double getNextBeat() const { return currBeat + deltaBeat; }
     inline double getDeltaTime() const { return deltaTime; }
     inline double getDeltaBeat() const { return deltaBeat; }
+    inline BeatTimeVec getNext() const { return BeatTimeVec(currTime + deltaTime, currBeat + deltaBeat); }
+    inline BeatTimeVec getDelta() const { return BeatTimeVec(deltaTime, deltaBeat); }
 
     // Functions that increases delta values.
     // Use this only if you know what you are doing !

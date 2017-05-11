@@ -21,6 +21,8 @@ public:
     Note(const NoteInfo& info, double forwardBeat);
 
     void setJudgeTime(double _hitTime, double _hitBeat);
+    double getJudgeBeat() const;
+
     void setScrollSpeed(double speed);
     void setNoteType(NoteType type);
 

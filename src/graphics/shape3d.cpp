@@ -47,6 +47,7 @@ HRESULT Shape3D::init()
     }
 
     resetMatrix();
+    resetView();
 
     return S_OK;
 }
@@ -211,30 +212,34 @@ void Shape3D::resetMatrix()
     currentMatrix.texture = 0;
     currentMatrix.isAddBlend = false;
     currentMatrix.defaultColor = 0xffffffff;
-
-    D3DXMATRIX matProj;
-    D3DXMATRIX matView;
-
-    // Create and set the projection matrix
-    //D3DXMatrixOrthoOffCenterLH(&matProj, 0, 800, 600, 0, 0, 1);
-    D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4.0f, 1.33333f, 1.0f, 1000.0f);
-    pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
-
-    // Create and set the view matrix
-    //D3DXMatrixTranslation(&matView, 100, 100, 0);
-    //D3DXMatrixIdentity(&matView);
-    D3DXMatrixLookAtLH(&matView, \
-                       &D3DXVECTOR3(50.0f, 100.0f, -500.0f), \
-                       &D3DXVECTOR3(0.0f, 0.0f, 0.0f), \
-                       &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
-    pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
-
 }
 
 void Shape3D::identityMatrix()
 {
     D3DXMatrixIdentity(&currentMatrix.matrix);
     D3DXMatrixTranslation(&currentMatrix.matrix, -0.5, -0.5, 0.0);
+}
+
+void Shape3D::resetView()
+{
+    Matrix matProj;
+    Matrix matView;
+    Matrix matScale;
+
+    // Create and set the projection matrix
+    //D3DXMatrixOrthoOffCenterLH(&matProj, 0, 800, 600, 0, 0, 1);
+    D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4.0f, (float)WIDTH / HEIGHT, 1.0f, 000.0f);
+    pD3DDevice->SetTransform(D3DTS_PROJECTION, &matProj);
+
+    // Create and set the view matrix
+    //D3DXMatrixTranslation(&matView, 100, 100, 0);
+    //D3DXMatrixIdentity(&matView);
+    D3DXMatrixLookAtLH(&matView, \
+                       &D3DXVECTOR3(0.0f, 0.0f, 0.0f), \
+                       &D3DXVECTOR3(0.0f, 0.0f, 500.0f), \
+                       &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+    pD3DDevice->SetTransform(D3DTS_VIEW, &matView);
+
 }
 
 void Shape3D::pushMatrix()

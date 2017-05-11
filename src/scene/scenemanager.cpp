@@ -76,17 +76,21 @@ void SceneManager::clearAllScene()
     coverScene=0;
 }
 
-void SceneManager::updateScene(rtime_t deltaTime, bool updateCoveredScene)
+void SceneManager::updateScene(const BeatTime& beatTime, bool updateCoveredScene)
 {
     if(coverScene)
     {
-        coverScene->update(deltaTime);
+        coverScene->updateTime(beatTime);
+        coverScene->update();
         if(!updateCoveredScene)
             return;
     }
 
-    for(Scene* p : stackScene)
-        p->update(deltaTime);
+    for(Scene* scene : stackScene)
+    {
+        scene->updateTime(beatTime);
+        scene->update();
+    }
 
 }
 
