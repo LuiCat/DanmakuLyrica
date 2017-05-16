@@ -60,13 +60,13 @@ void MainGame::updateFps(DWORD rate)
         lastFrameTick=GetTickCount();
         return;
     }
-    char buffer[120];
+    char buffer[60];
     DWORD newFrameTick=GetTickCount();
     frameRate=0.0;
     if(newFrameTick>lastFrameTick)
         frameRate=rate*1000.0/(newFrameTick-lastFrameTick);
     lastFrameTick=newFrameTick;
-    snprintf(buffer, 119, "Danmaku Lyrica [Fps%.1f]", frameRate);
+    sprintf_s(buffer, 59, "Danmaku Lyrica [Fps%.1f]", frameRate);
     SetWindowText(hWnd, buffer);
 }
 

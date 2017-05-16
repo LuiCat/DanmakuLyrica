@@ -6,13 +6,12 @@
 
 #include <unordered_map>
 #include <string>
-using namespace std;
 
 class TextureCache
 {
 private:
 
-    static unordered_map<string, Texture> cache;
+    static std::unordered_map<std::string, Texture> cache;
 
 public:
 

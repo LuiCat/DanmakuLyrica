@@ -34,6 +34,8 @@ void NoteScene::load()
     noteRenderer.setRadius(800, 500);
 
     combo = 0;
+    lerpPlayerX = 0;
+    lerpPlayerY = 0;
 
     reloadNotes();
 
@@ -107,33 +109,30 @@ void NoteScene::render()
 
     d3d.pushMatrix();
 
+    if (entityPlayer != nullptr)
+    {
+        double x = entityPlayer->getX(), y = entityPlayer->getY() - 70;
+        double k = 1 - exp(-3 * sceneTime.getDeltaTime());
+        lerpPlayerX += (x - lerpPlayerX) * k;
+        lerpPlayerY += (y - lerpPlayerY) * k;
+    }
+
     if (bg.texture())
     {
         d3d.pushMatrix();
-        if (entityPlayer != nullptr)
-        {
-            double x = entityPlayer->getX(), y = entityPlayer->getY();
-            d3d.rotate(-y, -x, 0, dist(x, y) / 400 * M_PI / 12);
-            //d3d.translate(-x, y, 0);
-        }
+        d3d.rotate(-lerpPlayerY, -lerpPlayerX, 0, dist(lerpPlayerX, lerpPlayerY) / 400 * M_PI / 6);
         d3d.setTexture(bg.texture());
-        d3d.vertex(-800, 800, 800, 0, 0);
-        d3d.vertex(-800, -800, 800, 0, 1);
-        d3d.vertex(800, 800, 800, 1, 0);
-        d3d.vertex(800, -800, 800, 1, 1);
+        d3d.vertex(-800, 800, 1000, 0, 0);
+        d3d.vertex(-800, -800, 1000, 0, 1);
+        d3d.vertex(800, 800, 1000, 1, 0);
+        d3d.vertex(800, -800, 1000, 1, 1);
         d3d.shape(Shape_Triangles);
         d3d.setTexture(0);
         d3d.popMatrix();
     }
 
-    if (entityPlayer != nullptr)
-    {
-        double x = entityPlayer->getX(), y = entityPlayer->getY();
-        d3d.translate(-x, y, 0);
-        d3d.rotate(-y, -x, 0, dist(x, y) / 400 * M_PI / 12);
-    }
-
-    //d3d.translate(0, 0, 500);
+    d3d.translate(-lerpPlayerX, lerpPlayerY, 600);
+    d3d.rotate(-lerpPlayerY, -lerpPlayerX, 0, dist(lerpPlayerX, lerpPlayerY) / 400 * M_PI / 6);
 
     //d3d.setColor(0xF34343);
 
@@ -155,13 +154,11 @@ void NoteScene::render()
         {
             if (firstNote)
             {
-                d3d.setAlpha(0.6);
-                firstNote = false;
+                d3d.setColor(0xFFD5D5);
+                if (note.offsetBeat > currBeat)
+                    firstNote = false;
             }
-            else
-            {
-                d3d.setAlpha(0.3 * exp(-0.1 * (note.offsetBeat - currBeat)));
-            }
+            d3d.setAlpha(0.3 * exp(-0.1 * (note.offsetBeat - currBeat)));
             double notePos = beatPos(note.offsetBeat, note.offsetSec);
             d3d.translate(0, 0, notePos - lastNotePos);
             noteRenderer.render((note.offsetBeat - currBeat) * (reversed ? M_PI : -M_PI) * 0.125);

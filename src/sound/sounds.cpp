@@ -31,11 +31,8 @@ void Sound_Cleanup()
 
 //=============Sound Members============================
 
-bool Sound::loadWavFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format)
+bool Sound::loadWavFile(const char* filename, char*& memout, DWORD& memsize, WAVEFORMATEX& format)
 {
-    if(!memout)
-        return false;
-
     HMMIO           hwav;    // handle to wave file
     MMCKINFO        parent,  // parent chunk
                     child;   // child chunk
@@ -96,25 +93,22 @@ bool Sound::loadWavFile(const char *filename, char **memout, DWORD *memsize, WAV
     // finally!!!! now all we have to do is read the data in and
     // set up the directsound buffer
 
-    if(*memout)
-        delete[] *memout;
+    if(memout)
+        delete[] memout;
 
-    *memsize=child.cksize-4;
-    *memout=new char[child.cksize-4];
-    *format=wfmtx;
+    memsize=child.cksize-4;
+    memout=new char[child.cksize-4];
+    format=wfmtx;
 
     mmioSeek(hwav, 4, SEEK_CUR);
-    mmioRead(hwav, (char*)*memout, child.cksize-4);
+    mmioRead(hwav, memout, child.cksize-4);
     mmioClose(hwav, 0);
 
     return true;
 }
 
-bool Sound::loadOggFile(const char* filename, char** memout, DWORD* memsize, WAVEFORMATEX* format)
+bool Sound::loadOggFile(const char* filename, char*& memout, DWORD& memsize, WAVEFORMATEX& format)
 {
-    if(!memout)
-        return false;
-
     FILE* f=fopen(filename, "rb");
     if(!f)return false;
 
@@ -144,14 +138,14 @@ bool Sound::loadOggFile(const char* filename, char** memout, DWORD* memsize, WAV
     int current_section;
     int remainSize=2*vi->channels*(int)ov_pcm_total(&vorbisFile, -1);
     int readSize;
-    char* p=new char[remainSize];
 
-    if(*memout)
-        delete[] *memout;
-    *memout=p;
-    *memsize=remainSize;
-    *format=wfmtx;
+    if(memout)
+        delete[] memout;
+    memout=new char[remainSize];
+    memsize=remainSize;
+    format=wfmtx;
 
+    char* p=memout;
     while(true)
     {
         readSize=ov_read(&vorbisFile, p, remainSize, 0, 2, 1, &current_section);
@@ -176,12 +170,12 @@ bool Sound::load(const char *filename)
         --dpos;
     if(dpos>0&&stricmp(filename+dpos, ".wav")==0)
     {
-        if(!loadWavFile(filename, &m_buffer, &m_size, &waveFormat))
+        if(!loadWavFile(filename, m_buffer, m_size, waveFormat))
             return false;
     }
     else if(dpos>0&&stricmp(filename+dpos, ".ogg")==0)
     {
-        if(!loadOggFile(filename, &m_buffer, &m_size, &waveFormat))
+        if(!loadOggFile(filename, m_buffer, m_size, waveFormat))
             return false;
     }
     else

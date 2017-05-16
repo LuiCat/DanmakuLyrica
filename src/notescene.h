@@ -68,6 +68,8 @@ protected:
     NoteRenderer noteRenderer;
 
     Entity* entityPlayer;
+    double lerpPlayerX;
+    double lerpPlayerY;
 
 };
 

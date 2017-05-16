@@ -2,10 +2,14 @@
 
 #include <cstdio>
 #include <cstring>
+#include <fstream>
+#include <unordered_map>
 
 #include "mathhelper.h"
 
 #include "debug.h"
+
+using namespace std;
 
 NoteMap::NoteMap()
 {
@@ -14,7 +18,7 @@ NoteMap::NoteMap()
 
 bool NoteMap::loadTjaFile(const char *filename)
 {
-    strcpy(tjafile, filename);
+    tjafile=filename;
     if(!reloadTjaFile())
     {
         cout<<"reload tja file failed"<<endl;
@@ -104,22 +108,24 @@ MapState NoteMap::getStateByOffset(double offset)
     return std::move(result);
 }
 
-const char* NoteMap::getWavFilename()
+const string& NoteMap::getWavFilename()
 {
     return wavfile;
 }
 
 bool NoteMap::reloadTjaFile()
 {
-    FILE* f=fopen(tjafile, "r");
+    ifstream f(tjafile.c_str());
     if(!f)return false;
 
-    char line[500];
+    string line;
 
     int i,j,k;
-    char c,*p;
+    char c;// , *p;
     bool flag;
     double x;
+
+    //unordered_map<string, string> props;
 
     SegmentNote tempNote;
     SegmentEvent tempEvent;
@@ -130,17 +136,18 @@ bool NoteMap::reloadTjaFile()
     Segment currentSegment;
     int currentNoteCount=0;
 
-    rewind(f);
-
     segments.clear();
 
-    while(fgets(line,500,f) && !readingEnded)
+    while(!f.eof() && !readingEnded)
     {
-        p=strstr(line, "//");
-        if(p)*p=0;
-        i=strlen(line);
-        while(i>0&&(line[i-1]==' '||line[i-1]=='\n'||line[i-1]=='\r'))i--;
-        line[i]=0;
+        getline(f, line);
+
+        i=line.rfind("//");
+        if(i!=string::npos)line.resize(i);
+
+        i=line.length();
+        while(i>0&&isspace(line[i-1]))i--;
+        line.resize(i);
 
         if(i==0)continue;
 
@@ -148,7 +155,7 @@ bool NoteMap::reloadTjaFile()
         {
             if(line[0]=='#')
             {
-                if(strcmp(line, "#START")==0)
+                if(line=="#START")
                 {
                     readingNotes=true;
                     currentSegment.init(&beginState);
@@ -156,37 +163,36 @@ bool NoteMap::reloadTjaFile()
             }
             else
             {
-                p=strstr(line, ":");
-                if(p)
+                i=line.find(':');
+                if(i!=string::npos)
                 {
-                    *p++=0;
-                    while(*p==' ')p++;
-                    if(strcmp(line, "WAVE")==0)
+                    string key=line.substr(0, i);
+                    ++i;
+                    while(i<line.length()&&line[i]==' ')++i;
+                    string value=line.substr(i);
+
+                    if(key=="WAVE")
                     {
-                        strcpy(wavfile, p);
+                        wavfile=value;
                     }
-                    else if(strcmp(line, "TITLE")==0)
+                    else if(key=="TITLE")
                     {
-                        strcpy(title, p);
+                        title=value;
                     }
-                    else if(strcmp(line, "SUBTITLE")==0)
+                    else if(key=="SUBTITLE")
                     {
-                        if(strstr(p, "--")==p)
-                        {
-                            p+=2;
-                            showSub=false;
-                        }
-                        strcpy(subtitle, p);
+                        if(value.find("--")==0)
+                            subtitle=value.substr(2);
+                        else
+                            subtitle=value;
                     }
-                    else if(strcmp(line, "OFFSET")==0)
+                    else if(key=="OFFSET")
                     {
-                        sscanf(p, "%lf", &x);
-                        beginState.timeOffset=-x;
+                        beginState.timeOffset=-atof(value.c_str());
                     }
-                    else if(strcmp(line, "BPM")==0)
+                    else if(key=="BPM")
                     {
-                        sscanf(p, "%lf", &x);
-                        beginState.bpm=x;
+                        beginState.bpm=atof(value.c_str());
                     }
                 }
             }
@@ -199,39 +205,30 @@ bool NoteMap::reloadTjaFile()
                 tempEvent.num=currentNoteCount;
                 tempEvent.type=unknown;
 
-                flag=true;
-
-                if(strncmp(line, "#END", 4)==0)
+                if(line=="#END")
                 {
-                    flag=false;
                     readingNotes=false;
                     readingEnded=true;
                 }
-                else if(strncmp(line, "#BPMCHANGE", 10)==0)
+                else if(line.compare(0, 10, "#BPMCHANGE")==0)
                 {
                     tempEvent.type=bpmchange;
-                    sscanf(line+11, "%lf", &x);
-                    tempEvent.parameter_d=x;
+                    tempEvent.parameter_d=atof(line.c_str()+10);
                 }
-                else if(strncmp(line, "#MEASURE", 8)==0)
+                else if(line.compare(0, 8, "#MEASURE")==0)
                 {
                     tempEvent.type=measure;
-                    sscanf(line+9, "%d/%d", &j, &k);
+                    sscanf(line.c_str()+8, "%d/%d", &j, &k);
                     tempEvent.parameter_i_1=j;
                     tempEvent.parameter_i_2=k;
                 }
-                else if(strncmp(line, "#SCROLL", 7)==0)
+                else if(line.compare(0, 7, "#SCROLL")==0)
                 {
                     tempEvent.type=scroll;
-                    sscanf(line+8, "%lf", &x);
-                    tempEvent.parameter_d=x;
-                }
-                else
-                {
-                    flag=false;
+                    tempEvent.parameter_d=atof(line.c_str()+7);
                 }
 
-                if(flag)
+                if(tempEvent.type!=unknown)
                     currentSegment.appendEvent(tempEvent);
 
             }
@@ -263,13 +260,11 @@ bool NoteMap::reloadTjaFile()
         }
     }
 
-    if(ferror(f))
+    if(f.fail())
     {
         cout<<"error while tja file reading"<<endl;
         return false;
     }
-
-    fclose(f);
 
     loadProc=segments.begin();
 

@@ -1,5 +1,7 @@
 #include "texturecache.h"
 
+using namespace std;
+
 unordered_map<string, Texture> TextureCache::cache;
 
 

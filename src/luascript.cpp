@@ -1,6 +1,6 @@
 #include "luascript.h"
 
-#include <cstring>
+#include <algorithm>
 
 #include "mathhelper.h"
 
@@ -13,7 +13,7 @@ LuaScript* LuaScript::currentInstance = 0;
 int LuaScript::lua_setCurrentPath(lua_State* L)
 {
     if(lua_isstring(L, 1))
-        strcpy(currentInstance->currentPath, lua_tostring(L, 1));
+        currentInstance->currentPath = lua_tostring(L, 1);
     return 0;
 }
 
@@ -51,9 +51,13 @@ bool LuaScript::loadScriptFile(const char* filename)
 {
     if(lua_exload(filename)==0)
     {
-        strcpy(currentPath, filename);
-        for(int i=strlen(currentPath)-1;i>=0&&currentPath[i]!='/';--i)
-            currentPath[i]=0;
+        currentPath = filename;
+        replace(currentPath.begin(), currentPath.end(), '\\', '/');
+        auto found = currentPath.rfind('/');
+        if (found != string::npos)
+            currentPath.resize(found + 1);
+        else
+            currentPath = "/";
         return (lua_excall(0, 0)==LUA_OK);
     }
     return false;

@@ -28,8 +28,8 @@ protected:
 
     bool pitchChanged;
 
-    static bool loadWavFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format);
-    static bool loadOggFile(const char *filename, char **memout, DWORD *memsize, WAVEFORMATEX* format);
+    static bool loadWavFile(const char* filename, char*& memout, DWORD& memsize, WAVEFORMATEX& format);
+    static bool loadOggFile(const char* filename, char*& memout, DWORD& memsize, WAVEFORMATEX& format);
 
     virtual bool onLoad(LPDIRECTSOUNDBUFFER primaryBuffer);
 

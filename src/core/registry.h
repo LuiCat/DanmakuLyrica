@@ -42,8 +42,7 @@ public:
         ++lastRegisteredId;
         if(name && strlen(name)>0)
             typeNameMap[string(name)]=lastRegisteredId;
-        typeInfoList.emplace(lastRegisteredId,
-              unique_ptr<T>(new _T(std::forward<_T>(info))));
+        typeInfoList.emplace(lastRegisteredId, unique_ptr<T>(new remove_reference<_T>::type(std::forward<_T>(info))));
         return lastRegisteredId;
     }
 

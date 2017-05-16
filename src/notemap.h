@@ -28,14 +28,14 @@ public:
     MapState getBgmBeginState();
     MapState getStateByOffset(double offset);
 
-    const char* getWavFilename();
+    const string& getWavFilename();
 
 protected:
 
-    char tjafile[100];
-    char wavfile[100];
-    char title[100];
-    char subtitle[200];
+    string tjafile;
+    string wavfile;
+    string title;
+    string subtitle;
     bool showSub;
 
     MapState beginState;

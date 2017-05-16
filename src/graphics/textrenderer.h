@@ -18,7 +18,7 @@ private:
     int width;
     int weight;
     bool italic;
-    char facename[128];
+    //char facename[128];
 
     stringstream ss;
 

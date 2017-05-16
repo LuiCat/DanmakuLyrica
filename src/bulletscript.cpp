@@ -58,15 +58,12 @@ int BulletScript::lua_loadStream(lua_State* L)
     if(!lua_isstring(L, 1))
         return 0;
 
-    int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 1));
-    char* buffer = new char[buflen+1];
-    strncpy(buffer, inst()->getCurrentPath(), buflen);
-    strncat(buffer, lua_tostring(L, 1), buflen);
+    string path = inst()->currentPath + lua_tostring(L, 1);
 
     double vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0);
     const char* name=(lua_isstring(L, 2) ? lua_tostring(L, 2) : 0);
 
-    int id=SoundRegistry::createSound<StreamSound>(name, buffer, vol);
+    int id=SoundRegistry::createSound<StreamSound>(name, path.c_str(), vol);
     lua_pushinteger(L, id);
 
     return 1;
@@ -77,15 +74,12 @@ int BulletScript::lua_loadSound(lua_State* L)
     if(!lua_isstring(L, 1))
         return 0;
 
-    int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 1));
-    char* buffer = new char[buflen+1];
-    strncpy(buffer, inst()->getCurrentPath(), buflen);
-    strncat(buffer, lua_tostring(L, 1), buflen);
+    string path = inst()->currentPath + lua_tostring(L, 1);
 
     float vol=(lua_isnumber(L, -1) ? lua_tonumber(L, -1) : 1.0f);
     const char* name=(lua_isstring(L, 2) ? lua_tostring(L, 2) : 0);
 
-    int id=SoundRegistry::createSound<Sound>(name, buffer, vol);
+    int id=SoundRegistry::createSound<Sound>(name, path.c_str(), vol);
     lua_pushinteger(L, id);
 
     return 1;
@@ -155,12 +149,9 @@ int BulletScript::lua_registerBullet(lua_State* L)
     BulletType type;
     const char *str;
 
-    int buflen = strlen(inst()->getCurrentPath())+strlen(lua_tostring(L, 2));
-    char* buffer = new char[buflen+1];
-    strncpy(buffer, inst()->getCurrentPath(), buflen);
-    strncat(buffer, lua_tostring(L, 2), buflen);
+    string path = inst()->currentPath + lua_tostring(L, 2);
 
-    type.image.load(buffer);
+    type.image.load(path.c_str());
 
     type.sizeX=lua_tonumber(L, 3);
     type.sizeY=lua_tonumber(L, 4);

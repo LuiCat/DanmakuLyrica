@@ -4,6 +4,7 @@ class LuaScript;
 #define LUASCRIPT_H
 
 #include <lua.hpp>
+#include <string>
 
 #define lua_tableregister(L,n,f) (lua_pushstring(L,n),lua_pushcfunction(L,f),lua_settable(L,-3))
 
@@ -22,7 +23,7 @@ protected:
     static LuaScript* currentInstance;
 
     lua_State* luaState;
-    char currentPath[256];
+    std::string currentPath;
 
     void beginScript()
     {
@@ -59,7 +60,7 @@ public:
         return luaState;
     }
 
-    inline const char* getCurrentPath()
+    inline const std::string& getCurrentPath()
     {
         return currentPath;
     }
