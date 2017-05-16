@@ -416,8 +416,8 @@ function task_8_spirit(hp)
 			for i = 0,19 do
 				setBulletType('dot2');
 				setAngle(playerAngle());
-				for j = 0,8 do
-					bullet(0,0,120,j*40);
+				for j = 0,5 do
+					bullet(0,0,120,j*60);
 				end
 				sleep(1);
 			end
@@ -490,15 +490,18 @@ function task_9()
 	local att;
 	for i = 0,14 do
 		if i%2 == 0 then
-			setAngle(playerAngle());
-			for j = 0,4 do
-				spirit(0,0,50,j*72+36,16,2);
+			setAngle(playerAngle()+math.random()*20-10);
+			for j = 0,9 do
+				spirit(0,0,50,j*36+36,16,2);
 			end
+            setAngle(playerAngle());
 		end
 		att = Attach.new();
 		for j = 0,14 do
 			att:bullet(0,0,230,j*24+6);
+			att:bullet(0,0,240,j*24+6);
 			att:bullet(0,0,250,j*24+6);
+			att:bullet(0,0,260,j*24+6);
 			att:bullet(0,0,270,j*24+6);
 		end
 		att:setAcc(-180);
@@ -507,7 +510,9 @@ function task_9()
 		att = Attach.new();
 		for j = 0,14 do
 			att:bullet(0,0,230,j*24+18);
+			att:bullet(0,0,240,j*24+18);
 			att:bullet(0,0,250,j*24+18);
+			att:bullet(0,0,260,j*24+18);
 			att:bullet(0,0,270,j*24+18);
 		end
 		att:setAcc(-180);
