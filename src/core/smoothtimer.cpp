@@ -12,7 +12,7 @@ using namespace std::chrono;
 
 SmoothTimer::SmoothTimer()
 {
-    setSmoothParam(60, 0.5);
+    setSmoothParam(60, 0.8);
 }
 
 void SmoothTimer::setSmoothParam(double halfTime, double decaySlope)
@@ -108,6 +108,8 @@ void SmoothTimer::insertTimeRecord(double real, double raw)
     record.emplace_back(real, raw);
     if(record.size()>MAX_TIMEFIX_RECORD)
         record.pop_front();
+
+    //cout << "Time Record : " << real << "," << raw << "," << getTimeFixed(real) << endl;
 
     double dec = pow(2, ksum*(real-realStamp));
     decaySum(sumReal, real, dec);

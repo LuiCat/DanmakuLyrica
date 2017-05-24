@@ -79,7 +79,7 @@ double Ticking::seekNextTick(double deltaSec)
     if(processSec<deltaSec)
     {
         onUpdateMotion(processSec, processSec*tickRate);
-        ++tick;
+        //++tick;
         timeSec+=processSec;
         deltaSec-=processSec;
         processSec=0.0;

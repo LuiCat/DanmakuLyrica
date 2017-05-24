@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-template <typename Clock = std::chrono::high_resolution_clock>
+template <typename Clock>
 class AccurateTimer
 {
 public:
