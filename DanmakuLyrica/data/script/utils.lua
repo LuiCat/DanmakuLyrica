@@ -108,6 +108,14 @@ function playScore(sound, centerPitch, delay, ...)
 					semi = semi+1
 				elseif c == 'b' then
 					semi = semi-1
+				elseif c == '[' then
+					dly = dly * 0.5
+				elseif c == ']' then
+					dly = dly * 2
+				elseif c == '(' then
+					dly = dly * 2 / 3
+				elseif c == ')' then
+					dly = dly * 3 / 2
 				elseif c == '.' then
 					sleep(dly)
 				else

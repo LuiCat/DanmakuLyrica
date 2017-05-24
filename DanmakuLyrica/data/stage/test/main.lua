@@ -1,4 +1,4 @@
-setCurrentPath('data/sound/')
+--setCurrentPath('data/sound/')
 loadSound('tick.wav', 'tick', 0.5)
 loadSound('pa0.wav', 'pa0', 1.0)
 loadSound('pa1.wav', 'pa1', 0.8)
@@ -99,6 +99,20 @@ function main3()
 	end
 end
 
+function awtest()
+	setBulletType('sharp0')
+	setAngle(90)
+	--setCenter(0,0)
+	sleepUntil(0)
+    while true do
+        local att=Attach.new()
+        att:bullet(0,0,0,0)
+        att:setAcc(5.0)
+		att:setRS(30.0)
+		sleep(0.5)
+    end
+end
+
 function fa()
 	sleepUntil(0)
 	while true do
@@ -119,7 +133,7 @@ function fas()
 				'-6..+1..3.#4..3..#2.',
 				'-7..#5..7.+3.....#5.',
 				'6..3..6.7..b3..7.',
-				'6.#5b3-7.+3-3.#57+321-7#5',
+				'6.[[#5543]]b3-7.+3-3.#57+321-7#5',
 				'-6..+1..3.2..-7..5.',
 				'..-3.#1.3.6.......')
 	task(function()
@@ -164,7 +178,10 @@ function fas()
 			'..-#1.-6.+#1.3.......')
 end
 
-task(main);
-task(main3);
---task(fa);
---task(fas);
+--task(main);
+--task(main3);
+task(fa);
+task(fas);
+
+task(awtest);
+
