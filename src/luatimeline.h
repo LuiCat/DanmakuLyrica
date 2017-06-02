@@ -54,7 +54,7 @@ public:
 
     void setTime(double newTime);
 
-    void push(const LuaTask& task);
+    void pushTask(const LuaTask& task);
     void clearTask();
 
     bool taskListEmpty();

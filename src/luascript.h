@@ -25,15 +25,10 @@ protected:
     lua_State* luaState;
     std::string currentPath;
 
-    void beginScript()
-    {
-        currentInstance=this;
-    }
-
-    void endScript()
-    {
-        currentInstance=0;
-    }
+    // Used before and after lua_excall.
+    // Sets current instance so lua state can be accessed in registered static functions
+    void beginScript();
+    void endScript();
 
 public:
 

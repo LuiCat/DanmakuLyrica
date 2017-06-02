@@ -17,6 +17,16 @@ int LuaScript::lua_setCurrentPath(lua_State* L)
     return 0;
 }
 
+void LuaScript::beginScript()
+{
+    currentInstance = this;
+}
+
+void LuaScript::endScript()
+{
+    currentInstance = nullptr;
+}
+
 //===========================================================================
 
 int LuaScript::lua_excall(int narg, int nres)

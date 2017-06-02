@@ -22,7 +22,7 @@ int LuaTimeline::lua_pushTask(lua_State* L)
     lua_State *t=lua_tothread(L, 1);
     lua_pushthread(t);
     int ref=luaL_ref(t, LUA_REGISTRYINDEX);
-    inst()->push(LuaTask(t, ref, inst()->timeSec, inst()->currentTask));
+    inst()->pushTask(LuaTask(t, ref, inst()->timeSec, inst()->currentTask));
     lua_pushinteger(L, ref);
     return 1;
 }
@@ -31,25 +31,20 @@ int LuaTimeline::lua_taskDelay(lua_State* L)
 {
     if(lua_isnumber(L, 1))
         inst()->currentTask->delay(lua_tonumber(L, 1));
-    return 0;
+    return lua_yield(L, 0);
 }
 
 int LuaTimeline::lua_taskDelayUntil(lua_State* L)
 {
     if(lua_isnumber(L, 1))
         inst()->currentTask->delayUntil(lua_tonumber(L, 1));
-    return 0;
+    return lua_yield(L, 0);
 }
 
 int LuaTimeline::lua_getTime(lua_State* L)
 {
     lua_pushnumber(L, inst()->timeSec);
     return 1;
-}
-
-bool LuaTimeline::beforeTask(LuaTask* task)
-{
-    return !task->isFinished;
 }
 
 //===========================================================
@@ -71,10 +66,30 @@ void LuaTimeline::setTime(double newTime)
     timeSec=newTime;
 }
 
-void LuaTimeline::push(const LuaTask& task)
+void LuaTimeline::pushTask(const LuaTask& task)
 {
     taskMap[task.luaRef]=task;
     taskList.push(&taskMap[task.luaRef]);
+}
+
+void LuaTimeline::clearTask()
+{
+    while (!taskList.empty())
+    {
+        luaL_unref(luaState, LUA_REGISTRYINDEX, taskList.top()->luaRef);
+        taskList.pop();
+    }
+    taskMap.clear();
+}
+
+bool LuaTimeline::taskListEmpty()
+{
+    return taskList.empty();
+}
+
+bool LuaTimeline::beforeTask(LuaTask* task)
+{
+    return !task->isFinished;
 }
 
 void LuaTimeline::update(double deltaSec)
@@ -187,20 +202,4 @@ double LuaTimeline::updateSingleTask(double limitDeltaSec)
 
     return newSec-timeSec;
 }
-
-void LuaTimeline::clearTask()
-{
-    while(!taskList.empty())
-    {
-        luaL_unref(luaState, LUA_REGISTRYINDEX, taskList.top()->luaRef);
-        taskList.pop();
-    }
-    taskMap.clear();
-}
-
-bool LuaTimeline::taskListEmpty()
-{
-    return taskList.empty();
-}
-
 

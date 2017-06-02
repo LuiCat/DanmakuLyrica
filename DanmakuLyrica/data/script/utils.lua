@@ -68,12 +68,12 @@ end
 
 function sleep(t)
 	delay(t)
-	coroutine.yield()
+	--coroutine.yield()
 end
 
 function sleepUntil(t)
 	delayUntil(t)
-	coroutine.yield()
+	--coroutine.yield()
 end
 
 function seq(str,t,...)
