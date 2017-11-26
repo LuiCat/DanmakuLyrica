@@ -133,13 +133,13 @@ void Shape2D::drawScene(RenderTarget* target)
             for (UINT j = 0; j < vertexCount && currVertex < vertexSize; ++j)
             {
                 auto& info = pendingVertices[currVertex++];
-                if (info.shape == nullptr)
+                if (info.shape == -1)
                     continue;
 
                 renderSetBlendDest(info.isAddBlend ? D3DBLEND_ONE : D3DBLEND_INVSRCALPHA);
                 renderSetTexture(info.texture);
-                pD3DDevice->DrawPrimitive(static_cast<D3DPRIMITIVETYPE>(info.shape->shape), lastIndex,
-                                          primitiveCount(currVertex - lastVertex, info.shape->shape));
+                pD3DDevice->DrawPrimitive(static_cast<D3DPRIMITIVETYPE>(listShapes[info.shape].shape), lastIndex,
+                                          primitiveCount(currVertex - lastVertex, listShapes[info.shape].shape));
                 lastVertex = currVertex;
                 lastIndex = currentChunkOffset + j + 1;
             }
@@ -251,7 +251,7 @@ void Shape2D::rect(float x1, float y1, float x2, float y2, float u1, float v1, f
 void Shape2D::vertex(float x, float y, float u, float v)
 {
     pendingVertices.push_back(VertexInfo{x, y, 0.0f, 1.0f, currentMatrix.defaultColor,
-                                         u, v, currentMatrix.texture, currentMatrix.isAddBlend, nullptr});
+                                         u, v, currentMatrix.texture, currentMatrix.isAddBlend, -1});
     VertexInfo& tmp = pendingVertices.back();
     D3DXVec3TransformCoord((Vector*)&tmp.vertex, (Vector*)&tmp.vertex, &currentMatrix.matrix);
 }
@@ -260,8 +260,8 @@ void Shape2D::shape(ShapeType shape)
 {
     if (!pendingVertices.empty())
     {
+		pendingVertices.back().shape = listShapes.size();
         listShapes.push_back(ShapeInfo{ shape, currentMatrix.matrix });
-        pendingVertices.back().shape = &listShapes.back();
     }
 }
 

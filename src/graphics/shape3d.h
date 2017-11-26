@@ -33,7 +33,7 @@ private:
         Vertex vertex;
         Texture texture;
         bool isAddBlend;
-        ShapeInfo* shape;
+        int shape;
     };
 
     struct MatrixInfo
