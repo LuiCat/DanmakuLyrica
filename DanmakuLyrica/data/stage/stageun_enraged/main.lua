@@ -416,8 +416,8 @@ function task_8_spirit(hp)
 			for i = 0,19 do
 				setBulletType('dot2');
 				setAngle(playerAngle());
-				for j = 0,5 do
-					bullet(0,0,120,j*60);
+				for j = -11,11 do
+					bullet(0,0,120,j*15+180);
 				end
 				sleep(1);
 			end
@@ -428,7 +428,7 @@ function task_8_spirit(hp)
 			x,y=playerPos();
 			cx,cy=centerPos();
 			x,y=x-cx,y-cy;
-			s=math.min(math.sqrt(x*x+y*y)*0.5,200);
+			s=math.min(math.sqrt(x*x+y*y)*0.4,200);
 			att:setSpeed(s);
 			att:setRot(playerAngle());
 			sleep(2);
@@ -475,14 +475,14 @@ function task_9()
 	sleep(1);
 	task(function()
 		setBulletType('sharp2');
-		seq('1000000010000000100010001010111',1,function()
+		seq('1000100010001000101010101010111',1,function()
 			local x=math.random()*200-100;
 			local y=math.random()*60-30;
-			for j = 0,149 do
-				bullet(x, y, 40, j*2.4);
-				bullet(x, -300-y, 40, j*2.4);
-				bullet(800-x, y, 40, j*2.4);
-				bullet(-800-x, y, 40, j*2.4);
+			for j = 0,239 do
+				bullet(x, y, 40, j*1.5);
+				bullet(x, -300-y, 40, j*1.5);
+				bullet(800-x, y, 40, j*1.5);
+				bullet(-800-x, y, 40, j*1.5);
 			end
 		end);
 	end);
@@ -497,23 +497,21 @@ function task_9()
             setAngle(playerAngle());
 		end
 		att = Attach.new();
-		for j = 0,14 do
-			att:bullet(0,0,230,j*24+6);
-			att:bullet(0,0,240,j*24+6);
-			att:bullet(0,0,250,j*24+6);
-			att:bullet(0,0,260,j*24+6);
-			att:bullet(0,0,270,j*24+6);
+		for j = 0,19 do
+			att:bullet(0,0,230,j*18+4.5);
+			att:bullet(0,0,245,j*18+4.5);
+			att:bullet(0,0,260,j*18+4.5);
+			att:bullet(0,0,275,j*18+4.5);
 		end
 		att:setAcc(-180);
 		sleep(1);
 		att:setAcc(0);
 		att = Attach.new();
-		for j = 0,14 do
-			att:bullet(0,0,230,j*24+18);
-			att:bullet(0,0,240,j*24+18);
-			att:bullet(0,0,250,j*24+18);
-			att:bullet(0,0,260,j*24+18);
-			att:bullet(0,0,270,j*24+18);
+		for j = 0,19 do
+			att:bullet(0,0,230,j*18+13.5);
+			att:bullet(0,0,245,j*18+13.5);
+			att:bullet(0,0,260,j*18+13.5);
+			att:bullet(0,0,275,j*18+13.5);
 		end
 		att:setAcc(-180);
 		sleep(1);
